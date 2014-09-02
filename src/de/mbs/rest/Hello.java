@@ -1,4 +1,4 @@
-package de.mkuerbis.groovytest.rest;
+package de.mbs.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

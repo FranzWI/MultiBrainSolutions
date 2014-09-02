@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app>
-    <display-name>Groovy Test</display-name>
+    <display-name>MBS</display-name>
     <description>
-      Groovy Test
+      MBS
     </description>
     
     <welcome-file-list>
@@ -31,7 +31,7 @@
         <!-- Register resources and providers under my.package. -->
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>de.mkuerbis.groovytest.rest</param-value>
+            <param-value>de.mbs.rest</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
