@@ -13,6 +13,7 @@ html.div('class':"page-container sidebar-collapsed"){
 				a('href':"#",'class':"with-animation"){ i('class':"entypo-menu") }
 			}
 		}
+		// Menü
 		ul(id:"main-menu"){
 			li(id:"search"){
 				form (method:"get", action:""){
@@ -21,29 +22,22 @@ html.div('class':"page-container sidebar-collapsed"){
 				}
 			}
 			li{
-				a(href:"index.groovy"){
-					i('class':"entypo-gauge")
-					span "Dashboard"
+				a(href:"index.groovy?page=module"){
+					i('class':"entypo-floppy")
+					span "Module"
 				}
-				ul{
-					li{
-						a(href:"index.groovy"){
-							span "Dashboard 1"
-							span ('class':"badge badge-success badge-roundless", "1.7")
-						}
-					}
-					li{
-						a(href:"index.groovy"){ span "Dashboard 2" }
-					}
-					li{
-						a(href:"index.groovy"){ span "Dashboard 3" }
-					}
+			}
+			li{
+				a(href:"index.groovy?page=user"){
+					i('class':"entypo-user")
+					span "Nutzer"
 				}
 			}
 		}
 	}
 	div('class':"main-content"){
 		div('class':"row"){
+			// Nutzername
 			div('class':"col-md-6 col-sm-8 clearfix"){
 				ul('class':"user-info pull-left pull-none-xsm"){
 					li('class':"profile-info dropdown", style:"margin-left: 40px; margin-top: 20px;"){
@@ -51,6 +45,7 @@ html.div('class':"page-container sidebar-collapsed"){
 					}
 				}
 			}
+			// Logout Button
 			div('class':"col-md-6 col-sm-4 clearfix hidden-xs"){
 				ul('class':"list-inline links-list pull-right"){
 					li{
@@ -60,7 +55,19 @@ html.div('class':"page-container sidebar-collapsed"){
 			}
 		}
 		hr()
-		br()
-		p "We have collapsed left sidebar on this page by adding <code>sidebar-collapsed</code> to <strong>.page-container</strong> element."
+		def page = request.getParameter("page")
+		if(!page){
+			h2("Startseite")
+			br()
+			p "Hi!"
+		}else{
+			i(style:"display:none;")
+			if(page.equals("module")){
+				include('/WEB-INF/includes/modules.groovy')
+			}
+			if(page.equals("user")){
+				include('/WEB-INF/includes/user.groovy')
+			}
+		}
 	}
 }

@@ -39,7 +39,7 @@ html.html('lang':"de"){
 	}
 	body ('class':"page-body") {
 		// body
-		i()
+		i(style:"display:none;")
 		if(!session.login){
 			include('/WEB-INF/includes/login.groovy')
 		}else{
