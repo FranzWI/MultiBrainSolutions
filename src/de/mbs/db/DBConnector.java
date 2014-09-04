@@ -6,40 +6,32 @@ import java.sql.SQLException;
 
 public class DBConnector {
 		
-	static Connection connection;
+	public static Connection getCon(String username, String password)
+	{
+		Connection connection = null;
 
-	public DBConnector(String username, String password) 
-	{
-		if(connection == null)
+		try
 		{
-			try
-			{
-				Class.forName("com.mysql.jdbc.Driver");
-				connection = DriverManager.getConnection("jdbc:mysql://localhost/feedback?user=" +
-							 username + "&password=" + password);
-			} 
-			catch (ClassNotFoundException cnfErr) 
-			{
-				cnfErr.printStackTrace();
-			} 
-			catch (SQLException sqlErr) 
-			{
-				sqlErr.printStackTrace();
-			}
-			finally
-			{
-				closeConnection();
-			}
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/feedback?user=" +
+						 username + "&password=" + password);
+		} 
+		catch (ClassNotFoundException cnfErr) 
+		{
+			cnfErr.printStackTrace();
+		} 
+		catch (SQLException sqlErr) 
+		{
+			sqlErr.printStackTrace();
 		}
-		
-	}
-	
-	public static Connection getDBConnection()
-	{
+		finally
+		{
+			closeConnection(connection);
+		}
 		return connection;
 	}
 	
-	public static boolean closeConnection()
+	public static boolean closeConnection(Connection connection)
 	{
 		if(connection!=null)
 			try 
