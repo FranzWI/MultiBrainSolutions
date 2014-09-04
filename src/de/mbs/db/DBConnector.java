@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnector {
+	
+	private final static String username ="";
+	private final static String password = "";
 		
-	public static Connection getCon(String username, String password)
+	public static Connection getCon()
 	{
 		Connection connection = null;
 
