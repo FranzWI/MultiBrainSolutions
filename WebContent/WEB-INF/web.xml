@@ -23,6 +23,13 @@
 		<url-pattern>*.groovy</url-pattern>
 	</servlet-mapping>
 	
+	<!-- Module laden -->
+	<servlet>
+		<servlet-name>Modulhandler</servlet-name>
+		<servlet-class>de.mbs.servlet.ModulServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
 	<!-- REST Full Web service -->
 	<servlet>
         <servlet-name>Jersey Rest</servlet-name>

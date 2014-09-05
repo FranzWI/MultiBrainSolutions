@@ -1,5 +1,7 @@
 package de.mbs.modules.interfaces;
 
+import java.io.File;
+
 import net.xeoh.plugins.base.Plugin;
 
 public interface Modul extends Plugin{
@@ -21,24 +23,26 @@ public interface Modul extends Plugin{
 	public String getDescription();
 
 	/**
-	 * Initialisiert DB usw..
+	 * Initalisiert das Modul
 	 * 
+	 * @param path - Ordner des Wurzelverzeichnisses
+	 * @param jarfile  - File in dem die Datenstehen
 	 * @return true falls erfolgreich, false falls nicht
 	 */
-	public boolean initialize();
+	public boolean install(File path, File jarfile);
 	
 	/**
 	 * entfernt aller vorher installierten dateien
 	 * 
 	 * @return 
 	 */
-	public boolean remove();
+	public boolean remove(File path);
 
 	/**
 	 * @return true falls breits initialisiert sind, false falls noch nichts
 	 *         initialisiert ist (DB...)
 	 */
-	public boolean isInitialized();
+	public boolean isInstalled();
 
 	/**
 	 * @return true falls das Modul funktioniert, false falls nicht
@@ -51,7 +55,34 @@ public interface Modul extends Plugin{
 	public String getError();
 	
 	/**
-	 * @return Liefert den Pfad zum Frontend bsp.: 'WEB-INF/includes/modules/modul.groovy'
+	 * @param path - Ordner des Wurzelverzeichnisses
+	 * @return Liefert den Pfad zum Frontend bsp.: 'WEB-INF/includes/modules/modul.groovy', falls kein Frontend null
 	 */
 	public String getFrontendFile();
+	
+	/**
+	 * 
+	 * @return den Pfad für den Configoberfläche des Administrators, falls keine Config null
+	 */
+	public String getConfigFile();
+	
+	/**
+	 * 
+	 * @return Pfade für die Portlets falls keine dann null
+	 */
+	public String[] getPortletFiles();
+	
+	/**
+	 * Methode die beim Starten des Management Cockpits ausgeführt wird (Tomcat start)
+	 * @return true falls erfolgreich, false falls nicht
+	 */
+	public boolean startup();
+	
+	/**
+	 *  Methode die beim Herunterfahren des Management Cockpits ausgeführt wird (Tomcat stop, undeploy)
+	 * @return true falls erfolgreich, false falls nicht
+	 */
+	public boolean shutdown();
+	
+	
 }

@@ -1,34 +1,49 @@
-import java.util.Set;
-
-import de.mbs.modules.interfaces.Modul;
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.impl.PluginManagerFactory;
-import net.xeoh.plugins.base.options.GetPluginOption;
-
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
-// JAR Dateien auslesen, Plugin bereitstellen
-def readJar(file){
-	PluginManager pm = PluginManagerFactory.createPluginManager();
-	pm.addPluginsFrom(file.toURI());
-	Modul mod = pm.getPlugin(Modul.class, new GetPluginOption[0]);
-	println "<br>"+mod.getMenuName()
-}
+import de.mbs.modules.ModulContainer
+import de.mbs.modules.interfaces.Modul
 
 html.div {
 	h2("Module")
 	br()
-	def path = request.getServletContext().getRealPath("/")+"WEB-INF/lib/modules"
-	def modulesDir = new File(path)
-	println modulesDir.getPath()+" "+modulesDir.exists()
-	for (File fileEntry : modulesDir.listFiles()) {
-		if(!fileEntry.isDirectory() && fileEntry.getName().endsWith("jar")){
-			readJar(fileEntry)
+	table('class':"table table-bordered datatable", id:"modultable") {
+		thead {
+			tr{
+				th "Name"
+			}
+		}
+		tbody {
+			def modules = ModulContainer.initialise()
+			def i = 0
+			for(mod in modules.getModules()){
+				i++
+				def trClass = ""
+				if(i%2==0)
+					trClass = "odd"
+				else
+					trClass = "even"
+				tr('class':trClass) {
+					td mod.getModulName()
+				}
+			}
 		}
 	}
+
+	link(rel:"stylesheet", href:"assets/js/datatables/responsive/css/datatables.responsive.css")
+	link(rel:"stylesheet", href:"assets/js/select2/select2-bootstrap.css")
+	link(rel:"stylesheet", href:"assets/js/select2/select2.css")
+	
+	script('') {
+		println """
+		\$(document).ready(function() {
+			\$('#modultable').dataTable();
+		} );
+		"""
+	}
+	
+	script(src:"assets/js/jquery.dataTables.min.js")
+	script(src:"assets/js/datatables/TableTools.min.js")
+	script(src:"assets/js/dataTables.bootstrap.js")
+	script(src:"assets/js/datatables/jquery.dataTables.columnFilter.js")
+	script(src:"assets/js/datatables/lodash.min.js")
+	script(src:"assets/js/datatables/responsive/js/datatables.responsive.js")
+	script(src:"assets/js/select2/select2.min.js")
 }
