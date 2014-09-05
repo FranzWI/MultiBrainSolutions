@@ -9,9 +9,7 @@ class DBConnectGroovy
 	/**
 	 * @return this method returns a groovy Sql variable... 
 	 * use it like this:  DBConnectGroovy.getMysqlInstance().eachRow("select * from FOOD where type=${foo}") 
-	 * 										{
-     *											println "Gromit likes ${it.name}"
-	 *										}
+	 * 										{println "Gromit likes ${it.name}"}
 	 */
 	
 	Sql getMySqlInstance()
