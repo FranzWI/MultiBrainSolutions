@@ -1,6 +1,7 @@
 package de.mbs.modules.interfaces;
 
 import java.io.File;
+import java.util.Map;
 
 import net.xeoh.plugins.base.Plugin;
 
@@ -68,9 +69,11 @@ public interface Modul extends Plugin{
 	
 	/**
 	 * 
+	 * Schlüssel ist der Name des Portlets, Value ist der Dateipfad
+	 * 
 	 * @return Pfade für die Portlets falls keine dann null
 	 */
-	public String[] getPortletFiles();
+	public Map<String,String> getPortletFiles();
 	
 	/**
 	 * Methode die beim Starten des Management Cockpits ausgeführt wird (Tomcat start)
@@ -84,5 +87,9 @@ public interface Modul extends Plugin{
 	 */
 	public boolean shutdown();
 	
-	
+	/**
+	 * liefert die aktuelle Version
+	 * @return
+	 */
+	public String getVersion();
 }
