@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.options.GetPluginOption;
+import de.mbs.modules.DataContainer;
 import de.mbs.modules.ModulContainer;
+import de.mbs.modules.ModulHelper;
 import de.mbs.modules.interfaces.Modul;
 
 public class ModulServlet extends HttpServlet {
@@ -24,13 +26,14 @@ public class ModulServlet extends HttpServlet {
 		PluginManager pm = PluginManagerFactory.createPluginManager();
 		pm.addPluginsFrom(file.toURI());
 		Modul mod = pm.getPlugin(Modul.class, new GetPluginOption[0]);
-		modules.addModul(mod);
+		modules.addModul(mod, file);
 	}
 
 	@Override
 	public void init() throws ServletException {
 		System.out.println("initialisiere Module");
 		this.modules = ModulContainer.initialise();
+		ModulHelper.setSerlvetContextPath(this.getServletContext().getRealPath("/"));
 		String path = this.getServletContext().getRealPath("/")
 				+ "WEB-INF/lib/modules";
 		File modulesDir = new File(path);

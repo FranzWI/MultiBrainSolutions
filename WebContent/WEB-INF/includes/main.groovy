@@ -1,3 +1,6 @@
+import de.mbs.modules.ModulContainer
+import de.mbs.modules.interfaces.Modul
+
 html.div('class':"page-container sidebar-collapsed"){
 	div('class':"sidebar-menu"){
 		header('class':"logo-env"){
@@ -21,6 +24,20 @@ html.div('class':"page-container sidebar-collapsed"){
 					button(type:"submit"){ i('class':"entypo-search") }
 				}
 			}
+			
+			//TODO mittels db nutzer bezogen entscheiden
+			def modules = ModulContainer.initialise()
+			for(mod in modules.getModules()){
+				if(mod.isInstalled()){
+					li {
+						a(href:"index.groovy?modul="+mod.getModulName()){
+							i('class':"entypo-floppy")
+							span mod.getMenuName();
+						}
+					}
+				}
+			}
+			
 			li{
 				a(href:"index.groovy?page=module"){
 					i('class':"entypo-floppy")
@@ -56,17 +73,28 @@ html.div('class':"page-container sidebar-collapsed"){
 		}
 		hr()
 		def page = request.getParameter("page")
-		if(!page){
+		def modul = request.getParameter("modul")
+		if(!page && !modul){
 			h2("Startseite")
 			br()
 			p "Hi!"
 		}else{
-			i(style:"display:none;")
-			if(page.equals("module")){
-				include('/WEB-INF/includes/modules.groovy')
+			if(page){
+				i(style:"display:none;")
+				if(page.equals("module")){
+					include('/WEB-INF/includes/modules.groovy')
+				}
+				if(page.equals("user")){
+					include('/WEB-INF/includes/user.groovy')
+				}
 			}
-			if(page.equals("user")){
-				include('/WEB-INF/includes/user.groovy')
+			if(modul){
+				def modules = ModulContainer.initialise()
+				for(mod in modules.getModules()){
+					if(mod.getModulName().equals(modul)){
+						include('/WEB-INF/includes/'+mod.getFrontendFile());
+					}
+				}
 			}
 		}
 	}

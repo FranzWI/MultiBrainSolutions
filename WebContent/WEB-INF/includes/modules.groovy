@@ -38,7 +38,7 @@ html.div {
 						if(mod.isInstalled()){
 							
 						}else{
-							button('class':"btn btn-default"){
+							button('class':"btn btn-default","data-mod":mod.getModulName(),"data-version":mod.getVersion()){
 								i('class':"entypo-install")
 								println "installieren"
 							}

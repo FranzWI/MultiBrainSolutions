@@ -1,9 +1,9 @@
 package de.mbs.modules.interfaces;
 
-import java.io.File;
 import java.util.Map;
 
 import net.xeoh.plugins.base.Plugin;
+import de.mbs.modules.DataContainer;
 
 public interface Modul extends Plugin{
 
@@ -26,18 +26,16 @@ public interface Modul extends Plugin{
 	/**
 	 * Initalisiert das Modul
 	 * 
-	 * @param path - Ordner des Wurzelverzeichnisses
-	 * @param jarfile  - File in dem die Datenstehen
 	 * @return true falls erfolgreich, false falls nicht
 	 */
-	public boolean install(File path, File jarfile);
+	public boolean install(DataContainer container);
 	
 	/**
 	 * entfernt aller vorher installierten dateien
 	 * 
 	 * @return 
 	 */
-	public boolean remove(File path);
+	public boolean remove(DataContainer container);
 
 	/**
 	 * @return true falls breits initialisiert sind, false falls noch nichts
