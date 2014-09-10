@@ -6,7 +6,7 @@ html.div('class':"page-container sidebar-collapsed"){
 		header('class':"logo-env"){
 			div('class':"logo"){
 				a ('href':"index.groovy"){
-					img('src':"assets/images/logo@2x.png", 'width':"120")
+					img('src':"assets/images/logo_dark.jpg", 'width':"80", style:"margin: 0px auto;")
 				}
 			}
 			div('class':"sidebar-collapse"){
@@ -20,11 +20,16 @@ html.div('class':"page-container sidebar-collapsed"){
 		ul(id:"main-menu"){
 			li(id:"search"){
 				form (method:"get", action:""){
-					input (type:"text", name:"q", 'class':"search-input", placeholder:"Sucher")
+					input (type:"text", name:"q", 'class':"search-input", placeholder:"Suche")
 					button(type:"submit"){ i('class':"entypo-search") }
 				}
 			}
-			
+			li{
+				a(href:"index.groovy"){
+					i('class':"entypo-gauge")
+					span "Cockpit"
+				}
+			}
 			//TODO mittels db nutzer bezogen entscheiden
 			def modules = ModulContainer.initialise()
 			for(mod in modules.getModules()){
@@ -74,13 +79,12 @@ html.div('class':"page-container sidebar-collapsed"){
 		hr()
 		def page = request.getParameter("page")
 		def modul = request.getParameter("modul")
+		
+		i(style:"display:none;")
 		if(!page && !modul){
-			h2("Startseite")
-			br()
-			p "Hi!"
+			include('/WEB-INF/includes/cockpit.groovy')
 		}else{
 			if(page){
-				i(style:"display:none;")
 				if(page.equals("module")){
 					include('/WEB-INF/includes/modules.groovy')
 				}
