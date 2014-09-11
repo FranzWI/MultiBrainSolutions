@@ -5,6 +5,8 @@ import java.io.File;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 import org.json.simple.JSONObject;
 
@@ -62,6 +64,30 @@ public class ModulREST {
 								+ error);
 			}
 		}
+		return obj.toString();
+	}
+	
+	@POST
+	@Path("/modul/{modulname}/{version}")
+	public String moduleCall(@PathParam("modulname") String modulname,@PathParam("version") String version, @Context UriInfo uriInfo){
+		JSONObject obj = new JSONObject();
+		ModulContainer modules = ModulContainer.initialise();
+		boolean hit = false;
+		for(Modul mod : modules.getModules()){
+			if (mod.getModulName().equals(modulname)
+					&& mod.getVersion().equals(version)) {
+				if(mod.isInstalled()){
+				hit = true;
+				mod.handleRest(uriInfo, obj);
+				}else{
+					obj.put("error", "Modul " + modulname + " in Version "
+							+ version + " nicht installiert.");
+				}
+			}
+		}
+		if(!hit)
+			obj.put("error", "Modul " + modulname + " in Version " + version
+					+ " wurde nicht gefunden");
 		return obj.toString();
 	}
 }

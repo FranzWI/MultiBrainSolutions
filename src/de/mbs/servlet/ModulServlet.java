@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.options.GetPluginOption;
-import de.mbs.modules.DataContainer;
 import de.mbs.modules.ModulContainer;
 import de.mbs.modules.ModulHelper;
 import de.mbs.modules.interfaces.Modul;

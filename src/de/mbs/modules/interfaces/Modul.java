@@ -2,6 +2,10 @@ package de.mbs.modules.interfaces;
 
 import java.util.Map;
 
+import javax.ws.rs.core.UriInfo;
+
+import org.json.simple.JSONObject;
+
 import net.xeoh.plugins.base.Plugin;
 import de.mbs.modules.DataContainer;
 
@@ -90,4 +94,26 @@ public interface Modul extends Plugin{
 	 * @return
 	 */
 	public String getVersion();
+	
+	/**
+	 * liefert den namen der Css-Klasse des Entypo Icons
+	 * @return
+	 */
+	public String getMenuIcon();
+	
+	/**
+	 * gibt an ob nach der Installation des Moduls der Tomcat neugestartet werden muss
+	 * @return
+	 */
+	public boolean requiresRestart();
+	
+	/**
+	 * Wird von der Klasse ModulREST  verwendet um der Methode die Abfrage über zuhelfen
+	 * 
+	 * @param uriInfo - Parameter
+	 * @param obj - Das JSONObject welches dem CLient als String zurück geliefert werden soll
+	 * @return String der an den Aufrufer übergeben werden muss
+	 */
+	public void handleRest(UriInfo uriInfo, JSONObject obj);
+	
 }
