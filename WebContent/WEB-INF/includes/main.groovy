@@ -36,7 +36,7 @@ html.div('class':"page-container sidebar-collapsed"){
 				if(mod.isInstalled()){
 					li {
 						a(href:"index.groovy?modul="+mod.getModulName()){
-							i('class':"entypo-floppy")
+							i('class':mod.getMenuIcon())
 							span mod.getMenuName();
 						}
 					}
