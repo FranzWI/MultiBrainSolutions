@@ -1,7 +1,7 @@
 import de.mbs.modules.ModulContainer
 import de.mbs.modules.interfaces.Modul
 
-html.div('class':"page-container sidebar-collapsed"){
+html.div('class':"page-container"){
 	div('class':"sidebar-menu"){
 		header('class':"logo-env"){
 			div('class':"logo"){
@@ -79,9 +79,10 @@ html.div('class':"page-container sidebar-collapsed"){
 		hr()
 		def page = request.getParameter("page")
 		def modul = request.getParameter("modul")
+		def search = request.getParameter("q")
 		
 		i(style:"display:none;")
-		if(!page && !modul){
+		if(!page && !modul && !search){
 			include('/WEB-INF/includes/cockpit.groovy')
 		}else{
 			if(page){
@@ -99,6 +100,9 @@ html.div('class':"page-container sidebar-collapsed"){
 						include('/WEB-INF/includes/'+mod.getFrontendFile());
 					}
 				}
+			}
+			if(search){
+				include('/WEB-INF/includes/search.groovy')
 			}
 		}
 	}
