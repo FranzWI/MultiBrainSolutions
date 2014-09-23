@@ -18,6 +18,16 @@ html.div{
 							strong('class':"disabled-text"){ "(31)" }
 						}
 					}
+					li(""){
+						a(href:"#user", "Anwender"){
+							strong('class':"disabled-text"){ "(31)" }
+						}
+					}
+					li(""){
+						a(href:"#messages", "Nachrichten"){
+							strong('class':"disabled-text"){ "(31)" }
+						}
+					}
 					//TODO an die Module anpassen
 					li(""){
 						a(href:"#Documents", "Dokumente"){
@@ -57,6 +67,15 @@ html.div{
 							}
 						}
 					}
+					
+					div('class':"search-results-pane", id:"user"){
+					
+					}
+					
+					div('class':"search-results-pane", id:"messages"){
+					
+					}
+					
 					// für jedes module hier dokumente
 					div('class':"search-results-pane", id:"Documents"){
 					

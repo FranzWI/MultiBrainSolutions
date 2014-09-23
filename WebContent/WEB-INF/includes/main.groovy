@@ -1,7 +1,7 @@
 import de.mbs.modules.ModulContainer
 import de.mbs.modules.interfaces.Modul
 
-html.div('class':"page-container"){
+html.div('class':"page-container sidebar-collapsed"){
 	div('class':"sidebar-menu"){
 		header('class':"logo-env"){
 			div('class':"logo"){
@@ -42,7 +42,7 @@ html.div('class':"page-container"){
 					}
 				}
 			}
-			
+
 			li{
 				a(href:"index.groovy?page=module"){
 					i('class':"entypo-floppy")
@@ -62,8 +62,46 @@ html.div('class':"page-container"){
 			// Nutzername
 			div('class':"col-md-6 col-sm-8 clearfix"){
 				ul('class':"user-info pull-left pull-none-xsm"){
-					li('class':"profile-info dropdown", style:"margin-left: 40px; margin-top: 20px;"){
-						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown", "Nutzername")
+					li('class':"profile-info dropdown"){
+						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown"){
+							img( src:"assets/images/thumb-1@2x.png", alt:"", 'class':"img-circle", width:"44")
+							i("Michael K\u00FCrbis")
+						}
+					}
+				}
+
+				// Nachrichten
+				ul('class':"user-info pull-left pull-right-xs pull-none-xsm"){
+					li('class':"notifications dropdown"){
+						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown", 'data-hover':"dropdown", 'data-close-others':"true"){
+							i('class':"entypo-mail")
+							span('class':"badge badge-secondary", "10")
+						}
+						// Dropdown bei den Nachrichten
+						ul('class':"dropdown-menu"){
+							li(""){
+								ul('class':"dropdown-menu-list scroller", tabindex:"5002", style:"overflow: hidden; outline: none;"){
+									// neue Nachricht....
+									li('class':"active"){
+										a(href:"#"){
+											span('class':"image pull-right"){
+												img(src:"assets/images/thumb-1.png", alt:"", 'class':"img-circle")
+											}
+											span('class':"line"){
+												strong("Michael K\u00FCrbis")
+												i("gestern")
+											}
+											span('class':"line desc small", "Betreff")
+										}
+									}
+
+								}
+							}
+							li('class':"external"){
+								a(href:"#messages","Alle Nachrichten")
+							}
+						}
+
 					}
 				}
 			}
@@ -71,7 +109,7 @@ html.div('class':"page-container"){
 			div('class':"col-md-6 col-sm-4 clearfix hidden-xs"){
 				ul('class':"list-inline links-list pull-right"){
 					li{
-						a(href:"index.groovy?logout=true", "Logout" ){ i('class':"entypo-logout right") }
+						a(href:"index.groovy?logout=true", "Abmelden" ){ i('class':"entypo-logout right") }
 					}
 				}
 			}
@@ -80,7 +118,7 @@ html.div('class':"page-container"){
 		def page = request.getParameter("page")
 		def modul = request.getParameter("modul")
 		def search = request.getParameter("q")
-		
+
 		i(style:"display:none;")
 		if(!page && !modul && !search){
 			include('/WEB-INF/includes/cockpit.groovy')
