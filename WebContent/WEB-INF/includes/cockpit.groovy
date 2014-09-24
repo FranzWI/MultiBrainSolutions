@@ -1,5 +1,15 @@
 html.div {
 	h2(style:"float:left;display: inline;", "Cockpit")
-	button('class':"btn btn-default tooltip-primary", 'data-toggle':"tooltip", 'data-placement':"bottom", 'data-original-title':"Portlet hinzuf\u00FCgen", style:"float:left;display: inline;margin-top: 15px; margin-left: 15px;"){ i "+" }
+	div('class':"btn-group"){
+		button('class':"btn btn-default tooltip-primary dropdown-toggle", 'data-toggle':"dropdown", style:"float:left;display: inline;margin-top: 15px; margin-left: 15px;", "+")
+		ul('class':"dropdown-menu dropdown-default", role:"menu"){
+			li{
+				a(href:"#portlet1", "Portlet 1")
+			}
+			li{
+				a(href:"#portlet2", "Portlet 2")
+			}
+		}
+	}
 	br()
 }
