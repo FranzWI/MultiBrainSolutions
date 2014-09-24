@@ -1,3 +1,5 @@
 html.div{
-	h2 "Nachrichten"
+	div('class':"row"){
+		div('class':"col-md-12"){ h2 "Nachrichten" }
+	}
 }
