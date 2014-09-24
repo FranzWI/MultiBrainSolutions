@@ -67,6 +67,15 @@ html.div('class':"page-container sidebar-collapsed"){
 							img( src:"assets/images/thumb-1@2x.png", alt:"", 'class':"img-circle", width:"44")
 							i("Michael K\u00FCrbis")
 						}
+						ul('class':"dropdown-menu"){
+							li('class':"caret")
+							li{
+								a(href:"#profil"){
+									i('class':"entypo-user")
+									println "Profil \u00E4ndern"
+								}
+							}
+						}
 					}
 				}
 
