@@ -119,7 +119,7 @@ html.div('class':"page-container sidebar-collapsed"){
 								}
 							}
 							li('class':"external"){
-								a(href:"#notifications","Alle Benachrichtigungen zeigen")
+								a(href:"index.groovy?page=notifications","Alle Benachrichtigungen zeigen")
 							}
 						}
 					}
@@ -153,7 +153,7 @@ html.div('class':"page-container sidebar-collapsed"){
 								}
 							}
 							li('class':"external"){
-								a(href:"#messages","Alle Nachrichten zeigen")
+								a(href:"index.groovy?page=messages","Alle Nachrichten zeigen")
 							}
 						}
 
@@ -184,6 +184,12 @@ html.div('class':"page-container sidebar-collapsed"){
 				}
 				if(page.equals("user")){
 					include('/WEB-INF/includes/user.groovy')
+				}
+				if(page.equals("notifications")){
+					include('/WEB-INF/includes/notifications.groovy')
+				}
+				if(page.equals("messages")){
+					include('/WEB-INF/includes/messages.groovy')
 				}
 			}
 			if(modul){
