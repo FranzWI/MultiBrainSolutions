@@ -42,17 +42,11 @@ html.div('class':"page-container sidebar-collapsed"){
 					}
 				}
 			}
-
+			//TODO nur für Admin
 			li{
-				a(href:"index.groovy?page=module"){
-					i('class':"entypo-floppy")
-					span "Module"
-				}
-			}
-			li{
-				a(href:"index.groovy?page=user"){
-					i('class':"entypo-user")
-					span "Nutzer"
+				a(href:"index.groovy?page=system"){
+					i('class':"entypo-tools")
+					span "System"
 				}
 			}
 		}
@@ -70,7 +64,7 @@ html.div('class':"page-container sidebar-collapsed"){
 						ul('class':"dropdown-menu"){
 							li('class':"caret")
 							li{
-								a(href:"#profil"){
+								a(href:"index.groovy?page=profil"){
 									i('class':"entypo-user")
 									println "Profil \u00E4ndern"
 								}
@@ -179,17 +173,18 @@ html.div('class':"page-container sidebar-collapsed"){
 			include('/WEB-INF/includes/cockpit.groovy')
 		}else{
 			if(page){
-				if(page.equals("module")){
-					include('/WEB-INF/includes/modules.groovy')
-				}
-				if(page.equals("user")){
-					include('/WEB-INF/includes/user.groovy')
+				//TODO nur für Admin
+				if(page.equals("system")){
+					include('/WEB-INF/includes/system.groovy')
 				}
 				if(page.equals("notifications")){
 					include('/WEB-INF/includes/notifications.groovy')
 				}
 				if(page.equals("messages")){
 					include('/WEB-INF/includes/messages.groovy')
+				}
+				if(page.equals("profil")){
+					include('/WEB-INF/includes/profil.groovy')
 				}
 			}
 			if(modul){
