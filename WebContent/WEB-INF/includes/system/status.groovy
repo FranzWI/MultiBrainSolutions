@@ -1,4 +1,10 @@
 import java.io.File;
+import de.mbs.listener.SessionListener
+
+
+//TODO Nutzer anzahl aus Datenbank ermitteln
+def int totalUserCount = 20;
+def int totalSessionCount = SessionListener.getSessionCount()
 
 Runtime runtime = Runtime.getRuntime()
 //TODO abhänig vom Tomcat verzeichniss setzen
@@ -6,44 +12,58 @@ File root = new File("/")
 
 def long MBYTE = 1024L*1024L
 
-html.div{ 
+html.div{
+	//System Zeug
 	div('class':"row"){
-		div('class':"col-md-4"){
+		div('class':"col-md-12"){h3 ("System")}
+	}
+	div('class':"row"){
+		div('class':"col-md-3"){
 			h4("Java HEAP Nutzung (RAM)")
 			div(id:"ramchart",style:"height: 250px")
 			p("Maximal (GByte): "+((Float)(runtime.maxMemory()/(MBYTE*1024L))).trunc(2))
 		}
-		div('class':"col-md-4"){
+		div('class':"col-md-3"){
 			h4("Festplatten Kapazit\u00E4t")
 			div(id:"hddchart",style:"height: 250px")
 			p("Maximal (GByte): "+((Float)(root.getTotalSpace()/(MBYTE*1024L))).trunc(2))
 		}
-		div('class':"col-md-4"){
+		div('class':"col-md-3"){
+			h4("Angemeldete Nutzer")
+			div(id:"userchart",style:"height: 250px")
+			p("Maximal : "+totalUserCount)
+		}
+		div('class':"col-md-3"){
 			h4("Dienste")
 			//TODO Elastice search nicht erreichbar dann btn-red und anderes icon siehe kaputter Dienst
-			button('class':"btn btn-lg btn-block btn-green disabled btn-icon icon-left", "Elasticsearch"){
-				i('class':"entypo-check")
-			}
-			button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "kaputter Dienst"){
-				i('class':"entypo-cancel")
-			}
+			button('class':"btn btn-lg btn-block btn-green disabled btn-icon icon-left", "Elasticsearch"){ i('class':"entypo-check") }
+			button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "kaputter Dienst"){ i('class':"entypo-cancel") }
 		}
 	}
+	div('class':"row"){
+		div('class':"col-md-12"){hr('')}
+	}
+	// infos zum Status von Elasticsearch
+	div('class':"row"){
+		div('class':"col-md-12"){h3("Elasticsearch")}
+	}
+	
 	script(src:"assets/js/raphael-min.js")
 	script(src:"assets/js/morris.min.js")
-	
-	
+
+	//FIXME mal prüfen ob die Methoden wirklich das machen was sie sollen
+	// Arbeitsspeicher bestimmen
 	def long ramfree = runtime.freeMemory()/MBYTE
 	def long rammemory = (runtime.totalMemory() - ramfree)/MBYTE
 	ramfree = runtime.maxMemory()/MBYTE - rammemory
-	
-	
-	def long usablehdd = root.getUsableSpace()/MBYTE;
+
+	// Festplatten kapazität bestimmen
+	def long usablehdd = root.getUsableSpace()/MBYTE
 	def long usedhdd = root.getTotalSpace()/MBYTE - usablehdd
-	
+
 	script(
-		
-		"""
+
+			"""
 		function getRandomInt(min, max) {
 			return Math.floor(Math.random() * (max - min + 1)) + min;
 		}
@@ -52,6 +72,9 @@ html.div{
 			Morris.Donut({
 				element: 'ramchart',
 				resize: true,
+				formatter: function(x, y){
+					return x;
+				},
 				data: [
 					{label: "Benutzer RAM (MByte)", value: """+rammemory+ """},
 					{label: "Freier RAM (MByte)", value: """+ramfree+ """},
@@ -62,6 +85,9 @@ html.div{
 			Morris.Donut({
 				element: 'hddchart',
 				resize: true,
+				formatter: function(x, y){
+					return x;
+				},
 				data: [
 					{label: "Frei (MByte)", value: """+usablehdd+ """},
 					{label: "Benutzt (MByte)", value: """+usedhdd+ """},
@@ -69,7 +95,20 @@ html.div{
 				labelColor: '#303641',
 				colors: ['#00bff3', '#0072bc']
 			});
+			Morris.Donut({
+				element: 'userchart',
+				resize: true,
+				formatter: function(x, y){
+					return x;
+				},
+				data: [
+					{label: "Angemeldet", value: """+totalSessionCount+ """},
+					{label: "Nicht angemeldet", value: """+(totalUserCount-totalSessionCount)+ """},
+				],
+				labelColor: '#303641',
+				colors: ['#C5D932', '#485859']
+			});
 		});
-		"""		
-	)
+		"""
+			)
 }

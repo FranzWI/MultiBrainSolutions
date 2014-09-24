@@ -10,7 +10,7 @@ html.div {
 				li('class':"active"){
 					a(href:"#status", 'data-toggle':"tab"){
 						span('class':"visible-xs"){ i('class':"entypo-tools") }
-						span('class':"hidden-xs", "System Status")
+						span('class':"hidden-xs", "Status")
 					}
 				}
 				li{
