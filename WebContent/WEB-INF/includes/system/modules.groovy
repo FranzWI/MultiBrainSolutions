@@ -24,8 +24,8 @@ html.div {
 			def modules = ModulContainer.initialise()
 			for(mod in modules.getModules()){
 				tr{
-					td mod.getModulName()
-					td mod.getVersion()
+					td (mod.getModulName())
+					td (mod.getVersion())
 					td {
 						if(mod.isInstalled())
 							i('class':"entypo-check","style":"color:green")
@@ -38,7 +38,7 @@ html.div {
 						}else{
 							button('class':"btn btn-default","data-mod":mod.getModulName(),"data-version":mod.getVersion()){
 								i('class':"entypo-install")
-								println "installieren"
+								span "installieren"
 							}
 						}
 					}
