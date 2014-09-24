@@ -78,13 +78,59 @@ html.div('class':"page-container sidebar-collapsed"){
 						}
 					}
 				}
-
+				// Benachrichtigungen
+				ul('class':"user-info pull-left pull-right-xs pull-none-xsm"){
+					li('class':"notifications dropdown"){
+						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown", 'data-hover':"dropdown", 'data-close-others':"true"){
+							i('class':"entypo-attention")
+							span('class':"badge badge-info", "2")
+						}
+						ul('class':"dropdown-menu"){
+							// Alle Benachrichtigungen markieren
+							li('class':"top"){
+								p('class':"small"){
+									a(href:"#", 'class':"pull-right"," Alle als gelesen markieren")
+									i "Sie haben"
+									strong "2"
+									i "neue Benachrichtigungen"
+								}
+							}
+							
+							li{
+								ul('class':"dropdown-menu-list scroller"){
+									li('class':"unread notification-success"){
+										a(href:"#"){
+											i('class':"entypo-user-add pull-right")
+											span('class':"line"){
+												strong "Neuer Nutzer ist registriert"
+											}
+											span('class':"line small", "vor 30 Sekunden")
+										}
+									}
+									li('class':"unread notification-secondary"){
+										a(href:"#"){
+											i('class':"entypo-heart pull-right")
+											span('class':"line"){
+												strong "Es wurde ein Dokument mit Ihnen geteilt"
+											}
+											span('class':"line small", "vor 2 Minuten")
+										}
+									}
+								}
+							}
+							li('class':"external"){
+								a(href:"#notifications","Alle Benachrichtigungen zeigen")
+							}
+						}
+					}
+				}
+				
 				// Nachrichten
 				ul('class':"user-info pull-left pull-right-xs pull-none-xsm"){
 					li('class':"notifications dropdown"){
 						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown", 'data-hover':"dropdown", 'data-close-others':"true"){
 							i('class':"entypo-mail")
-							span('class':"badge badge-secondary", "10")
+							span('class':"badge badge-secondary", "1")
 						}
 						// Dropdown bei den Nachrichten
 						ul('class':"dropdown-menu"){
@@ -107,7 +153,7 @@ html.div('class':"page-container sidebar-collapsed"){
 								}
 							}
 							li('class':"external"){
-								a(href:"#messages","Alle Nachrichten")
+								a(href:"#messages","Alle Nachrichten zeigen")
 							}
 						}
 
