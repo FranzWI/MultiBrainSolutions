@@ -23,6 +23,11 @@
     <servlet-class>de.mbs.servlet.ModulServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+   <servlet>
+    <servlet-name>Elasticsearchhandler</servlet-name>
+    <servlet-class>de.mbs.servlet.ElasticsearchServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
   <servlet>
     <servlet-name>Jersey Rest</servlet-name>
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
