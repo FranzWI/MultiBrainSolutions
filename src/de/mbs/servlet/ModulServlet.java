@@ -36,6 +36,11 @@ public class ModulServlet extends HttpServlet {
 		String path = this.getServletContext().getRealPath("/")
 				+ "WEB-INF/lib/modules";
 		File modulesDir = new File(path);
+		if(modulesDir.listFiles()==null){
+			//TODO Richtiges Logging
+			System.err.println("Fehler kein Modulordner vorhanden");
+			return;
+		}
 		for (File fileEntry : modulesDir.listFiles()) {
 			if (!fileEntry.isDirectory() && fileEntry.getName().endsWith("jar")) {
 				this.readJar(fileEntry);
@@ -45,14 +50,14 @@ public class ModulServlet extends HttpServlet {
 				+ " Module gefunden");
 		for (Modul mod : this.modules.getModules()) {
 			System.out.println("Modul:\t" + mod.getModulName()
-					+ " installiert: " + mod.isInstalled() + " läuft: "
+					+ " installiert: " + mod.isInstalled() + " lï¿½uft: "
 					+ mod.isRunning());
 			if (mod.isInstalled()) {
 				System.out.println("Modul " + mod.getModulName()
-						+ " startup wird ausgeführt.");
+						+ " startup wird ausgefï¿½hrt.");
 				mod.startup();
 				System.out.println("Modul " + mod.getModulName()
-						+ " startup wurde ausgeführt.");
+						+ " startup wurde ausgefï¿½hrt.");
 			}
 		}
 	}
@@ -62,10 +67,10 @@ public class ModulServlet extends HttpServlet {
 		for (Modul mod : this.modules.getModules()) {
 			if (mod.isInstalled()) {
 				System.out.println("Modul " + mod.getModulName()
-						+ " shutdown wird ausgeführt.");
+						+ " shutdown wird ausgefï¿½hrt.");
 				mod.shutdown();
 				System.out.println("Modul " + mod.getModulName()
-						+ " shutdown wurde ausgeführt.");
+						+ " shutdown wurde ausgefï¿½hrt.");
 			}
 		}
 	}
