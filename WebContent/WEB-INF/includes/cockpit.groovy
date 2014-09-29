@@ -15,5 +15,64 @@ html.div {
 			}
 		}
 	}
-	br()
+	div('class':"draggable-portlets"){
+		div('class':"row sorted"){
+
+			div('class':"col-md-6"){
+				div('class':"portlet panel panel-primary"){
+
+					div('class':"panel-heading"){
+						div('class':"panel-title", "Draggable Portlet 1")
+					}
+					div('class':"panel-body"){ p "Hallo Welt" }
+				}
+			}
+			div('class':"col-md-6"){
+				div('class':"portlet panel panel-danger"){
+
+					div('class':"panel-heading"){
+						div('class':"panel-title", "Draggable Portlet 2")
+					}
+					div('class':"panel-body"){ p "Hallo Welt" }
+				}
+			}
+			div('class':"col-md-3"){
+				div('class':"portlet panel panel-danger"){
+
+					div('class':"panel-heading"){
+						div('class':"panel-title", "Draggable Portlet 2")
+					}
+					div('class':"panel-body"){ p "Hallo Welt" }
+				}
+			}
+			div('class':"col-md-3"){
+				div('class':"portlet panel panel-primary"){
+
+					div('class':"panel-heading"){
+						div('class':"panel-title", "Draggable Portlet 2")
+					}
+					div('class':"panel-body"){ p "Hallo Welt" }
+				}
+			}
+			div('class':"col-md-3"){
+				div('class':"portlet panel panel-danger"){
+
+					div('class':"panel-heading"){
+						div('class':"panel-title", "Draggable Portlet 2")
+					}
+					div('class':"panel-body"){ p "Hallo Welt" }
+				}
+			}
+			div('class':"col-md-3"){
+				div('class':"portlet panel panel-primary"){
+
+					div('class':"panel-heading"){
+						div('class':"panel-title", "Draggable Portlet 2")
+					}
+					div('class':"panel-body"){ p "Hallo Welt" }
+				}
+			}
+		}
+	}
+	script(src:"assets/js/cockpit.js")
 }
