@@ -10,6 +10,8 @@ import java.util.Vector;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.stats.IndexStats;
+import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
@@ -81,11 +83,26 @@ public class ElasticsearchContainer {
 		ImmutableOpenMap<String, IndexMetaData> indexMappings = clusterStateResponse
 				.getState().getMetaData().indices();
 		for (ObjectCursor<String> key : indexMappings.keys()) {
+			
 			indices.add(key.value);
 		}
 		return indices;
 	}
 
+	/**
+	 * 
+	 * @return die Größe der Indexe in Bytes
+	 */
+	public Map<String,Long> getESIndiceSize(){
+		Map<String,Long> map = new TreeMap<String,Long>();
+		for(String index: this.getESIndices()){
+			IndicesStatsResponse stats = client.admin().indices().prepareStats().clear().setIndices(index).setStore(true).execute().actionGet();
+			long bytes = stats.getIndex(index).getTotal().getStore().getSize().bytes();
+			map.put(index, bytes);
+		}
+		return map;
+	}
+	
 	/**
 	 * alle Typen aller Indexe abfragen
 	 * @return
