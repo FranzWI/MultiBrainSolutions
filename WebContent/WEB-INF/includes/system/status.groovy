@@ -64,7 +64,7 @@ html.div{
 	div('class':"row"){
 		if(es.isRunning()){
 			div('class':"col-md-3"){
-				h4("Index Größe")
+				h4("Indizes Größe")
 				div(id:"indexsizechart",style:"height: 250px")
 				p("Gesamtgröße (KByte): "+((indexSize / 1024f).trunc(2)));
 			}

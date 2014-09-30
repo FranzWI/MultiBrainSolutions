@@ -1,4 +1,5 @@
 html.div {
+	link(rel:"stylesheet", href:"assets/css/context.bootstrap.css")
 	div('class':"row"){
 		div('class':"col-md-12"){
 			h2(style:"float:left;display: inline;", "Cockpit")
@@ -74,5 +75,6 @@ html.div {
 			}
 		}
 	}
+	script(src:"assets/js/context.js")
 	script(src:"assets/js/cockpit.js")
 }
