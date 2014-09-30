@@ -12,6 +12,7 @@ import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
+import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
@@ -101,6 +102,18 @@ public class ElasticsearchContainer {
 			map.put(index, bytes);
 		}
 		return map;
+	}
+	
+	/**
+	 * 
+	 * @param index - bei dem die Anzahl der DOkumente gezählt werden soll
+	 * @return die Anzahl der Dokumente die in einen Index sind
+	 */
+	public long getESDocumentCount(String index){
+		CountResponse response = client.prepareCount(index)
+		        .execute()
+		        .actionGet();
+		return response.getCount();
 	}
 	
 	/**

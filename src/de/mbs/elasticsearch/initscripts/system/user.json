@@ -1,0 +1,8 @@
+{
+	"user":{
+		"properties" : {
+			"name":{"type":"string", "store": true}
+			"surname":{"type":"string", "store": true}
+		}
+	}
+}

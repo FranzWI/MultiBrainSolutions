@@ -9,12 +9,18 @@ def int totalSessionCount = SessionListener.getSessionCount()
 // Datenbank verbindung
 def ElasticsearchContainer es = ElasticsearchContainer.initialise();
 
-def String indexDonutData = ""
-def long indexSize = 0l
+def String indexSizeDonutData = "", indexCountDonutData = ""
+def long indexSize = 0l, indexCount = 0l
 // closure, cooles zeusch ...
-es.getESIndiceSize().each {key,value-> 
-	indexDonutData+="{label: \""+key+" (KByte)\", value: \""+((value/1024f).trunc(2))+"\"},\n"
+es.getESIndiceSize().each {key,value->
+	indexSizeDonutData+="{label: \""+key+" (KByte)\", value: \""+((value/1024f).trunc(2))+"\"},\n"
 	indexSize += value
+}
+
+es.getESIndices().each {key->
+	long value = es.getESDocumentCount(key)
+	indexCountDonutData+="{label: \""+key+"\", value: \""+value+"\"},\n"
+	indexCount += value
 }
 
 Runtime runtime = Runtime.getRuntime()
@@ -62,16 +68,25 @@ html.div{
 		div('class':"col-md-12"){h3("Elasticsearch")}
 	}
 	div('class':"row"){
-		if(es.isRunning()){
+		if(es.isRunning() && es.getESIndices().size()>0){
 			div('class':"col-md-3"){
 				h4("Indizes Größe")
 				div(id:"indexsizechart",style:"height: 250px")
 				p("Gesamtgröße (KByte): "+((indexSize / 1024f).trunc(2)));
 			}
+			div('class':"col-md-3"){
+				h4("Dokumenten Anzahl")
+				div(id:"indexdoccountchart",style:"height: 250px")
+				p("Gesamt Anzahl: "+indexCount);
+			}
 		}else{
-			div('class':"col-md-12"){
-				div('class':"alert alert-danger"){
-					strong("Oh Nein! Elasticsearch wird nicht ausgeführt!")
+			if(es.isRunning()){
+				div('class':"col-md-12"){
+					div('class':"alert alert-info"){ p("Oh! Elasticsearch enthält keine Daten! Bitte Tomcat neustarten!") }
+				}
+			}else{
+				div('class':"col-md-12"){
+					div('class':"alert alert-danger"){ p("Oh Nein! Elasticsearch wird nicht ausgeführt!") }
 				}
 			}
 		}
@@ -92,7 +107,7 @@ html.div{
 
 	script(
 
-	"""
+			"""
 		function getRandomInt(min, max) {
 			return Math.floor(Math.random() * (max - min + 1)) + min;
 		}
@@ -105,8 +120,8 @@ html.div{
 					return x;
 				},
 				data: [
-					{label: "Benutzer RAM (MByte)", value: """+rammemory+ """},
-					{label: "Freier RAM (MByte)", value: """+ramfree+ """},
+					{label: "benutzt (MByte)", value: """+rammemory+ """},
+					{label: "frei (MByte)", value: """+ramfree+ """},
 				],
 				labelColor: '#303641',
 				colors: ['#f26c4f', '#00a651', '#00bff3', '#0072bc']
@@ -118,8 +133,8 @@ html.div{
 					return x;
 				},
 				data: [
-					{label: "Frei (MByte)", value: """+usablehdd+ """},
-					{label: "Benutzt (MByte)", value: """+usedhdd+ """},
+					{label: "frei (MByte)", value: """+usablehdd+ """},
+					{label: "benutzt (MByte)", value: """+usedhdd+ """},
 				],
 				labelColor: '#303641',
 				colors: ['#00bff3', '#0072bc']
@@ -144,13 +159,24 @@ html.div{
 					return x;
 				},
 				data: [
-					"""+indexDonutData+
-	"""
+					"""+indexSizeDonutData+"""
+				],
+				labelColor: '#303641',
+				colors: ['#7E3759','#C5403E','#B8D331','#EEB31B','#53C7CB','#C5D932', '#485859']
+			});
+			Morris.Donut({
+				element: 'indexdoccountchart',
+				resize: true,
+				formatter: function(x, y){
+					return x;
+				},
+				data: [
+					"""+indexCountDonutData+"""
 				],
 				labelColor: '#303641',
 				colors: ['#7E3759','#C5403E','#B8D331','#EEB31B','#53C7CB','#C5D932', '#485859']
 			});
 		});
 		"""
-	)
+			)
 }
