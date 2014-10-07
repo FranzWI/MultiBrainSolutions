@@ -2,6 +2,10 @@ package de.mbs.elasticsearch;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -23,6 +27,8 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.indices.IndexAlreadyExistsException;
 import org.elasticsearch.node.Node;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class ElasticsearchContainer {
 
@@ -46,7 +52,7 @@ public class ElasticsearchContainer {
 			} else {
 				System.out.println("ES: installation fehlgeschlagen");
 			}
-			
+
 		}
 		this.printESStructure();
 	}
@@ -62,19 +68,21 @@ public class ElasticsearchContainer {
 		return this.client;
 	}
 
-	private void printESStructure(){
+	private void printESStructure() {
 		System.out.println("ES:Structure");
-		for(Entry<String, Vector<String>> structur: this.getESStructure().entrySet()){
-			System.out.println("ES:\tIndex:"+structur.getKey());
-			for(String type: structur.getValue()){
-				System.out.println("ES:\t\t->"+type);
+		for (Entry<String, Vector<String>> structur : this.getESStructure()
+				.entrySet()) {
+			System.out.println("ES:\tIndex:" + structur.getKey());
+			for (String type : structur.getValue()) {
+				System.out.println("ES:\t\t->" + type);
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * alle Indexe abfragen
+	 * 
 	 * @return
 	 */
 	public Vector<String> getESIndices() {
@@ -84,7 +92,7 @@ public class ElasticsearchContainer {
 		ImmutableOpenMap<String, IndexMetaData> indexMappings = clusterStateResponse
 				.getState().getMetaData().indices();
 		for (ObjectCursor<String> key : indexMappings.keys()) {
-			
+
 			indices.add(key.value);
 		}
 		return indices;
@@ -94,30 +102,34 @@ public class ElasticsearchContainer {
 	 * 
 	 * @return die Größe der Indexe in Bytes
 	 */
-	public Map<String,Long> getESIndiceSize(){
-		Map<String,Long> map = new TreeMap<String,Long>();
-		for(String index: this.getESIndices()){
-			IndicesStatsResponse stats = client.admin().indices().prepareStats().clear().setIndices(index).setStore(true).execute().actionGet();
-			long bytes = stats.getIndex(index).getTotal().getStore().getSize().bytes();
+	public Map<String, Long> getESIndiceSize() {
+		Map<String, Long> map = new TreeMap<String, Long>();
+		for (String index : this.getESIndices()) {
+			IndicesStatsResponse stats = client.admin().indices()
+					.prepareStats().clear().setIndices(index).setStore(true)
+					.execute().actionGet();
+			long bytes = stats.getIndex(index).getTotal().getStore().getSize()
+					.bytes();
 			map.put(index, bytes);
 		}
 		return map;
 	}
-	
+
 	/**
 	 * 
-	 * @param index - bei dem die Anzahl der DOkumente gezählt werden soll
+	 * @param index
+	 *            - bei dem die Anzahl der DOkumente gezählt werden soll
 	 * @return die Anzahl der Dokumente die in einen Index sind
 	 */
-	public long getESDocumentCount(String index){
-		CountResponse response = client.prepareCount(index)
-		        .execute()
-		        .actionGet();
+	public long getESDocumentCount(String index) {
+		CountResponse response = client.prepareCount(index).execute()
+				.actionGet();
 		return response.getCount();
 	}
-	
+
 	/**
 	 * alle Typen aller Indexe abfragen
+	 * 
 	 * @return
 	 */
 	public Map<String, Vector<String>> getESStructure() {
@@ -143,7 +155,8 @@ public class ElasticsearchContainer {
 	}
 
 	public boolean isInstalled() {
-		return this.getESIndices().size() > 0;
+		return this.getESIndices().size() > 0
+				&& this.getESIndices().contains("system");
 	}
 
 	private JSONObject getProperties(String[][] data) {
@@ -154,25 +167,47 @@ public class ElasticsearchContainer {
 		return grr;
 	}
 
+	/**
+	 * 
+	 * @param dir
+	 *            - Ordner indem die *.json Datein gesucht werden sollen
+	 * @return
+	 */
+	private Map<String, JSONObject> getMapping(String dir) {
+		Map<String, JSONObject> maps = new TreeMap<String, JSONObject>();
+		URL url = this.getClass().getResource("initscripts/" + dir);
+		File folder = new File(url.getFile());
+		JSONParser parser = new JSONParser();
+		// ordner existiert und ist Ordner
+		if (folder.exists() && folder.isDirectory()) {
+			// alle Dateien daraus holen
+			for (File file : folder.listFiles()) {
+				// Datie endet mit .json
+				if (file.getName().matches(".*json")) {
+					try {
+						System.out.println("DEBUG "+dir+"/"+file.getName());
+						JSONObject obj = (JSONObject) parser
+								.parse(new FileReader(file));
+						maps.put(file.getName().replace(".json", ""), obj);
+						parser.reset();
+					} catch (IOException | ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return maps;
+	}
+
 	public boolean install() {
 		// Index System erstellen
 		String indexName = "system";
 		CreateIndexRequest request = new CreateIndexRequest(indexName);
-		//Type user erstellen
-		//TODO vereinfachen ....
-		String strType = "user";
-		JSONObject obj = new JSONObject();
-		JSONObject propList = new JSONObject();
-		propList.put("name",
-				this.getProperties(new String[][] { { "type", "string" } }));
-		propList.put("surname",
-				this.getProperties(new String[][] { { "type", "string" } }));
-
-		JSONObject prop = new JSONObject();
-		prop.put("properties", propList);
-		obj.put("user", prop);
-
-		request.mapping(strType, obj.toJSONString());
+		Map<String, JSONObject> map = this.getMapping("system");
+		for (String key : map.keySet()) {
+			request.mapping(key, map.get(key).toJSONString());
+		}
 		try {
 			client.admin().indices().create(request).actionGet();
 			client.admin().cluster()

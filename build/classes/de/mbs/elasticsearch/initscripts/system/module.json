@@ -1,14 +1,14 @@
 {
-    "user":{
+    "module":{
         "properties":{
-            "userName":{
+            "name":{
                 "type":"string",
                 "index":"not_analyzed"
             },
-            "firstName":{
+            "pathGui":{
                 "type":"multi_field",
                 "fields":{
-                    "firstName":{
+                    "pathGui":{
                         "type":"string",
                         "index":"not_analyzed"
                     },
@@ -17,10 +17,10 @@
                     }
                 }
             },
-            "lastName":{
+            "patchAdmin":{
                 "type":"multi_field",
                 "fields":{
-                    "lastName":{
+                    "pathAdmin":{
                         "type":"string",
                         "index":"not_analyzed"
                     },
@@ -29,34 +29,14 @@
                     }
                 }
             },
-            "email":{
-                "type":"multi_field",
-                "fields":{
-                    "email":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    },
-                    "divided":{
-                        "type":"string"
-                    }
-                }
+            "description":{
+                "type":"string"
             },
-            "pw":{
+            "createsDataForPortlets":{
                 "type":"string",
                 "index":"not_analyzed"
             },
-            "apiKey":{
-                "type":"string",
-                "index":"not_analyzed"
-            },
-            "sessionID":{
-                "type":"integer"
-            },
-            "inGroups":{
-                "type":"string",
-                "index":"not_analyzed"
-            },
-            "usesPortlets":{
+            "usedInGroups":{
                 "type":"string",
                 "index":"not_analyzed"
             }
