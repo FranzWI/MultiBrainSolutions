@@ -1,24 +1,28 @@
 import java.io.File;
 import de.mbs.listener.SessionListener
-import de.mbs.elasticsearch.ElasticsearchContainer
+import de.mbs.interfaces.DatabaseView
+import de.mbs.interfaces.MailView
+import de.mbs.handler.ServiceHandler
 
 
 //TODO maximale Nutzer anzahl aus Datenbank ermitteln
 def int totalUserCount = 20;
 def int totalSessionCount = SessionListener.getSessionCount()
 // Datenbank verbindung
-def ElasticsearchContainer es = ElasticsearchContainer.initialise();
+def DatabaseView es = ServiceHandler.getDatabaseView();
+// Email Dienst
+def MailView mail = ServiceHandler.getMailView();
 
 def String indexSizeDonutData = "", indexCountDonutData = ""
 def long indexSize = 0l, indexCount = 0l
 // closure, cooles zeusch ...
-es.getESIndiceSize().each {key,value->
+es.getDatabaseSize().each {key,value->
 	indexSizeDonutData+="{label: \""+key+" (KByte)\", value: \""+((value/1024f).trunc(2))+"\"},\n"
 	indexSize += value
 }
 
-es.getESIndices().each {key->
-	long value = es.getESDocumentCount(key)
+es.getDatabases().each {key->
+	long value = es.getEntryCount(key)
 	indexCountDonutData+="{label: \""+key+"\", value: \""+value+"\"},\n"
 	indexCount += value
 }
@@ -54,9 +58,14 @@ html.div{
 			h4("Dienste")
 			//TODO Elastice search nicht erreichbar dann btn-red und anderes icon siehe kaputter Dienst
 			if(es.isRunning()){
-				button('class':"btn btn-lg btn-block btn-green disabled btn-icon icon-left", "Elasticsearch"){ i('class':"entypo-check") }
+				button('class':"btn btn-lg btn-block btn-green disabled btn-icon icon-left", "Datenbank "+es.getServiceName()){ i('class':"entypo-check") }
 			}else{
-				button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "Elasticsearch"){ i('class':"entypo-cancel") }
+				button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "Datenbank "+es.getServiceName()){ i('class':"entypo-cancel") }
+			}
+			if(mail.isRunning()){
+				button('class':"btn btn-lg btn-block btn-green disabled btn-icon icon-left", "Mail "+mail.getServiceName()){ i('class':"entypo-check") }
+			}else{
+				button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "Mail "+mail.getServiceName()){ i('class':"entypo-cancel") }
 			}
 		}
 	}
@@ -68,7 +77,7 @@ html.div{
 		div('class':"col-md-12"){h3("Elasticsearch")}
 	}
 	div('class':"row"){
-		if(es.isRunning() && es.getESIndices().size()>0){
+		if(es.isRunning() && es.getDatabases().size()>0){
 			div('class':"col-md-3"){
 				h4("Indizes Größe")
 				div(id:"indexsizechart",style:"height: 250px")

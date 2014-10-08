@@ -24,8 +24,13 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
    <servlet>
-    <servlet-name>Elasticsearchhandler</servlet-name>
-    <servlet-class>de.mbs.servlet.ElasticsearchServlet</servlet-class>
+    <servlet-name>Databasehandler</servlet-name>
+    <servlet-class>de.mbs.servlet.DatabaseServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>Mailhandler</servlet-name>
+    <servlet-class>de.mbs.servlet.MailServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet>

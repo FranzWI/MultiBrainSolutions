@@ -30,13 +30,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class ElasticsearchContainer {
+import de.mbs.interfaces.DatabaseView;
 
-	private static ElasticsearchContainer container;
+public class ElasticsearchView implements DatabaseView{
 
 	private Client client;
 
-	private ElasticsearchContainer() {
+	public ElasticsearchView() {
 		Settings settings = ImmutableSettings.settingsBuilder()
 				.put("cluster.name", "MBS Management Cockpit Cluster")
 				.put("node.data", false).put("network.host", "localhost")
@@ -57,13 +57,6 @@ public class ElasticsearchContainer {
 		this.printESStructure();
 	}
 
-	public static ElasticsearchContainer initialise() {
-		if (container == null) {
-			container = new ElasticsearchContainer();
-		}
-		return container;
-	}
-
 	public Client getESClient() {
 		return this.client;
 	}
@@ -79,13 +72,17 @@ public class ElasticsearchContainer {
 		}
 	}
 
+	public String getServiceName(){
+		return "elasticsearch";
+	}
+	
 	/**
 	 * 
 	 * alle Indexe abfragen
 	 * 
 	 * @return
 	 */
-	public Vector<String> getESIndices() {
+	public Vector<String> getDatabases(){
 		Vector<String> indices = new Vector<String>();
 		ClusterStateResponse clusterStateResponse = client.admin().cluster()
 				.prepareState().execute().actionGet();
@@ -102,9 +99,9 @@ public class ElasticsearchContainer {
 	 * 
 	 * @return die Größe der Indexe in Bytes
 	 */
-	public Map<String, Long> getESIndiceSize() {
+	public Map<String, Long> getDatabaseSize() {
 		Map<String, Long> map = new TreeMap<String, Long>();
-		for (String index : this.getESIndices()) {
+		for (String index : this.getDatabases()) {
 			IndicesStatsResponse stats = client.admin().indices()
 					.prepareStats().clear().setIndices(index).setStore(true)
 					.execute().actionGet();
@@ -121,7 +118,7 @@ public class ElasticsearchContainer {
 	 *            - bei dem die Anzahl der DOkumente gezählt werden soll
 	 * @return die Anzahl der Dokumente die in einen Index sind
 	 */
-	public long getESDocumentCount(String index) {
+	public long getEntryCount(String index) {
 		CountResponse response = client.prepareCount(index).execute()
 				.actionGet();
 		return response.getCount();
@@ -155,8 +152,9 @@ public class ElasticsearchContainer {
 	}
 
 	public boolean isInstalled() {
-		return this.getESIndices().size() > 0
-				&& this.getESIndices().contains("system");
+		Vector<String> dbs = this.getDatabases();
+		return dbs.size() > 0
+				&& dbs.contains("system");
 	}
 
 	private JSONObject getProperties(String[][] data) {
@@ -223,5 +221,11 @@ public class ElasticsearchContainer {
 			ex.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public boolean exit() {
+		this.getESClient().close();
+		return true;
 	}
 }
