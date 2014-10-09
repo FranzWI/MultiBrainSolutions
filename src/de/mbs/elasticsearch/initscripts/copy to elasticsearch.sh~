@@ -1,4 +1,0 @@
-#!/bin/bash
-cd /home/master/git/MultiBrainSolutions/src/de/mbs/elasticsearch/initscript/
-pwd
-#cp * 

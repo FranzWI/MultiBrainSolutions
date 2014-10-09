@@ -1,4 +1,4 @@
-package de.mbs.elasticsearch;
+package de.mbs.db.elasticsearch;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 

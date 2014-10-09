@@ -24,13 +24,8 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
    <servlet>
-    <servlet-name>Databasehandler</servlet-name>
-    <servlet-class>de.mbs.servlet.DatabaseServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet>
-    <servlet-name>Mailhandler</servlet-name>
-    <servlet-class>de.mbs.servlet.MailServlet</servlet-class>
+    <servlet-name>Servicehandler</servlet-name>
+    <servlet-class>de.mbs.servlet.ServiceServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet>
