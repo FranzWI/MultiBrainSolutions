@@ -8,6 +8,9 @@ public abstract class MailView {
 
 	public abstract boolean sendMail(String to, String topic, String from,
 			String text);
+	
+	public abstract boolean sendHtmlMail(String to, String topic, String from,
+			String html);
 
 	public abstract String getServiceName();
 	
@@ -16,6 +19,15 @@ public abstract class MailView {
 		Map<String, Boolean> map = new TreeMap<String, Boolean>();
 		for (String res : to) {
 			map.put(res, this.sendMail(res, topic, from, text));
+		}
+		return map;
+	}
+	
+	public Map<String, Boolean> sendHtmlMail(Vector<String> to, String topic,
+			String from, String html) {
+		Map<String, Boolean> map = new TreeMap<String, Boolean>();
+		for (String res : to) {
+			map.put(res, this.sendHtmlMail(res, topic, from, html));
 		}
 		return map;
 	}

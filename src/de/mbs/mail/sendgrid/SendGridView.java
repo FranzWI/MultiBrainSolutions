@@ -19,12 +19,14 @@ public class SendGridView extends MailView {
 
 	public SendGridView() {
 		sendgrid = new SendGrid(SGProp.USER, SGProp.PASSWORD);
-		
+
 		// TODO aus der Datenbank lesen
-		HttpHost proxy = new HttpHost("192.168.2.4",3128);
-		CloseableHttpClient http = HttpClientBuilder.create().setProxy(proxy).setUserAgent("sendgrid/" + sendgrid.getVersion() + ";java").build();
+		HttpHost proxy = new HttpHost("192.168.2.4", 3128);
+		CloseableHttpClient http = HttpClientBuilder.create().setProxy(proxy)
+				.setUserAgent("sendgrid/" + sendgrid.getVersion() + ";java")
+				.build();
 		sendgrid = sendgrid.setClient(http);
-		
+
 	}
 
 	@Override
@@ -59,6 +61,27 @@ public class SendGridView extends MailView {
 			return true;
 		return this.sendMail("derdudele@gmail.com", "testmail",
 				"management-cockpit@ba-dresden.de", "testmail");
+	}
+
+	@Override
+	public boolean sendHtmlMail(String to, String topic, String from,
+			String html) {
+		SendGrid.Email email = new SendGrid.Email();
+		email.addTo(to);
+		email.setFrom(from);
+		email.setSubject(topic);
+		email.setHtml(html);
+		try {
+			SendGrid.Response response = sendgrid.send(email);
+			this.lastSendStatus = SendGridView.OKEY;
+			System.out.println("Email versandstatus: " + response.getMessage());
+			return response.getStatus();
+		} catch (SendGridException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.lastSendStatus = SendGridView.ERROR;
+		return false;
 	}
 
 }
