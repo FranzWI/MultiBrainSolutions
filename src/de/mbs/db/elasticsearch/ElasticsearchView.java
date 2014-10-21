@@ -14,7 +14,6 @@ import java.util.Vector;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.client.Client;
@@ -31,7 +30,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.interfaces.DatabaseView;
-import de.mbs.interfaces.MailView;
 
 public class ElasticsearchView extends DatabaseView{
 

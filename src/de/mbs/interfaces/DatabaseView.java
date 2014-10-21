@@ -28,7 +28,9 @@ public abstract class DatabaseView {
 				while(true){
 					Mail m = null;
 					if(DatabaseView.this.mailView == null || !DatabaseView.this.mailView.isRunning()){
-						//TOOD Mails in DB Aufnehmen
+						//TODO Mails in DB Aufnehmen
+						// da sie scheinbar aktuell nich versendet werden können
+						// später versenden
 					}else{
 						while((m = mailQueue.poll()) != null){
 							DatabaseView.this.mailView.sendMail(m);
@@ -56,6 +58,8 @@ public abstract class DatabaseView {
 			}
 			
 		});
+		//TODO Thread als
+		t.setDaemon(true);
 		t.start();
 	}
 	
