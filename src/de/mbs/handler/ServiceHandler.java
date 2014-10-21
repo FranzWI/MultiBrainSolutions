@@ -6,7 +6,6 @@ import de.mbs.interfaces.MailView;
 public class ServiceHandler {
 
 	private static DatabaseView dbview;
-	private static MailView mailview;
 	
 	public static void setDatabaseView(DatabaseView dbview){
 		ServiceHandler.dbview = dbview;
@@ -14,14 +13,6 @@ public class ServiceHandler {
 	
 	public static DatabaseView getDatabaseView(){
 		return dbview;
-	}
-	
-	public static void setMailView(MailView mailview){
-		ServiceHandler.mailview = mailview;
-	}
-	
-	public static MailView getMailView(){
-		return mailview;
 	}
 	
 }

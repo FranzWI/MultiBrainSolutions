@@ -2,32 +2,34 @@ package de.mbs.interfaces;
 
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
+
+import de.mbs.mail.Mail;
 
 public abstract class MailView {
 
-	public abstract boolean sendMail(String to, String topic, String from,
+	protected abstract boolean sendMail(String to, String topic, String from,
 			String text);
-	
-	public abstract boolean sendHtmlMail(String to, String topic, String from,
-			String html);
+
+	protected abstract boolean sendHtmlMail(String to, String topic,
+			String from, String html);
 
 	public abstract String getServiceName();
-	
-	public Map<String, Boolean> sendMail(Vector<String> to, String topic,
-			String from, String text) {
+
+	public Map<String, Boolean> sendMail(Mail m) {
 		Map<String, Boolean> map = new TreeMap<String, Boolean>();
-		for (String res : to) {
-			map.put(res, this.sendMail(res, topic, from, text));
+		for (String res : m.getTo()) {
+			map.put(res,
+					this.sendMail(res, m.getTopic(), m.getFrom(), m.getText()));
 		}
 		return map;
 	}
-	
-	public Map<String, Boolean> sendHtmlMail(Vector<String> to, String topic,
-			String from, String html) {
+
+	public Map<String, Boolean> sendHtmlMail(Mail m) {
 		Map<String, Boolean> map = new TreeMap<String, Boolean>();
-		for (String res : to) {
-			map.put(res, this.sendHtmlMail(res, topic, from, html));
+		for (String res : m.getTo()) {
+			map.put(res,
+					this.sendHtmlMail(res, m.getTopic(), m.getFrom(),
+							m.getText()));
 		}
 		return map;
 	}

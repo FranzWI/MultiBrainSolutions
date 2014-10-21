@@ -30,7 +30,7 @@ public class SendGridView extends MailView {
 	}
 
 	@Override
-	public boolean sendMail(String to, String topic, String from, String text) {
+	protected boolean sendMail(String to, String topic, String from, String text) {
 		SendGrid.Email email = new SendGrid.Email();
 		email.addTo(to);
 		email.setFrom(from);
@@ -64,7 +64,7 @@ public class SendGridView extends MailView {
 	}
 
 	@Override
-	public boolean sendHtmlMail(String to, String topic, String from,
+	protected boolean sendHtmlMail(String to, String topic, String from,
 			String html) {
 		SendGrid.Email email = new SendGrid.Email();
 		email.addTo(to);

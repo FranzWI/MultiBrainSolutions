@@ -31,8 +31,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.interfaces.DatabaseView;
+import de.mbs.interfaces.MailView;
 
-public class ElasticsearchView implements DatabaseView{
+public class ElasticsearchView extends DatabaseView{
 
 	private Client client;
 

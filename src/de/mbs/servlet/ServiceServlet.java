@@ -17,10 +17,8 @@ public class ServiceServlet extends HttpServlet {
 	public void init() throws ServletException {
 		System.out.println("Starte Datenbankverbindung");
 		ServiceHandler.setDatabaseView(new ElasticsearchView());
+		ServiceHandler.getDatabaseView().setMailView(new SendGridView());
 		System.out.println("Verbindung zur Datenbank hergestellt");
-		System.out.println("Starte Mailhandler");
-		ServiceHandler.setMailView(new SendGridView());
-		System.out.println("Mailhandler gestartet");
 	}
 	
 	@Override
