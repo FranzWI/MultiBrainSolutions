@@ -29,7 +29,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import de.mbs.interfaces.DatabaseView;
+import de.mbs.abstracts.db.DatabaseView;
 
 public class ElasticsearchView extends DatabaseView{
 

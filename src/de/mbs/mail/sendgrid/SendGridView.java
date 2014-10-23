@@ -7,7 +7,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
 
-import de.mbs.interfaces.MailView;
+import de.mbs.abstracts.mail.MailView;
 
 public class SendGridView extends MailView {
 

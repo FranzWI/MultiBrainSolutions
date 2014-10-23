@@ -3,9 +3,9 @@ package de.mbs.servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import de.mbs.abstracts.mail.MailView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
 import de.mbs.handler.ServiceHandler;
-import de.mbs.interfaces.MailView;
 import de.mbs.mail.sendgrid.SendGridView;
 
 public class ServiceServlet extends HttpServlet {

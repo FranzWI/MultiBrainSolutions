@@ -25,20 +25,22 @@ public class ModulServlet extends HttpServlet {
 		PluginManager pm = PluginManagerFactory.createPluginManager();
 		pm.addPluginsFrom(file.toURI());
 		Modul mod = pm.getPlugin(Modul.class, new GetPluginOption[0]);
-		modules.addModul(mod, file);
+		if (mod != null)
+			modules.addModul(mod, file);
 	}
 
 	@Override
 	public void init() throws ServletException {
 		System.out.println("initialisiere Module");
 		this.modules = ModulContainer.initialise();
-		ModulHelper.setSerlvetContextPath(this.getServletContext().getRealPath("/"));
-		String path = this.getServletContext().getRealPath("/")
+		ModulHelper.setSerlvetContextPath(this.getServletContext().getRealPath(
+				"/"));
+		String path = this.getServletContext().getRealPath("/")+File.separator
 				+ "WEB-INF/lib/modules";
 		File modulesDir = new File(path);
-		if(modulesDir.listFiles()==null){
-			//TODO Richtiges Logging
-			System.err.println("Fehler kein Modulordner vorhanden");
+		if (modulesDir.listFiles() == null) {
+			// TODO Richtiges Logging
+			System.err.println("Fehler kein Modulordner vorhanden: "+path);
 			return;
 		}
 		for (File fileEntry : modulesDir.listFiles()) {
@@ -50,14 +52,14 @@ public class ModulServlet extends HttpServlet {
 				+ " Module gefunden");
 		for (Modul mod : this.modules.getModules()) {
 			System.out.println("Modul:\t" + mod.getModulName()
-					+ " installiert: " + mod.isInstalled() + " l�uft: "
+					+ " installiert: " + mod.isInstalled() + " läuft: "
 					+ mod.isRunning());
 			if (mod.isInstalled()) {
 				System.out.println("Modul " + mod.getModulName()
-						+ " startup wird ausgef�hrt.");
+						+ " startup wird ausgeführt.");
 				mod.startup();
 				System.out.println("Modul " + mod.getModulName()
-						+ " startup wurde ausgef�hrt.");
+						+ " startup wurde ausgeführt.");
 			}
 		}
 	}

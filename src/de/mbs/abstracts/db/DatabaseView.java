@@ -1,10 +1,11 @@
-package de.mbs.interfaces;
+package de.mbs.abstracts.db;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
 
+import de.mbs.abstracts.mail.MailView;
 import de.mbs.mail.Mail;
 
 /**
