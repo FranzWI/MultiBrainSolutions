@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import de.mbs.abstracts.mail.MailView;
-import de.mbs.mail.Mail;
+import de.mbs.abstracts.mail.definition.Mail;
 
 /**
  * 

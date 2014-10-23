@@ -3,7 +3,7 @@ package de.mbs.abstracts.mail;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.mbs.mail.Mail;
+import de.mbs.abstracts.mail.definition.Mail;
 
 public abstract class MailView {
 
@@ -35,5 +35,5 @@ public abstract class MailView {
 	}
 
 	public abstract boolean isRunning();
-
+	
 }

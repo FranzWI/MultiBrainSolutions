@@ -1,4 +1,4 @@
-package de.mbs.mail;
+package de.mbs.abstracts.mail.definition;
 
 import java.util.Vector;
 
