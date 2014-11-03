@@ -1,6 +1,7 @@
 package de.mbs.db.elasticsearch;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+import groovy.xml.MarkupBuilder;
 
 import java.io.File;
 import java.io.FileReader;
@@ -30,6 +31,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.DatabaseView;
+import de.mbs.abstracts.db.views.GroupView;
+import de.mbs.abstracts.db.views.PortletView;
+import de.mbs.abstracts.db.views.UserView;
 
 public class ElasticsearchView extends DatabaseView{
 
@@ -226,5 +230,29 @@ public class ElasticsearchView extends DatabaseView{
 	public boolean exit() {
 		this.getESClient().close();
 		return true;
+	}
+
+	@Override
+	public UserView getUserView() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PortletView getPortletView() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GroupView getGroupView() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<MarkupBuilder> search(String search) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
