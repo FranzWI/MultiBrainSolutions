@@ -34,11 +34,18 @@ import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.UserView;
+import de.mbs.db.elasticsearch.views.ElasticsearchPortletview;
+import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
+import de.mbs.db.elasticsearch.views.ElasticsearchGroupview;
 
 public class ElasticsearchView extends DatabaseView{
 
 	private Client client;
 
+	private ElasticsearchUserview userview;
+	private ElasticsearchPortletview portletview;
+	private ElasticsearchGroupview groupview;
+	
 	public ElasticsearchView() {
 		Settings settings = ImmutableSettings.settingsBuilder()
 				.put("cluster.name", "MBS Management Cockpit Cluster")
@@ -57,6 +64,10 @@ public class ElasticsearchView extends DatabaseView{
 			}
 
 		}
+		// Views initialisieren
+		this.userview = new ElasticsearchUserview();
+		this.groupview = new ElasticsearchGroupview();
+		this.portletview = new ElasticsearchPortletview();
 		this.printESStructure();
 	}
 
@@ -234,20 +245,17 @@ public class ElasticsearchView extends DatabaseView{
 
 	@Override
 	public UserView getUserView() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.userview;
 	}
 
 	@Override
 	public PortletView getPortletView() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.portletview;
 	}
 
 	@Override
 	public GroupView getGroupView() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.groupview;
 	}
 
 	@Override
