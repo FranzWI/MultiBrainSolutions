@@ -160,12 +160,7 @@ public class ElasticsearchView extends DatabaseView{
 				&& dbs.contains("system");
 	}
 
-	/*TODO: Franz -> Ich habe es auf Public gesetzt, da wir es somit für alle add()'s verwenden können 
-	-> Vereinheitlichung des Quellcodes, Redundanzen vermindern usw...
-	 Um dies zu gewährleisten habe ich den Typ des Mehrdimensionalen Arrays von String[][] 
-	 auf Object[][] umgestellt*/
-	
-	public JSONObject getProperties(Object[][] data) {
+	private JSONObject getProperties(String[][] data) {
 		JSONObject grr = new JSONObject();
 		for (int i = 0; i < data.length; i++) {
 			grr.put(data[i][0], data[i][1]);
