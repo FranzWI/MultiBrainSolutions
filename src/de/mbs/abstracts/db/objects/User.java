@@ -7,10 +7,10 @@ import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 public class User extends DatabaseObject {
 
 	private String username, firstname, lastname, email, pw, apikey;
-	
-	private Vector<String> membership;
-	private Vector<String> portlets;
-	
+
+	private Vector<String> membership = new Vector<String>();
+	private Vector<String> portlets = new Vector<String>();
+
 	public User(String id) {
 		super(id);
 	}

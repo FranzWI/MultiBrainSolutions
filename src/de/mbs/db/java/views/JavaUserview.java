@@ -8,67 +8,51 @@ import java.util.Vector;
 import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.crypt.Crypt;
+import de.mbs.db.java.JavaView;
+import de.mbs.db.java.utils.JavaHelper;
 
 public class JavaUserview extends UserView {
 
 	private Vector<User> users = new Vector<User>();
 	
-	public JavaUserview(){
+	private JavaView view;
+	
+	public JavaUserview(JavaView view){
 		// Admin anlegen
+		this.view = view;
 		User admin = new User(null);
-		admin.setFirstname("Admin");
+		admin.setFirstname("Admini");
 		admin.setLastname("Strator");
 		admin.setUsername("admin");
 		admin.setEmail("ich@michaelkuerbis.de");
-		admin.setPw(Crypt.getCryptedPassword("admin"));
+		admin.setPw("admin");
 		admin.setApikey(UUID.randomUUID().toString());
 		this.add(admin);
 	}
 	
 	@Override
 	public String add(User data) {
+		// ID des neuen Nutzers setzen
 		data.setId(UUID.randomUUID().toString());
+		// Passwort verschlüsseln
+		data.setPw(Crypt.getCryptedPassword(data.getPw()));
 		this.users.add(data);
 		return data.getId();
 	}
 
 	@Override
-	public boolean remove(User data) {
-		for(User u : this.users){
-			if(u.getId().equals(data.getId())){
-				this.users.remove(u);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean remove(Vector<User> data) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean remove(String id) {
+		return JavaHelper.remove(id, this.users);
 	}
 
 	@Override
 	public User edit(User data) {
-		for(int i=0; i< this.users.size();i++){
-			User u = this.users.get(i);
-			if(u.getId().equals(data.getId())){
-				this.users.set(i, data);
-				return data;
-			}
-		}
-		return null;
+		return JavaHelper.edit(data, this.users);
 	}
 
 	@Override
 	public User get(String id) {
-		for(User u: this.users){
-			if(u.getId().equals(id)){
-				return u;
-			}
-		}
-		return null;
+		return JavaHelper.get(id, this.users);
 	}
 
 	@Override

@@ -26,13 +26,7 @@ public class ElasticsearchGroupview extends GroupView {
 	}
 
 	@Override
-	public boolean remove(Group data) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean remove(Vector<Group> data) {
+	public boolean remove(String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -26,15 +26,15 @@ public class ElasticsearchPortletview extends PortletView {
 	}
 
 	@Override
-	public boolean remove(Portlet data) {
+	public boolean remove(String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean remove(Vector<Portlet> data) {
+	public Vector<Portlet> getPossiblePortletsForUser(String id) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 }

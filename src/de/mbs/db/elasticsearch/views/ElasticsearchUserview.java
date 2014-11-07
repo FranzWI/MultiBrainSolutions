@@ -16,13 +16,7 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public boolean remove(User data) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean remove(Vector<User> data) {
+	public boolean remove(String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}

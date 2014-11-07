@@ -80,7 +80,7 @@ public abstract class DatabaseView {
 		return this.searchable;
 	}
 	
-	public abstract Vector<MarkupBuilder> search(String search);
+	public abstract Map<String, MarkupBuilder> search(String search);
 	
 	public void setMailView(MailView mailView) {
 		this.mailView = mailView;

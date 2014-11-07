@@ -258,7 +258,7 @@ public class ElasticsearchView extends DatabaseView{
 	}
 
 	@Override
-	public Vector<MarkupBuilder> search(String search) {
+	public Map<String,MarkupBuilder> search(String search) {
 		// TODO Auto-generated method stub
 		return null;
 	}
