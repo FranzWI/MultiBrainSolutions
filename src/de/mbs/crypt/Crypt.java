@@ -14,7 +14,7 @@ public class Crypt
 	
 	private static String getSalt()
 	{
-		return "124124##+1241§=4";
+		return "124124##+1241ï¿½=4";
 	}
 	
 	private static String getSHA1Hash(String string) 
@@ -32,7 +32,7 @@ public class Crypt
 		return null;
 	}
 	
-	private String getCryptedPassword(String password)
+	public static String getCryptedPassword(String password)
 	{
 		return getSHA1Hash((getSHA1Hash(password+getPepper()))+getSalt());
 	}

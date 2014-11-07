@@ -7,6 +7,11 @@ html.div {
 		form('class':'form-signin', action:'index.groovy',method:"post", role:"form"){
 			input(type:"text",name:'user', 'class':"form-control", placeholder:"Nutzername", required:"", autofocus:"")
 			input(type:"password",name:'password', 'class':"form-control", placeholder:"Passwort", required:"", autofocus:"")
+			if(session.false_login){
+				div('class':"alert alert-danger"){
+					p("Login fehlgeschlagen")
+				}
+			}
 			label('class':"checkbox"){
 				input(type:"checkbox", value:"remember-me", "angemeldet bleiben")
 			}

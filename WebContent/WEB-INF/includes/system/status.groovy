@@ -1,7 +1,7 @@
 import java.io.File;
 import de.mbs.listener.SessionListener
-import de.mbs.interfaces.DatabaseView
-import de.mbs.interfaces.MailView
+import de.mbs.abstracts.db.DatabaseView
+import de.mbs.abstracts.mail.MailView
 import de.mbs.handler.ServiceHandler
 
 

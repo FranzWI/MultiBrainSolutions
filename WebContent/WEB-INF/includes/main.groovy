@@ -1,5 +1,17 @@
+import java.awt.GraphicsConfiguration.DefaultBufferCapabilities;
+
 import de.mbs.modules.ModulContainer
 import de.mbs.modules.interfaces.Modul
+import de.mbs.abstracts.db.DatabaseView
+import de.mbs.abstracts.db.views.UserView
+import de.mbs.abstracts.db.objects.User
+import de.mbs.handler.ServiceHandler
+
+def dbView = ServiceHandler.getDatabaseView();
+def userView = dbView.getUserView();
+def user = userView.get(session.user);
+
+
 
 html.div('class':"page-container sidebar-collapsed"){
 	div('class':"sidebar-menu"){
@@ -16,7 +28,7 @@ html.div('class':"page-container sidebar-collapsed"){
 				a('href':"#",'class':"with-animation"){ i('class':"entypo-menu") }
 			}
 		}
-		// Menü
+		// Menï¿½
 		ul(id:"main-menu"){
 			li(id:"search"){
 				form (method:"get", action:""){
@@ -42,7 +54,7 @@ html.div('class':"page-container sidebar-collapsed"){
 					}
 				}
 			}
-			//TODO nur für Admin
+			//TODO nur fï¿½r Admin
 			li{
 				a(href:"index.groovy?page=system"){
 					i('class':"entypo-tools")
@@ -59,7 +71,7 @@ html.div('class':"page-container sidebar-collapsed"){
 					li('class':"profile-info dropdown"){
 						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown"){
 							img( src:"assets/images/thumb-1@2x.png", alt:"", 'class':"img-circle", width:"44")
-							i("Michael K\u00FCrbis")
+							i(user.getFirstname()+" "+user.getLastname())
 						}
 						ul('class':"dropdown-menu"){
 							li('class':"caret")
@@ -89,24 +101,20 @@ html.div('class':"page-container sidebar-collapsed"){
 									i "neue Benachrichtigungen"
 								}
 							}
-							
+
 							li{
 								ul('class':"dropdown-menu-list scroller"){
 									li('class':"unread notification-success"){
 										a(href:"#"){
 											i('class':"entypo-user-add pull-right")
-											span('class':"line"){
-												strong "Neuer Nutzer ist registriert"
-											}
+											span('class':"line"){ strong "Neuer Nutzer ist registriert" }
 											span('class':"line small", "vor 30 Sekunden")
 										}
 									}
 									li('class':"unread notification-secondary"){
 										a(href:"#"){
 											i('class':"entypo-heart pull-right")
-											span('class':"line"){
-												strong "Es wurde ein Dokument mit Ihnen geteilt"
-											}
+											span('class':"line"){ strong "Es wurde ein Dokument mit Ihnen geteilt" }
 											span('class':"line small", "vor 2 Minuten")
 										}
 									}
@@ -118,7 +126,7 @@ html.div('class':"page-container sidebar-collapsed"){
 						}
 					}
 				}
-				
+
 				// Nachrichten
 				ul('class':"user-info pull-left pull-right-xs pull-none-xsm"){
 					li('class':"notifications dropdown"){
@@ -173,7 +181,7 @@ html.div('class':"page-container sidebar-collapsed"){
 			include('/WEB-INF/includes/cockpit.groovy')
 		}else{
 			if(page){
-				//TODO nur für Admin
+				//TODO nur fï¿½r Admin
 				if(page.equals("system")){
 					include('/WEB-INF/includes/system.groovy')
 				}

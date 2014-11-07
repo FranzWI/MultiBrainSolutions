@@ -1,6 +1,14 @@
+import de.mbs.abstracts.db.DatabaseView
+import de.mbs.abstracts.db.views.UserView
+import de.mbs.handler.ServiceHandler
+
+def dbView = ServiceHandler.getDatabaseView();
+
 if (!session) {
 	session = request.getSession(true)
 }
+
+session.false_login = false;
 
 //logout
 if(session && request.getParameter('logout')){
@@ -15,9 +23,18 @@ if (!session.counter) {
 def user = request.getParameter('user')
 def password = request.getParameter('password')
 
+
+
 if(!session.login && user && password){
 	//TODO login
-	session.login = true
+	UserView userView = dbView.getUserView();
+	String id = userView.login(user,password);
+	if(id){
+		session.user = id;
+		session.login = true;
+	}else{
+		session.false_login = true;
+	}
 }
 
 html.html('lang':"de"){
