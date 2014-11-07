@@ -40,13 +40,19 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public MarkupBuilder getFormatedContent(String index, String type, String id) {
+	public String login(String username, String password) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String login(String username, String password) {
+	public String searchId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<MarkupBuilder> search(String search) {
 		// TODO Auto-generated method stub
 		return null;
 	}
