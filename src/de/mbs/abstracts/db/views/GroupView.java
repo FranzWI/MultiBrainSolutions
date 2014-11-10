@@ -9,4 +9,14 @@ import de.mbs.abstracts.db.views.definition.RemoveableView;
 public abstract class GroupView implements AddableView<Group>, EditableView<Group>,
 		FindableView<Group>, RemoveableView<Group> {
 
+	protected String adminGroupId, userGroupId;
+	
+	public String getAdminGroupId(){
+		return this.adminGroupId;
+	}
+	
+	public String getUserGroupId() {
+		return this.userGroupId;
+	}
+	
 }

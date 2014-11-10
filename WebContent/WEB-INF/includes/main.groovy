@@ -4,11 +4,15 @@ import de.mbs.modules.ModulContainer
 import de.mbs.modules.interfaces.Modul
 import de.mbs.abstracts.db.DatabaseView
 import de.mbs.abstracts.db.views.UserView
+import de.mbs.abstracts.db.views.GroupView
 import de.mbs.abstracts.db.objects.User
+import de.mbs.abstracts.db.objects.Group
+import de.mbs.frontend.FrontendHelper
 import de.mbs.handler.ServiceHandler
 
 def dbView = ServiceHandler.getDatabaseView();
 def userView = dbView.getUserView();
+def groupView = dbView.getGroupView();
 def user = userView.get(session.user);
 
 
@@ -28,7 +32,7 @@ html.div('class':"page-container sidebar-collapsed"){
 				a('href':"#",'class':"with-animation"){ i('class':"entypo-menu") }
 			}
 		}
-		// Men�
+		// Menü
 		ul(id:"main-menu"){
 			li(id:"search"){
 				form (method:"get", action:""){
@@ -54,11 +58,13 @@ html.div('class':"page-container sidebar-collapsed"){
 					}
 				}
 			}
-			//TODO nur f�r Admin
-			li{
-				a(href:"index.groovy?page=system"){
-					i('class':"entypo-tools")
-					span "System"
+			// Ist der Nutzer Admin?
+			if(user.getMembership().contains(groupView.getAdminGroupId())){
+				li{
+					a(href:"index.groovy?page=system"){
+						i('class':"entypo-tools")
+						span "System"
+					}
 				}
 			}
 		}
@@ -70,7 +76,7 @@ html.div('class':"page-container sidebar-collapsed"){
 				ul('class':"user-info pull-left pull-none-xsm"){
 					li('class':"profile-info dropdown"){
 						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown"){
-							img( src:"assets/images/thumb-1@2x.png", alt:"", 'class':"img-circle", width:"44")
+							img( 'data-src':"holder.js/45x45/"+FrontendHelper.getColors(user)+"/text:"+user.getFirstname().substring(0, 1), alt:"", 'class':"img-circle", width:"44")
 							i(user.getFirstname()+" "+user.getLastname())
 						}
 						ul('class':"dropdown-menu"){
@@ -142,7 +148,10 @@ html.div('class':"page-container sidebar-collapsed"){
 									li('class':"active"){
 										a(href:"#"){
 											span('class':"image pull-right"){
-												img(src:"assets/images/thumb-1.png", alt:"", 'class':"img-circle")
+												User mkue = new User(null);
+												mkue.setFirstname("Michael")
+												mkue.setLastname("Kürbis")
+												img( 'data-src':"holder.js/45x45/"+FrontendHelper.getColors(mkue)+"/text:"+mkue.getFirstname().substring(0, 1), alt:"", 'class':"img-circle", width:"44")
 											}
 											span('class':"line"){
 												strong("Michael K\u00FCrbis")

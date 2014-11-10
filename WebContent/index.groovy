@@ -1,11 +1,20 @@
 import de.mbs.abstracts.db.DatabaseView
 import de.mbs.abstracts.db.views.UserView
+import de.mbs.abstracts.db.objects.User
 import de.mbs.handler.ServiceHandler
 
 def dbView = ServiceHandler.getDatabaseView();
 
 if (!session) {
 	session = request.getSession(true)
+}
+
+if(session.user) {
+	user = dbView.getUserView().get(session.user)
+	if(!user){
+		request.getSession(true).invalidate();
+		session = request.getSession(true)
+	}
 }
 
 session.false_login = false;
@@ -20,15 +29,13 @@ if (!session.counter) {
 	session.counter = 1
 }
 
-def user = request.getParameter('user')
+def ruser = request.getParameter('user')
 def password = request.getParameter('password')
 
+if(!session.login && ruser && password){
 
-
-if(!session.login && user && password){
-	//TODO login
 	UserView userView = dbView.getUserView();
-	String id = userView.login(user,password);
+	String id = userView.login(ruser,password);
 	if(id){
 		session.user = id;
 		session.login = true;
@@ -52,7 +59,7 @@ html.html('lang':"de"){
 		link(rel:"stylesheet", href:"assets/css/neon-forms.css")
 		link(rel:"stylesheet", href:"assets/css/custom.css")
 		script(src:"assets/js/jquery-1.11.0.min.js")
-		
+
 	}
 	body ('class':"page-body") {
 		// body
@@ -63,7 +70,7 @@ html.html('lang':"de"){
 			include('/WEB-INF/includes/main.groovy')
 		}
 	}
-	
+
 	script(src:"assets/js/gsap/main-gsap.js")
 	script(src:"assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js")
 	script(src:"assets/js/bootstrap.js")
@@ -73,5 +80,6 @@ html.html('lang':"de"){
 	script(src:"assets/js/neon-chat.js")
 	script(src:"assets/js/neon-custom.js")
 	script(src:"assets/js/neon-demo.js")
+	script(src:"assets/js/holder.min.js")
 }
 session.counter = session.counter + 1

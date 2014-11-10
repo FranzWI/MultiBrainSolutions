@@ -31,4 +31,10 @@ public class ElasticsearchGroupview extends GroupView {
 		return false;
 	}
 
+	@Override
+	public Vector<Group> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

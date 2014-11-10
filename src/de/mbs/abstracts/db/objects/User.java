@@ -74,6 +74,10 @@ public class User extends DatabaseObject {
 	public Vector<String> getPortlets() {
 		return portlets;
 	}
+	
+	public void addMembership(String groupId) {
+		this.membership.add(groupId);
+	}
 
 	public void setPortlets(Vector<String> portlets) {
 		this.portlets = portlets;

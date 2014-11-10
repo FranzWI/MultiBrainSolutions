@@ -51,4 +51,10 @@ public class ElasticsearchUserview extends UserView {
 		return null;
 	}
 
+	@Override
+	public Vector<User> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

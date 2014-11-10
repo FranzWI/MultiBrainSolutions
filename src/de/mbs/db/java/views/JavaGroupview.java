@@ -13,13 +13,14 @@ public class JavaGroupview extends GroupView {
 
 	public JavaGroupview() {
 		Group admins = new Group(null);
-		admins.setName("Administratoren");
+		admins.setName("Admin");
 		admins.setDescription("Die System betreuer");
-		this.add(admins);
+		this.adminGroupId = this.add(admins);
+		
 		Group user = new Group(null);
 		user.setName("Nutzer");
 		user.setDescription("Nutzer des Systems");
-		this.add(user);
+		this.userGroupId = this.add(user);
 	}
 
 	@Override
@@ -42,6 +43,11 @@ public class JavaGroupview extends GroupView {
 	@Override
 	public boolean remove(String id) {
 		return JavaHelper.remove(id, this.groups);
+	}
+
+	@Override
+	public Vector<Group> getAll() {
+		return this.groups;
 	}
 
 }

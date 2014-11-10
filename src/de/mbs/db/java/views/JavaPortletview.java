@@ -61,4 +61,9 @@ public class JavaPortletview extends PortletView {
 		return null;
 	}
 
+	@Override
+	public Vector<Portlet> getAll() {
+		return this.portlets;
+	}
+
 }

@@ -37,4 +37,10 @@ public class ElasticsearchPortletview extends PortletView {
 		return null;
 	}
 
+	@Override
+	public Vector<Portlet> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
