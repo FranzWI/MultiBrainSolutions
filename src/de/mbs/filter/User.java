@@ -10,5 +10,5 @@ import javax.ws.rs.NameBinding;
 @NameBinding
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface Admin {
+public @interface User {
 }

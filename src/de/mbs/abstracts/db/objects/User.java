@@ -78,9 +78,21 @@ public class User extends DatabaseObject {
 	public void addMembership(String groupId) {
 		this.membership.add(groupId);
 	}
+	
+	public void removeMembership(String groupId){
+		this.membership.remove(groupId);
+	}
 
 	public void setPortlets(Vector<String> portlets) {
 		this.portlets = portlets;
 	}
 
+	public void addPortlet(String id){
+		this.portlets.add(id);
+	}
+	
+	public void removePortlet(String id){
+		this.portlets.remove(id);
+	}
+	
 }

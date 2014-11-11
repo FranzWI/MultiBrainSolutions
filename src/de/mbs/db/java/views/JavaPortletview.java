@@ -17,6 +17,37 @@ public class JavaPortletview extends PortletView {
 
 	public JavaPortletview(JavaView view) {
 		this.view = view;
+		Portlet p = new Portlet(null);
+		p.setName("Portlet 1");
+		p.setPath("portlet1.groovy");
+		p.setDescription("Test Portlet No. 1");
+		p.setSizeXS(6);
+		p.setSizeSM(6);
+		p.setSizeMD(3);
+		p.setSizeLG(2);
+		
+		p.addUseableGroup(this.view.getGroupView().getUserGroupId());
+		this.add(p);
+		Portlet p2 = new Portlet(null);
+		p2.setName("Portlet 2");
+		p2.setPath("portlet2.groovy");
+		p2.setDescription("Test Portlet No. 2");
+		p2.addUseableGroup(this.view.getGroupView().getUserGroupId());
+		p2.setSizeXS(6);
+		p2.setSizeSM(6);
+		p2.setSizeMD(3);
+		p2.setSizeLG(2);
+		this.add(p2);
+		Portlet p3 = new Portlet(null);
+		p3.setName("Portlet 3");
+		p3.setPath("portlet3.groovy");
+		p3.setDescription("Test Portlet No. 3");
+		p3.setSizeXS(12);
+		p3.setSizeSM(12);
+		p3.setSizeMD(6);
+		p3.setSizeLG(8);
+		p3.addUseableGroup(this.view.getGroupView().getUserGroupId());
+		this.add(p3);
 	}
 
 	@Override

@@ -40,12 +40,6 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public String searchId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Vector<MarkupBuilder> search(String search) {
 		// TODO Auto-generated method stub
 		return null;

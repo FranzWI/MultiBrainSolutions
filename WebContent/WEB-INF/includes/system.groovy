@@ -1,4 +1,5 @@
 html.div {
+	link(rel:"stylesheet", href:"assets/css/context.bootstrap.css")
 	div('class':"row"){ 
 		div('class':"col-md-12"){
 			h2 "System"
@@ -9,8 +10,14 @@ html.div {
 			ul('class':"nav nav-tabs bordered"){
 				li('class':"active"){
 					a(href:"#status", 'data-toggle':"tab"){
-						span('class':"visible-xs"){ i('class':"entypo-tools") }
+						span('class':"visible-xs"){ i('class':"entypo-address") }
 						span('class':"hidden-xs", "Status")
+					}
+				}
+				li{
+					a(href:"#settings", 'data-toggle':"tab"){
+						span('class':"visible-xs"){ i('class':"entypo-tools") }
+						span('class':"hidden-xs", "Einstellungen")
 					}
 				}
 				li{
@@ -30,6 +37,10 @@ html.div {
 				div('class':"tab-pane active", id:"status"){
 					span ""
 					include('/WEB-INF/includes/system/status.groovy')
+				}
+				div('class':"tab-pane", id:"settings"){
+					span ""
+					include('/WEB-INF/includes/system/settings.groovy')
 				}
 				div('class':"tab-pane", id:"user"){
 					span ""

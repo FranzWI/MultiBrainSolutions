@@ -5,8 +5,10 @@ import de.mbs.modules.interfaces.Modul
 import de.mbs.abstracts.db.DatabaseView
 import de.mbs.abstracts.db.views.UserView
 import de.mbs.abstracts.db.views.GroupView
+import de.mbs.abstracts.db.views.MessageView
 import de.mbs.abstracts.db.objects.User
 import de.mbs.abstracts.db.objects.Group
+import de.mbs.abstracts.db.objects.Message
 import de.mbs.frontend.FrontendHelper
 import de.mbs.handler.ServiceHandler
 
@@ -14,6 +16,7 @@ def dbView = ServiceHandler.getDatabaseView();
 def userView = dbView.getUserView();
 def groupView = dbView.getGroupView();
 def user = userView.get(session.user);
+def messagesView = dbView.getMessageView();
 
 
 
@@ -133,34 +136,40 @@ html.div('class':"page-container sidebar-collapsed"){
 					}
 				}
 
+				Vector<Message> unreadMessages = messagesView.getUnreadMessagesForUser(session.user);
 				// Nachrichten
 				ul('class':"user-info pull-left pull-right-xs pull-none-xsm"){
 					li('class':"notifications dropdown"){
 						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown", 'data-hover':"dropdown", 'data-close-others':"true"){
 							i('class':"entypo-mail")
-							span('class':"badge badge-secondary", "1")
+							if(unreadMessages && unreadMessages.size() > 0){
+								span('class':"badge badge-secondary", unreadMessages.size())
+							}
 						}
 						// Dropdown bei den Nachrichten
 						ul('class':"dropdown-menu"){
-							li(""){
-								ul('class':"dropdown-menu-list scroller", tabindex:"5002", style:"overflow: hidden; outline: none;"){
-									// neue Nachricht....
-									li('class':"active"){
-										a(href:"#"){
-											span('class':"image pull-right"){
-												User mkue = new User(null);
-												mkue.setFirstname("Michael")
-												mkue.setLastname("Kürbis")
-												img( 'data-src':"holder.js/45x45/"+FrontendHelper.getColors(mkue)+"/text:"+mkue.getFirstname().substring(0, 1), alt:"", 'class':"img-circle", width:"44")
+							if(unreadMessages && unreadMessages.size() > 0){
+								li(""){
+									ul('class':"dropdown-menu-list scroller", tabindex:"5002", style:"overflow: hidden; outline: none;"){
+										for(Message m: unreadMessages){
+											// neue Nachricht....
+											li('class':"active"){
+												a(href:"#"){
+													User muser = userView.get(m.getFromUser());
+													span('class':"image pull-right"){
+														img( 'data-src':"holder.js/45x45/"+FrontendHelper.getColors(muser)+"/text:"+muser.getFirstname().substring(0, 1), alt:"", 'class':"img-circle", width:"44")
+													}
+													span('class':"line"){
+														strong(m.getTopic())
+														i(muser.getFirstname()+" "+muser.getLastname())
+													}
+													span('class':"line desc small"){
+														time('class':"timeago", datetime:FrontendHelper.getTimeagoString(m.getSendDate()));
+													}
+												}
 											}
-											span('class':"line"){
-												strong("Michael K\u00FCrbis")
-												i("gestern")
-											}
-											span('class':"line desc small", "Betreff")
 										}
 									}
-
 								}
 							}
 							li('class':"external"){
@@ -217,4 +226,9 @@ html.div('class':"page-container sidebar-collapsed"){
 			}
 		}
 	}
+	script('') { println """
+			jQuery(document).ready(function() {
+			  jQuery("time.timeago").timeago();
+			});
+		""" }
 }

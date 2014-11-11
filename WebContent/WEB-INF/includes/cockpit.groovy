@@ -27,7 +27,7 @@ html.div {
 						for(Portlet p: possiblePortlets){
 							li{
 								//TODO Portlets hinzufügen
-								a(href:"#portlet1", p.getName())
+								a(href:"#",'class':"add-portlet","data-portlet-id":p.getId(), p.getName())
 							}
 						}
 					}
@@ -46,6 +46,26 @@ html.div {
 				}
 			}else{
 				//TODO Portlets laden
+				for(String pId: userPortlets){
+					Portlet p = portletView.get(pId);
+					if(p){
+						String size = "";
+						if(p.getSizeXS()>0)
+							size+=" col-xs-"+p.getSizeXS();
+						if(p.getSizeSM()>0)
+							size+=" col-sm-"+p.getSizeSM();
+						if(p.getSizeMD()>0)
+							size+=" col-md-"+p.getSizeMD();
+						if(p.getSizeLG()>0)
+							size+=" col-lg-"+p.getSizeLG();
+						div('class':size,'data-portlet-id':p.getId(),"style":"float:left"){
+							i('style':"display:none")
+							include('/WEB-INF/includes/portlets/'+p.getPath())
+						}
+					}else{
+						//TODO Fehler Portlet ID ungültig
+					}
+				}
 			}	
 		}
 	}

@@ -61,7 +61,7 @@ html.html('lang':"de"){
 		script(src:"assets/js/jquery-1.11.0.min.js")
 
 	}
-	body ('class':"page-body") {
+	body ('class':"page-body","data-user-id":session.user) {
 		// body
 		i(style:"display:none;")
 		if(!session.login){
@@ -81,5 +81,7 @@ html.html('lang':"de"){
 	script(src:"assets/js/neon-custom.js")
 	script(src:"assets/js/neon-demo.js")
 	script(src:"assets/js/holder.min.js")
+	script(src:"assets/js/jquery.timeago.js")
+	script(src:"assets/js/jquery.timeago.de.js")
 }
 session.counter = session.counter + 1

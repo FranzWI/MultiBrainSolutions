@@ -8,10 +8,14 @@ import java.util.Vector;
 
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.db.views.GroupView;
+import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.PortletView;
+import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.db.java.views.JavaGroupview;
+import de.mbs.db.java.views.JavaMessageview;
 import de.mbs.db.java.views.JavaPortletview;
+import de.mbs.db.java.views.JavaSettingsview;
 import de.mbs.db.java.views.JavaUserview;
 
 public class JavaView extends DatabaseView {
@@ -19,11 +23,15 @@ public class JavaView extends DatabaseView {
 	private JavaUserview userview;
 	private JavaGroupview groupview;
 	private JavaPortletview portletview;
+	private JavaSettingsview settingview;
+	private JavaMessageview messageview;
 
 	public JavaView() {
 		this.groupview = new JavaGroupview();
 		this.userview = new JavaUserview(this);
 		this.portletview = new JavaPortletview(this);
+		this.settingview = new JavaSettingsview();
+		this.messageview = new JavaMessageview(this);
 	}
 
 	@Override
@@ -76,6 +84,16 @@ public class JavaView extends DatabaseView {
 	@Override
 	public GroupView getGroupView() {
 		return this.groupview;
+	}
+
+	@Override
+	public MessageView getMessageView() {
+		return this.messageview;
+	}
+
+	@Override
+	public SettingsView getSettingsView() {
+		return this.settingview;
 	}
 
 }

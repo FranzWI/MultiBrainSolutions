@@ -10,7 +10,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.json.simple.JSONObject;
 
-import de.mbs.filter.Admin;
+import de.mbs.filter.User;
 import de.mbs.modules.DataContainer;
 import de.mbs.modules.ModulContainer;
 import de.mbs.modules.interfaces.Modul;
@@ -20,7 +20,7 @@ public class ModulREST {
 
 	@POST
 	@Path("/install/{modulname}/{version}")
-	@Admin
+	@User
 	public String install(@PathParam("modulname") String modulname,
 			@PathParam("version") String version) {
 		JSONObject obj = new JSONObject();
@@ -71,7 +71,7 @@ public class ModulREST {
 	
 	@POST
 	@Path("/modul/{modulname}/{version}")
-	@Admin
+	@User
 	public String moduleCall(@PathParam("modulname") String modulname,@PathParam("version") String version, @Context UriInfo uriInfo){
 		JSONObject obj = new JSONObject();
 		ModulContainer modules = ModulContainer.initialise();

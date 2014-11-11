@@ -74,7 +74,7 @@ html.div{
 	}
 	// infos zum Status von Elasticsearch
 	div('class':"row"){
-		div('class':"col-md-12"){h3("Elasticsearch")}
+		div('class':"col-md-12"){h3(es.getServiceName())}
 	}
 	div('class':"row"){
 		if(es.isRunning() && es.getDatabases().size()>0){
@@ -91,11 +91,11 @@ html.div{
 		}else{
 			if(es.isRunning()){
 				div('class':"col-md-12"){
-					div('class':"alert alert-info"){ p("Oh! Elasticsearch enthält keine Daten! Bitte Tomcat neustarten!") }
+					div('class':"alert alert-info"){ p("Oh! "+es.getServiceName()+" enthält keine Daten! Bitte Tomcat neustarten!") }
 				}
 			}else{
 				div('class':"col-md-12"){
-					div('class':"alert alert-danger"){ p("Oh Nein! Elasticsearch wird nicht ausgeführt!") }
+					div('class':"alert alert-danger"){ p("Oh Nein! "+es.getServiceName()+" wird nicht ausgeführt!") }
 				}
 			}
 		}
@@ -161,6 +161,7 @@ html.div{
 				labelColor: '#303641',
 				colors: ['#C5D932', '#485859']
 			});
+			"""+((es.isRunning() && es.getDatabases().size()>0)?"""
 			Morris.Donut({
 				element: 'indexsizechart',
 				resize: true,
@@ -184,7 +185,7 @@ html.div{
 				],
 				labelColor: '#303641',
 				colors: ['#7E3759','#C5403E','#B8D331','#EEB31B','#53C7CB','#C5D932', '#485859']
-			});
+			});""":"")+"""
 		});
 		"""
 			)

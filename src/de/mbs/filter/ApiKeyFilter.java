@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-@Admin
+@User
 public class ApiKeyFilter implements ContainerRequestFilter {
 
 	@Context

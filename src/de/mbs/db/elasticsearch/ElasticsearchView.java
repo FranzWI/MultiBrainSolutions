@@ -32,10 +32,14 @@ import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.db.views.GroupView;
+import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.PortletView;
+import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.db.elasticsearch.views.ElasticsearchGroupview;
+import de.mbs.db.elasticsearch.views.ElasticsearchMessageview;
 import de.mbs.db.elasticsearch.views.ElasticsearchPortletview;
+import de.mbs.db.elasticsearch.views.ElasticsearchSettingsview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
 
 public class ElasticsearchView extends DatabaseView{
@@ -45,6 +49,8 @@ public class ElasticsearchView extends DatabaseView{
 	private ElasticsearchUserview userview;
 	private ElasticsearchGroupview groupview;
 	private ElasticsearchPortletview portletview;
+	private ElasticsearchSettingsview settingview;
+	private ElasticsearchMessageview messageview;
 	
 	public ElasticsearchView() {
 		Settings settings = ImmutableSettings.settingsBuilder()
@@ -67,6 +73,8 @@ public class ElasticsearchView extends DatabaseView{
 		this.userview = new ElasticsearchUserview();
 		this.groupview = new ElasticsearchGroupview();
 		this.portletview = new ElasticsearchPortletview();
+		this.messageview = new ElasticsearchMessageview();
+		this.settingview = new ElasticsearchSettingsview();
 		this.printESStructure();
 	}
 
@@ -261,5 +269,15 @@ public class ElasticsearchView extends DatabaseView{
 	public Map<String,MarkupBuilder> search(String search) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public MessageView getMessageView() {
+		return this.messageview;
+	}
+
+	@Override
+	public SettingsView getSettingsView() {
+		return this.settingview;
 	}
 }

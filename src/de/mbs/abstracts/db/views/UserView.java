@@ -19,4 +19,9 @@ public abstract class UserView implements AddableView<User>,
 	 */
 	public abstract String login(String username, String password);
 
+	@Override
+	public String searchId() {
+		return "User";
+	}
+	
 }

@@ -7,8 +7,13 @@ import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 public class Portlet extends DatabaseObject {
 
 	private String name, description, path;
-	private Vector<String> usedByGroups;
+	private Vector<String> usedByGroups = new Vector<String>();
 
+	/**
+	 * siehe Bootstrap Doku
+	 */
+	private int sizeXS, sizeSM, sizeMD, sizeLG;
+	
 	public Portlet(String id) {
 		super(id);
 	}
@@ -43,6 +48,42 @@ public class Portlet extends DatabaseObject {
 
 	public void setUsedByGroups(Vector<String> usedByGroups) {
 		this.usedByGroups = usedByGroups;
+	}
+	
+	public void addUseableGroup(String id){
+		this.usedByGroups.add(id);
+	}
+
+	public int getSizeXS() {
+		return sizeXS;
+	}
+
+	public void setSizeXS(int sizeXS) {
+		this.sizeXS = sizeXS;
+	}
+
+	public int getSizeSM() {
+		return sizeSM;
+	}
+
+	public void setSizeSM(int sizeSM) {
+		this.sizeSM = sizeSM;
+	}
+
+	public int getSizeMD() {
+		return sizeMD;
+	}
+
+	public void setSizeMD(int sizeMD) {
+		this.sizeMD = sizeMD;
+	}
+
+	public int getSizeLG() {
+		return sizeLG;
+	}
+
+	public void setSizeLG(int sizeLG) {
+		this.sizeLG = sizeLG;
 	}
 
 }
