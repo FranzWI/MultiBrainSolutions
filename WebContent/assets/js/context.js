@@ -73,6 +73,7 @@ var context = context || (function () {
 						actionID = 'event-' + actiond.getTime() * Math.floor(Math.random()*100000),
 						eventAction = data[i].action;
 					$sub.find('a').attr('id', actionID);
+					
 					$('#' + actionID).addClass('context-event');
 					$(document).on('click', '#' + actionID, eventAction);
 				}
@@ -96,15 +97,18 @@ var context = context || (function () {
 			$menu = buildMenu(data, id);
 			
 		$('body').append($menu);
-		
+		// add an caller id
+		$( selector ).each(function( index ) {
+			  $(this).attr("data-contextjs-id", Math.floor(Math.random()*100000));
+		});
 		
 		$(document).on('contextmenu', selector, function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 			
 			$('.dropdown-context:not(.dropdown-context-sub)').hide();
-			
 			$dd = $('#dropdown-' + id);
+			$dd.attr("data-contextjs-callerid", $(this).attr('data-contextjs-id'));
 			if (typeof options.above == 'boolean' && options.above) {
 				$dd.addClass('dropdown-context-up').css({
 					top: e.pageY - 20 - $('#dropdown-' + id).height(),

@@ -25,7 +25,7 @@ public class JavaPortletview extends PortletView {
 		p.setSizeSM(6);
 		p.setSizeMD(3);
 		p.setSizeLG(2);
-		
+
 		p.addUseableGroup(this.view.getGroupView().getUserGroupId());
 		this.add(p);
 		Portlet p2 = new Portlet(null);
@@ -82,8 +82,10 @@ public class JavaPortletview extends PortletView {
 				Vector<String> portletGroups = portlet.getUsedByGroups();
 				for (String groupId : portletGroups) {
 					if (userGroups.contains(groupId)) {
-						result.add(portlet);
-						break;
+						if (!user.getPortlets().contains(portlet.getId())) {
+							result.add(portlet);
+							break;
+						}
 					}
 				}
 			}

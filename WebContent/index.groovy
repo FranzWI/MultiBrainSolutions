@@ -84,4 +84,3 @@ html.html('lang':"de"){
 	script(src:"assets/js/jquery.timeago.js")
 	script(src:"assets/js/jquery.timeago.de.js")
 }
-session.counter = session.counter + 1
