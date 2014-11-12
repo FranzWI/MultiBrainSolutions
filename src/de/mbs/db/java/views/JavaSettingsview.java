@@ -1,28 +1,46 @@
 package de.mbs.db.java.views;
 
+import java.util.Properties;
+import java.util.UUID;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.Settings;
 import de.mbs.abstracts.db.views.SettingsView;
+import de.mbs.db.java.utils.JavaHelper;
 
 public class JavaSettingsview extends SettingsView {
 
+	private Vector<Settings> settings = new Vector<Settings>();
+	//TODO mögliche Prefixe dokumentieren PW --> passwort, NUMBER--> Zahl, BOOL-->CheckBOX
+	public JavaSettingsview() {
+		Settings setting = new Settings(UUID.randomUUID().toString());
+		Properties mailProp = setting.getMailProperties();
+		mailProp.put("SendGrid_Nutzername", "");
+		mailProp.put("PW_SendGrid_Passwort", "");
+		setting.setMailProperties(mailProp);
+		
+		Properties proxyProp = setting.getProxyProperties();
+		proxyProp.put("HTTP_Proxy_Server", "");
+		proxyProp.put("NUMBER_HTTP_Proxy_Port", "");
+		proxyProp.put("HTTPS_Proxy_Server", "");
+		proxyProp.put("NUMBER_HTTPS_Proxy_Port", "");
+		setting.setProxyProperties(proxyProp);
+		this.settings.add(setting);
+	}
+	
 	@Override
 	public Settings edit(Settings data) {
-		// TODO Auto-generated method stub
-		return null;
+		return JavaHelper.edit(data, this.settings);
 	}
 
 	@Override
 	public Settings get(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return settings.get(0);
 	}
 
 	@Override
 	public Vector<Settings> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return settings;
 	}
 
 }

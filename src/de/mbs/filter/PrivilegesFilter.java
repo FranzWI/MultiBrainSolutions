@@ -8,14 +8,13 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
 
-@Provider
-@User
-public class ApiKeyFilter implements ContainerRequestFilter {
+import de.mbs.handler.ServiceHandler;
+
+public abstract class PrivilegesFilter implements ContainerRequestFilter{
 
 	@Context
-	HttpServletRequest webRequest;
+	protected HttpServletRequest webRequest;
 
 	@Override
 	public void filter(ContainerRequestContext arg0) throws IOException {
@@ -35,16 +34,26 @@ public class ApiKeyFilter implements ContainerRequestFilter {
 	}
 
 	private void checkSession(ContainerRequestContext arg0, HttpSession session) {
-		// TODO session okey anhand des angemeldeten Nutzers prüfen ob
-		// rechte vorhanden sind
-		System.out.println("Session da");
+		String userID = session.getAttribute("user").toString();
+		if(userID != null){
+			de.mbs.abstracts.db.objects.User u = ServiceHandler.getDatabaseView().getUserView().get(userID);
+			if(u != null){
+				this.webRequest.setAttribute("user", u);
+				this.check(arg0, u);
+			}
+		}else{
+			this.denieAccess(arg0);
+		}
 	}
 
 	private void checkApiKey(ContainerRequestContext arg0, String apikey) {
-		// TODO anhand des Api keys prüfen ob entsprechende Rechte
-		// vorhanden sind
-		System.out.println("APIKEY da: " + apikey);
-		this.denieAccess(arg0);
+		de.mbs.abstracts.db.objects.User u = ServiceHandler.getDatabaseView().getUserView().getUserByApikey(apikey);
+		if(u != null){
+			this.webRequest.setAttribute("user", u);
+			this.check(arg0, u);
+		}
+		else
+			this.denieAccess(arg0);
 	}
 
 	/*
@@ -56,11 +65,13 @@ public class ApiKeyFilter implements ContainerRequestFilter {
 	}
 	
 	/*
-	 * soll aufgerufen werden wenn der Nutzer kein Admin ist 
+	 * soll aufgerufen werden wenn die Rechte nicht ausreichend sind
 	 */
-	private void noAdmin(ContainerRequestContext arg0){
+	protected void deniePrivAccess(ContainerRequestContext arg0) {
 		arg0.abortWith(Response.status(Response.Status.BAD_REQUEST)
-				.entity("Sie sind kein Admin").build());
+				.entity("keine ausreichenden Rechte").build());
 	}
 
+	public abstract void check(ContainerRequestContext arg0, de.mbs.abstracts.db.objects.User u);
+	
 }

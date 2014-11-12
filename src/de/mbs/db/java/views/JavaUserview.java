@@ -100,4 +100,13 @@ public class JavaUserview extends UserView {
 		return this.users;
 	}
 
+	@Override
+	public User getUserByApikey(String apikey) {
+		for (User u : this.users) {
+			if (u.getApikey().equals(apikey))
+				return u;
+		}
+		return null;
+	}
+
 }

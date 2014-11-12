@@ -19,6 +19,13 @@ public abstract class UserView implements AddableView<User>,
 	 */
 	public abstract String login(String username, String password);
 
+	/**
+	 * 
+	 * @param apikey - nach dem gesucht werden soll
+	 * @return null falls der Apikey keinem Nutzer zugewiesen werden kann, den User falls doch
+	 */
+	public abstract User getUserByApikey(String apikey);
+	
 	@Override
 	public String searchId() {
 		return "User";

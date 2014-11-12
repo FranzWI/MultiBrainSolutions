@@ -77,7 +77,7 @@ public class SendGridView extends MailView {
 			System.out.println("Email versandstatus: " + response.getMessage());
 			return response.getStatus();
 		} catch (SendGridException e) {
-			// TODO Auto-generated catch block
+			// TODO loggen
 			e.printStackTrace();
 		}
 		this.lastSendStatus = SendGridView.ERROR;

@@ -1,7 +1,4 @@
 $(document).ready(function() {
-	
-	
-	
 	context.init({
 	    fadeSpeed: 100,
 	    filter: function ($obj){},
@@ -17,10 +14,9 @@ $(document).ready(function() {
 			var callerId = $(this).closest('ul').attr('data-contextjs-callerid');
 			var $par = $('[data-contextjs-id="' + callerId + '"]').closest('div[data-portlet-id]');
 			var portId = $par.attr("data-portlet-id");
-			var userId = $('body').data('user-id');
 			$.ajax({
 				  type: "POST",
-				  url: "rest/user/removePortlet/"+userId+"/"+portId
+				  url: "rest/user/removePortlet/"+portId
 				}).done(function() {
 					$par.slideUp();
 				}).fail(function(jqXHR, textStatus ) {
@@ -35,14 +31,13 @@ $(document).ready(function() {
 			handle : '.tile-stats, .panel-heading ',
 			delay : 200,
 			stop: function(ev, ui){
-				var userId = $('body').data('user-id');
 				var portletIds = "";
 				$(".portlet").each(function(index,obj) {
 					portletIds = portletIds+$(this).parent().data('portlet-id')+",";
 				});
 				$.ajax({
 					  type: "POST",
-					  url: "rest/user/setPortlets/"+userId+"/"+portletIds
+					  url: "rest/user/setPortlets/"+portletIds
 					}).done(function() {
 					}).fail(function(jqXHR, textStatus ) {
 					    alert( "error "+textStatus );
@@ -53,10 +48,9 @@ $(document).ready(function() {
 		$('.portlet > .panel-heading > .panel-options > a[data-rel="close"]').click(function() {
 			var $par = $(this).closest('div[data-portlet-id]');
 			var portId = $par.attr("data-portlet-id");
-			var userId = $('body').data('user-id');
 			$.ajax({
 				  type: "POST",
-				  url: "rest/user/removePortlet/"+userId+"/"+portId
+				  url: "rest/user/removePortlet/"+portId
 				}).done(function() {
 					location.reload();
 				}).fail(function(jqXHR, textStatus ) {
@@ -65,11 +59,10 @@ $(document).ready(function() {
 		});
 		
 		$('.add-portlet').click(function() {
-			var userId = $('body').data('user-id');
 			var portletId = $(this).data('portlet-id');
 			$.ajax({
 				  type: "POST",
-				  url: "rest/user/addPortlet/"+userId+"/"+portletId
+				  url: "rest/user/addPortlet/"+portletId
 				}).done(function() {
 					location.reload();
 				}).fail(function(jqXHR, textStatus ) {

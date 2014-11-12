@@ -23,7 +23,13 @@ html.div {
 				li{
 					a(href:"#user", 'data-toggle':"tab"){
 						span('class':"visible-xs"){ i('class':"entypo-user") }
-						span('class':"hidden-xs", "Nutzer")
+						span('class':"hidden-xs", "Nutzer & Gruppen")
+					}
+				}
+				li{
+					a(href:"#portlets", 'data-toggle':"tab"){
+						span('class':"visible-xs"){ i('class':"entypo-docs") }
+						span('class':"hidden-xs", "Portlets")
 					}
 				}
 				li{
@@ -45,6 +51,10 @@ html.div {
 				div('class':"tab-pane", id:"user"){
 					span ""
 					include('/WEB-INF/includes/system/user.groovy')
+				}
+				div('class':"tab-pane", id:"portlets"){
+					span ""
+					include('/WEB-INF/includes/system/portlets.groovy')
 				}
 				div('class':"tab-pane", id:"modules"){
 					span ""

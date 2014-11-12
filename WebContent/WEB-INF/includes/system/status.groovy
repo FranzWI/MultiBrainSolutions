@@ -55,6 +55,8 @@ html.div{
 			p("Maximal : "+totalUserCount)
 		}
 		div('class':"col-md-3"){
+			//TODO Status asynchron abfragen mittels REST & ajax
+			/*
 			h4("Dienste")
 			//TODO Elastice search nicht erreichbar dann btn-red und anderes icon siehe kaputter Dienst
 			if(es.isRunning()){
@@ -67,6 +69,7 @@ html.div{
 			}else{
 				button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "Mail "+mail.getServiceName()){ i('class':"entypo-cancel") }
 			}
+			*/
 		}
 	}
 	div('class':"row"){

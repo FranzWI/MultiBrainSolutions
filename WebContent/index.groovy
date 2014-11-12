@@ -58,6 +58,7 @@ html.html('lang':"de"){
 		link(rel:"stylesheet", href:"assets/css/neon-theme.css")
 		link(rel:"stylesheet", href:"assets/css/neon-forms.css")
 		link(rel:"stylesheet", href:"assets/css/custom.css")
+		link(rel:"stylesheet", href:"assets/css/toastr.min.css")
 		script(src:"assets/js/jquery-1.11.0.min.js")
 
 	}
@@ -83,4 +84,6 @@ html.html('lang':"de"){
 	script(src:"assets/js/holder.min.js")
 	script(src:"assets/js/jquery.timeago.js")
 	script(src:"assets/js/jquery.timeago.de.js")
+	script(src:"assets/js/toastr.js")
+	script(src:"assets/js/jsurl.js")
 }
