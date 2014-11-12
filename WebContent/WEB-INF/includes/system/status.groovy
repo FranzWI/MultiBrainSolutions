@@ -56,20 +56,10 @@ html.div{
 		}
 		div('class':"col-md-3"){
 			//TODO Status asynchron abfragen mittels REST & ajax
-			/*
+			
 			h4("Dienste")
-			//TODO Elastice search nicht erreichbar dann btn-red und anderes icon siehe kaputter Dienst
-			if(es.isRunning()){
-				button('class':"btn btn-lg btn-block btn-green disabled btn-icon icon-left", "Datenbank "+es.getServiceName()){ i('class':"entypo-check") }
-			}else{
-				button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "Datenbank "+es.getServiceName()){ i('class':"entypo-cancel") }
-			}
-			if(mail.isRunning()){
-				button('class':"btn btn-lg btn-block btn-green disabled btn-icon icon-left", "Mail "+mail.getServiceName()){ i('class':"entypo-check") }
-			}else{
-				button('class':"btn btn-lg btn-block btn-red disabled btn-icon icon-left", "Mail "+mail.getServiceName()){ i('class':"entypo-cancel") }
-			}
-			*/
+			button('class':"btn btn-lg btn-block btn-warning disabled btn-icon icon-left",id:"db-status", "Datenbank "+es.getServiceName()){ i('class':"entypo-hourglass") }
+			button('class':"btn btn-lg btn-block btn-warning disabled btn-icon icon-left",id:"mail-status", "Mail "+mail.getServiceName()){ i('class':"entypo-hourglass") }
 		}
 	}
 	div('class':"row"){
@@ -116,6 +106,8 @@ html.div{
 	// Festplatten kapazit�t bestimmen
 	def long usablehdd = root.getUsableSpace()/MBYTE
 	def long usedhdd = root.getTotalSpace()/MBYTE - usablehdd
+	
+	script(src:"assets/js/status.js")
 
 	script(
 

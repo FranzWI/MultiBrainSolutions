@@ -7,6 +7,7 @@ import java.util.Vector;
 import de.mbs.abstracts.db.objects.Settings;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.db.java.utils.JavaHelper;
+import de.mbs.mail.sendgrid.SGProp;
 
 public class JavaSettingsview extends SettingsView {
 
@@ -15,15 +16,13 @@ public class JavaSettingsview extends SettingsView {
 	public JavaSettingsview() {
 		Settings setting = new Settings(UUID.randomUUID().toString());
 		Properties mailProp = setting.getMailProperties();
-		mailProp.put("SendGrid_Nutzername", "");
-		mailProp.put("PW_SendGrid_Passwort", "");
+		mailProp.put("SendGrid_Nutzername", SGProp.USER);
+		mailProp.put("PW_SendGrid_Passwort", SGProp.PASSWORD);
 		setting.setMailProperties(mailProp);
 		
 		Properties proxyProp = setting.getProxyProperties();
 		proxyProp.put("HTTP_Proxy_Server", "");
 		proxyProp.put("NUMBER_HTTP_Proxy_Port", "");
-		proxyProp.put("HTTPS_Proxy_Server", "");
-		proxyProp.put("NUMBER_HTTPS_Proxy_Port", "");
 		setting.setProxyProperties(proxyProp);
 		this.settings.add(setting);
 	}

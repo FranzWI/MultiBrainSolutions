@@ -36,4 +36,8 @@ public abstract class MailView {
 
 	public abstract boolean isRunning();
 	
+	/**
+	 * verbindung erneut versuchen
+	 */
+	public abstract void retry();
 }

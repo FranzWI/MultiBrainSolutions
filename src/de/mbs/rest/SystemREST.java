@@ -2,6 +2,7 @@ package de.mbs.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 import org.json.simple.JSONObject;
 
@@ -11,17 +12,22 @@ import de.mbs.handler.ServiceHandler;
 public class SystemREST {
 
 	@GET
-	@Path("/services")
-	public String getServices() {
+	@Path("/services/{service}")
+	public String getServices(@PathParam("service") String service) {
 		JSONObject obj = new JSONObject();
-		JSONObject db = new JSONObject();
-		db.put("name", ServiceHandler.getDatabaseView().getServiceName());
-		db.put("status", ServiceHandler.getDatabaseView().isRunning());
-		obj.put("db", db);
-		JSONObject mail = new JSONObject();
-		mail.put("name", ServiceHandler.getMailView().getServiceName());
-		mail.put("status", ServiceHandler.getMailView().isRunning());
-		obj.put("mail", mail);
+		
+		switch(service){
+		case "db":
+			obj.put("name", ServiceHandler.getDatabaseView().getServiceName());
+			obj.put("status", ServiceHandler.getDatabaseView().isRunning());
+			break;
+		case "mail":
+			obj.put("name", ServiceHandler.getMailView().getServiceName());
+			obj.put("status", ServiceHandler.getMailView().isRunning());
+			break;
+		default:
+			obj.put("error","Unbekannter Dienst");
+		}
 		return obj.toJSONString();
 	}
 	

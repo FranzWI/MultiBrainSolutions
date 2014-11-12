@@ -1,54 +1,46 @@
 html.div {
-	div('class':"row"){
-		div('class':"col-md-3 col-sm-5"){
-			form(method:"get", role:"form", 'class':"search-form-full"){
-				div('class':"form-group"){
-					input(type:"text",'class':"form-control", name:"search",id:"search-input",placeholder:"Suchen...")
-					i('class':"entypo-search")
-				}
-			}
+	html.div{
+		div('class':"row"){
+			div('class':"col-md-12"){ h2 "Nutzer & Gruppen" }
 		}
-	}
-	// einzelner Mitgliedseintrag
-	div('class':"member-entry"){
-		a(href:"#", 'class':"member-img"){
-			img (src:"assets/images/member.jpg", 'class':"img-rounded")
-			i ('class':"entypo-forward")
-		}
-		div('class':"member-details"){
-			h4{
-				// Name
-				a(href:"#","Max Mustermann")
-			}
-			div('class':"row info-list"){
-				// Info
-				div( 'class':"col-sm-4"){
-					i('class':"entypo-briefcase", "Co-Founder at")
-					a( href:"#","Complete Tech")
+		div('class':"row"){
+			div('class':"col-md-12"){
+				div('class':"tabs-vertical-env"){
+	
+					ul('class':"nav tabs-vertical"){
+						li('class':"active"){
+							a(href:'#useradd', 'data-toggle':"tab", "Nutzer hinzufügen")
+						}
+						li {
+							a(href:'#useredit', 'data-toggle':"tab", "Nutzer ändern")
+						}
+						li {
+							a(href:'#userremove', 'data-toggle':"tab", "Nutzer entfernen")
+						}
+						li{
+							a(href:'#groupadd', 'data-toggle':"tab", "Gruppe hinzufügen")
+						}
+						li {
+							a(href:'#groupedit', 'data-toggle':"tab", "Gruppe ändern")
+						}
+						li {
+							a(href:'#groupremove', 'data-toggle':"tab", "Gruppe entfernen")
+						}
+					}
+	
+					div('class':"tab-content"){
+						div('class':"tab-pane active", id:"useradd"){
+							p("Test 1")
+						}
+						div('class':"tab-pane", id:"useredit"){ p("Test 2") }
+						div('class':"tab-pane", id:"userremove"){ p("Test 3") }
+						div('class':"tab-pane", id:"groupadd"){
+							p("Test 4")
+						}
+						div('class':"tab-pane", id:"groupedit"){ p("Test 5") }
+						div('class':"tab-pane", id:"groupremove"){ p("Test 6") }
+					}
 				}
-				div( 'class':"col-sm-4"){
-					i('class':"entypo-briefcase", "Co-Founder at")
-					a( href:"#","Complete Tech")
-				}
-				div( 'class':"col-sm-4"){
-					i('class':"entypo-briefcase", "Co-Founder at")
-					a( href:"#","Complete Tech")
-				}
-				// nach 3 Eintr�gen mit der breite umbrechen ...
-				div('class':"clear")
-				div( 'class':"col-sm-4"){
-					i('class':"entypo-briefcase", "Co-Founder at")
-					a( href:"#","Complete Tech")
-				}
-				div( 'class':"col-sm-4"){
-					i('class':"entypo-briefcase", "Co-Founder at")
-					a( href:"#","Complete Tech")
-				}
-				div( 'class':"col-sm-4"){
-					i('class':"entypo-briefcase", "Co-Founder at")
-					a( href:"#","Complete Tech")
-				}
-				div('class':"clear")
 			}
 		}
 	}

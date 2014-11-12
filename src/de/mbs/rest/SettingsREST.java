@@ -46,7 +46,14 @@ public class SettingsREST {
 			JSONObject obj = (JSONObject) parser.parse(jsonData);
 			for (Object oKey : obj.keySet()) {
 				String key = oKey.toString();
-				p.setProperty(key, obj.get(key).toString());
+				// Passwortfelder die nicht erneut angegeben werden
+				// also leer sind werden nicht übernommen
+				if (key.toLowerCase().startsWith("pw")
+						&& obj.get(key).toString().isEmpty()) {
+
+				} else {
+					p.setProperty(key, obj.get(key).toString());
+				}
 			}
 			switch (target) {
 			case "db":

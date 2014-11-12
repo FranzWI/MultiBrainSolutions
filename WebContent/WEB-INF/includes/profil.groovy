@@ -7,6 +7,7 @@ def dbView = ServiceHandler.getDatabaseView();
 def userView = dbView.getUserView();
 def user = userView.get(session.user);
 
+//TODO REST Service Daten speichern
 html.div{
 	div('class':"row"){
 		div('class':"col-md-12"){ h2 "Profil" }
@@ -15,6 +16,14 @@ html.div{
 		div('class':"col-md-6") {
 			div('class':"panel panel-default"){
 				div('class':"panel-body"){
+					div('class':"row"){
+						div('class':"col-xs-12"){
+							div('class':"form-group"){
+								label('for':"username", 'class':"control-label", "Anmeldename")
+								input(type:"text", 'class':"form-control", id:"username",value: user.getUsername(), placeholder:"Anmeldename")
+							}
+						}
+					}
 					div('class':"row"){
 						div('class':"col-xs-6"){
 							div('class':"form-group"){
@@ -32,8 +41,8 @@ html.div{
 					div('class':"row"){
 						div('class':"col-xs-12"){
 							div('class':"form-group"){
-								label('for':"pos", 'class':"control-label", "Position")
-								input(type:"text", 'class':"form-control", id:"pos", placeholder:"Position")
+								label('for':"apikey", 'class':"control-label", "API Key")
+								input(type:"text", 'class':"form-control", id:"apikey",value: user.getApikey(), placeholder:"API Key", 'readonly':"")
 							}
 						}
 					}
@@ -49,7 +58,7 @@ html.div{
 					div('class':"row"){
 						div('class':"col-xs-12"){
 							div('class':"form-group"){
-								label('for':"pw", 'class':"control-label", "Passwort")
+								label('for':"pw", 'class':"control-label", "aktuelles Passwort")
 								input(type:"password", 'class':"form-control", id:"pw", placeholder:"Passwort")
 							}
 						}
@@ -57,8 +66,16 @@ html.div{
 					div('class':"row"){
 						div('class':"col-xs-12"){
 							div('class':"form-group"){
-								label('for':"rpw", 'class':"control-label", "Passwort wiederholen")
-								input(type:"password", 'class':"form-control", id:"rpw", placeholder:"Passwort wiederholen")
+								label('for':"npw", 'class':"control-label", "neues Passwort")
+								input(type:"password", 'class':"form-control", id:"npw", placeholder:"neues Passwort")
+							}
+						}
+					}
+					div('class':"row"){
+						div('class':"col-xs-12"){
+							div('class':"form-group"){
+								label('for':"rpw", 'class':"control-label", "neues Passwort wiederholen")
+								input(type:"password", 'class':"form-control", id:"rpw", placeholder:"neues Passwort wiederholen")
 							}
 						}
 					}

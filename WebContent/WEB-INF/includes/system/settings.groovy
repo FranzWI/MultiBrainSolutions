@@ -58,7 +58,7 @@ html.div {
 						}
 						div('class':"form-group"){
 							div('class':"col-sm-offset-1 col-sm-6"){
-								button('class':"btn btn-default", id:"save-db", "Änderung speichern");
+								button('class':"btn btn-info", id:"save-db", "Änderung speichern");
 							}
 						}
 					}
@@ -106,7 +106,7 @@ html.div {
 						}
 						div('class':"form-group"){
 							div('class':"col-sm-offset-1 col-sm-6"){
-								button('class':"btn btn-default", id:"save-mail", "Änderung speichern");
+								button('class':"btn btn-info", id:"save-mail", "Änderung speichern");
 							}
 						}
 					}
@@ -154,7 +154,7 @@ html.div {
 						}
 						div('class':"form-group"){
 							div('class':"col-sm-offset-1 col-sm-6"){
-								button('class':"btn btn-default", id:"save-proxy", "Änderung speichern");
+								button('class':"btn btn-info", id:"save-proxy", "Änderung speichern");
 							}
 						}
 					}
