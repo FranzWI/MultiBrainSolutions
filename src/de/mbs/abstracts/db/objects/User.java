@@ -11,6 +11,8 @@ public class User extends DatabaseObject {
 	private Vector<String> membership = new Vector<String>();
 	private Vector<String> portlets = new Vector<String>();
 
+	private boolean active = true;
+	
 	public User(String id) {
 		super(id);
 	}
@@ -93,6 +95,14 @@ public class User extends DatabaseObject {
 	
 	public void removePortlet(String id){
 		this.portlets.remove(id);
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }

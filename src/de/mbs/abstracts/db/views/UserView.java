@@ -15,7 +15,7 @@ public abstract class UserView implements AddableView<User>,
 	 * @param username
 	 * @param password
 	 * @return null falls keine Gültige Kombination aus Passwort und Nutzernamen
-	 *         vorliegt ansonsten die ID des betroffenen Nutzers
+	 *         vorliegt, oder der nutzer nicht aktiv ist, ansonsten die ID des betroffenen Nutzers
 	 */
 	public abstract String login(String username, String password);
 

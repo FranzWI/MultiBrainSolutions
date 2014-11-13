@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 
 import de.mbs.handler.ServiceHandler;
 
-public abstract class PrivilegesFilter implements ContainerRequestFilter{
+public abstract class PrivilegesFilter implements ContainerRequestFilter {
 
 	@Context
 	protected HttpServletRequest webRequest;
@@ -35,25 +35,42 @@ public abstract class PrivilegesFilter implements ContainerRequestFilter{
 
 	private void checkSession(ContainerRequestContext arg0, HttpSession session) {
 		String userID = session.getAttribute("user").toString();
-		if(userID != null){
-			de.mbs.abstracts.db.objects.User u = ServiceHandler.getDatabaseView().getUserView().get(userID);
-			if(u != null){
+		if (userID != null) {
+			de.mbs.abstracts.db.objects.User u = ServiceHandler
+					.getDatabaseView().getUserView().get(userID);
+			if (u != null) {
 				this.webRequest.setAttribute("user", u);
-				this.check(arg0, u);
+				if (u.isActive()) {
+					this.check(arg0, u);
+				} else {
+					this.denieAccessNotActive(arg0);
+				}
 			}
-		}else{
+		} else {
 			this.denieAccess(arg0);
 		}
 	}
 
 	private void checkApiKey(ContainerRequestContext arg0, String apikey) {
-		de.mbs.abstracts.db.objects.User u = ServiceHandler.getDatabaseView().getUserView().getUserByApikey(apikey);
-		if(u != null){
+		de.mbs.abstracts.db.objects.User u = ServiceHandler.getDatabaseView()
+				.getUserView().getUserByApikey(apikey);
+		if (u != null) {
 			this.webRequest.setAttribute("user", u);
-			this.check(arg0, u);
-		}
-		else
+			if (u.isActive()) {
+				this.check(arg0, u);
+			} else {
+				this.denieAccessNotActive(arg0);
+			}
+		} else
 			this.denieAccess(arg0);
+	}
+
+	/*
+	 * soll aufgerufen werden wenn der API KEy oder die Session ungültig ist
+	 */
+	private void denieAccessNotActive(ContainerRequestContext arg0) {
+		arg0.abortWith(Response.status(Response.Status.BAD_REQUEST)
+				.entity("Nutzer wurde nicht aktiviert").build());
 	}
 
 	/*
@@ -63,7 +80,7 @@ public abstract class PrivilegesFilter implements ContainerRequestFilter{
 		arg0.abortWith(Response.status(Response.Status.BAD_REQUEST)
 				.entity("APIKEY oder Session nicht valide").build());
 	}
-	
+
 	/*
 	 * soll aufgerufen werden wenn die Rechte nicht ausreichend sind
 	 */
@@ -72,6 +89,7 @@ public abstract class PrivilegesFilter implements ContainerRequestFilter{
 				.entity("keine ausreichenden Rechte").build());
 	}
 
-	public abstract void check(ContainerRequestContext arg0, de.mbs.abstracts.db.objects.User u);
-	
+	public abstract void check(ContainerRequestContext arg0,
+			de.mbs.abstracts.db.objects.User u);
+
 }

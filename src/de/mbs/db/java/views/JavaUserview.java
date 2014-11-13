@@ -87,7 +87,7 @@ public class JavaUserview extends UserView {
 	@Override
 	public String login(String username, String password) {
 		for (User u : this.users) {
-			if (u.getUsername().equals(username)
+			if (u.isActive() && u.getUsername().equals(username)
 					&& Crypt.getCryptedPassword(password).equals(u.getPw())) {
 				return u.getId();
 			}
