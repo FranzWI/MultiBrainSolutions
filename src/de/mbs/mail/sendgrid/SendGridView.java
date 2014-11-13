@@ -18,7 +18,7 @@ public class SendGridView extends MailView {
 	private SendGrid sendgrid;
 
 	private final static int OKEY = 0, ERROR = 1, NO_SEND_YET = -1;
-
+	
 	private int lastSendStatus = SendGridView.NO_SEND_YET;
 
 	public SendGridView() {
@@ -110,7 +110,7 @@ public class SendGridView extends MailView {
 		if (this.lastSendStatus == SendGridView.NO_SEND_YET)
 			return this
 					.sendMail("derdudele@gmail.com", "Probemail",
-							"multibraincockpit@ba-dresden.de",
+							MailView.SENDER,
 							"Dies ist eine Testmail");
 		return false;
 	}

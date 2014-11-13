@@ -27,7 +27,6 @@ public class JavaUserview extends UserView {
 		admin.setUsername("admin");
 		admin.setEmail("ich@michaelkuerbis.de");
 		admin.setPw("admin");
-		admin.setApikey(UUID.randomUUID().toString());
 		for (Group group : view.getGroupView().getAll()) {
 			admin.addMembership(group.getId());
 		}
@@ -40,7 +39,6 @@ public class JavaUserview extends UserView {
 		user.setUsername("user");
 		user.setEmail("ich@michaelkuerbis.de");
 		user.setPw("user");
-		user.setApikey(UUID.randomUUID().toString());
 		for (Group group : view.getGroupView().getAll()) {
 			if (group.getName().equals("Nutzer"))
 				user.addMembership(group.getId());
@@ -52,6 +50,8 @@ public class JavaUserview extends UserView {
 	public String add(User data) {
 		// ID des neuen Nutzers setzen
 		data.setId(UUID.randomUUID().toString());
+		// Apikey vergeben
+		data.setApikey(UUID.randomUUID().toString());
 		// Passwort verschlüsseln
 		data.setPw(Crypt.getCryptedPassword(data.getPw()));
 		this.users.add(data);

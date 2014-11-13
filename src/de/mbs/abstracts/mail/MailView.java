@@ -7,6 +7,8 @@ import de.mbs.abstracts.mail.definition.Mail;
 
 public abstract class MailView {
 
+	public final static String SENDER = "multibraincockpit@ba-dresden.de";
+	
 	protected abstract boolean sendMail(String to, String topic, String from,
 			String text);
 

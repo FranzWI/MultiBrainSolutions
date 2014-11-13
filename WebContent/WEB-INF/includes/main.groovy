@@ -6,9 +6,11 @@ import de.mbs.abstracts.db.DatabaseView
 import de.mbs.abstracts.db.views.UserView
 import de.mbs.abstracts.db.views.GroupView
 import de.mbs.abstracts.db.views.MessageView
+import de.mbs.abstracts.db.views.NotificationView
 import de.mbs.abstracts.db.objects.User
 import de.mbs.abstracts.db.objects.Group
 import de.mbs.abstracts.db.objects.Message
+import de.mbs.abstracts.db.objects.Notification
 import de.mbs.frontend.FrontendHelper
 import de.mbs.handler.ServiceHandler
 
@@ -96,41 +98,55 @@ html.div('class':"page-container sidebar-collapsed"){
 				// Benachrichtigungen
 				ul('class':"user-info pull-left pull-right-xs pull-none-xsm"){
 					li('class':"notifications dropdown"){
-						a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown", 'data-hover':"dropdown", 'data-close-others':"true"){
-							i('class':"entypo-attention")
-							span('class':"badge badge-info", "2")
-						}
-						ul('class':"dropdown-menu"){
-							// Alle Benachrichtigungen markieren
-							li('class':"top"){
-								p('class':"small"){
-									a(href:"#", 'class':"pull-right"," Alle als gelesen markieren")
-									i "Sie haben"
-									strong "2"
-									i "neue Benachrichtigungen"
-								}
+						NotificationView notificationView = dbView.getNotificationView();
+						Vector<Notification> notifications = notificationView.getNotificationsForUser(session.user);
+						if(notifications != null){
+							a(href:"#", 'class':"dropdown-toggle", 'data-toggle':"dropdown", 'data-hover':"dropdown", 'data-close-others':"true"){
+								i('class':"entypo-attention")
+								if(notifications.size() > 0)
+									span('class':"badge badge-info", notifications.size())
 							}
+							if(notifications.size() > 0){
+								ul('class':"dropdown-menu"){
+									// Alle Benachrichtigungen markieren
+									li('class':"top"){
+										p('class':"small"){
+											a(href:"#", 'class':"pull-right"," Alle als gelesen markieren")
+											i "Sie haben"
+											strong (""+notifications.size())
+											i "neue Benachrichtigungen"
+										}
+									}
 
-							li{
-								ul('class':"dropdown-menu-list scroller"){
-									li('class':"unread notification-success"){
-										a(href:"#"){
-											i('class':"entypo-user-add pull-right")
-											span('class':"line"){ strong "Neuer Nutzer ist registriert" }
-											span('class':"line small", "vor 30 Sekunden")
+									li{
+										ul('class':"dropdown-menu-list scroller"){
+											for(Notification n : notifications){
+												//TODO typen unterscheiden
+												li('class':"unread notification-success"){
+													a(href:"#"){
+														i('class':n.getIcon()+" pull-right")
+														span('class':"line"){ strong (n.getSubject())}
+														span('class':"line small"){
+															time('class':"timeago", datetime:FrontendHelper.getTimeagoString(n.getReleaseTimestamp()));
+														}
+													}
+												}
+											}
+											/*
+											li('class':"unread notification-secondary"){
+												a(href:"#"){
+													i('class':"entypo-heart pull-right")
+													span('class':"line"){ strong "Es wurde ein Dokument mit Ihnen geteilt" }
+													span('class':"line small", "vor 2 Minuten")
+												}
+											}
+											*/
 										}
 									}
-									li('class':"unread notification-secondary"){
-										a(href:"#"){
-											i('class':"entypo-heart pull-right")
-											span('class':"line"){ strong "Es wurde ein Dokument mit Ihnen geteilt" }
-											span('class':"line small", "vor 2 Minuten")
-										}
-									}
+									//li('class':"external"){
+									//	a(href:"index.groovy?page=notifications","Alle Benachrichtigungen zeigen")
+									//}
 								}
-							}
-							li('class':"external"){
-								a(href:"index.groovy?page=notifications","Alle Benachrichtigungen zeigen")
 							}
 						}
 					}

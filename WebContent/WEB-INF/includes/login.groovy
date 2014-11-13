@@ -12,9 +12,6 @@ html.div {
 					p("Login fehlgeschlagen")
 				}
 			}
-			label('class':"checkbox"){
-				input(type:"checkbox", value:"remember-me", "angemeldet bleiben")
-			}
 			button('class':"btn btn-lg btn-primary btn-block", type:"submit", "anmelden")
 			a(href:"javascript:;", onclick:"jQuery('#reg').modal('show');", 'class':"btn btn-xs btn-white btn-block","registrieren")
 		}
@@ -29,22 +26,22 @@ html.div {
 						div('class':"row"){
 							div('class':"col-md-6"){
 								div('class':"form-group"){
-									label('for':"vorname", 'class':"control-label", "Vorname")
-									input(type:"text", 'class':"form-control", id:"vorname", placeholder:"Vorname")
+									label('for':"firstname", 'class':"control-label", "Vorname")
+									input(type:"text", 'class':"form-control register", id:"firstname", placeholder:"Vorname")
 								}
 							}
 							div('class':"col-md-6"){
 								div('class':"form-group"){
-									label('for':"name", 'class':"control-label", "Name")
-									input(type:"text", 'class':"form-control", id:"name", placeholder:"Name")
+									label('for':"lastname", 'class':"control-label", "Name")
+									input(type:"text", 'class':"form-control register", id:"lastname", placeholder:"Name")
 								}
 							}
 						}
 						div('class':"row"){
 							div('class':"col-md-12"){
 								div('class':"form-group"){
-									label('for':"pos", 'class':"control-label", "Position")
-									input(type:"text", 'class':"form-control", id:"pos", placeholder:"Position")
+									label('for':"username", 'class':"control-label", "Anmeldename")
+									input(type:"text", 'class':"form-control register", id:"username", placeholder:"Anmeldename")
 								}
 							}
 						}
@@ -52,7 +49,7 @@ html.div {
 							div('class':"col-md-12"){
 								div('class':"form-group"){
 									label('for':"mail", 'class':"control-label", "E-Mail")
-									input(type:"text", 'class':"form-control", id:"mail", placeholder:"E-Mail")
+									input(type:"text", 'class':"form-control register", id:"mail", placeholder:"E-Mail")
 								}
 							}
 						}
@@ -61,7 +58,7 @@ html.div {
 							div('class':"col-md-12"){
 								div('class':"form-group"){
 									label('for':"pw", 'class':"control-label", "Passwort")
-									input(type:"password", 'class':"form-control", id:"pw", placeholder:"Passwort")
+									input(type:"password", 'class':"form-control register", id:"pw", placeholder:"Passwort")
 								}
 							}
 						}
@@ -69,18 +66,26 @@ html.div {
 							div('class':"col-md-12"){
 								div('class':"form-group"){
 									label('for':"rpw", 'class':"control-label", "Passwort wiederholen")
-									input(type:"password", 'class':"form-control", id:"rpw", placeholder:"Passwort wiederholen")
+									input(type:"password", 'class':"form-control register", id:"rpw", placeholder:"Passwort wiederholen")
+								}
+							}
+						}
+						div('class':"row"){
+							div('class':"col-md-12"){
+								div('class':"alert alert-danger",id:"reg-error", 'style':"display:none;"){
+									
 								}
 							}
 						}
 					}
 					div('class':"modal-footer"){
-						button(type:"button", 'class':"btn btn-xs btn-default", 'data-dismiss':"modal", "schlie\u00DFen");
-						button(type:"button", 'class':"btn btn-info", "registrieren")
+						button(type:"button",id:"register-close", 'class':"btn btn-xs btn-default", 'data-dismiss':"modal", "schlie\u00DFen");
+						button(type:"button",id:"register-button", 'class':"btn btn-info", "registrieren")
 					}
 				}
 			}
 		}
+		script(src:"assets/js/login.js");
 		//TODO Fehlermeldungen bei fehlgeschlagener Anmeldung
 	}
 }
