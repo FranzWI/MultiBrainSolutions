@@ -35,9 +35,9 @@ public class GroupREST {
 	}
 	
 	@POST
-	@Path("/add/{group}")
+	@Path("/add/{groupJSON}")
 	@Admin
-	public Response addGroup(@PathParam("group") String groupJSON) {
+	public Response addGroup(@PathParam("groupJSON") String groupJSON) {
 		groupJSON = groupJSON.replaceAll("\\(", "{").replaceAll("\\)", "}");
 		JSONParser parser = new JSONParser();
 		try {
@@ -59,9 +59,9 @@ public class GroupREST {
 	}
 	
 	@POST
-	@Path("/edit/{group}")
+	@Path("/edit/{groupJSON}")
 	@Admin
-	public Response editGroup(@PathParam("group") String groupJSON) {
+	public Response editGroup(@PathParam("groupJSON") String groupJSON) {
 		groupJSON = groupJSON.replaceAll("\\(", "{").replaceAll("\\)", "}");
 		JSONParser parser = new JSONParser();
 		try {
@@ -86,6 +86,18 @@ public class GroupREST {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("JSON Objekt fehlerhaft").build();
 		}
+	}
+	
+	@POST
+	@Path("/remove/{groupId}")
+	@Admin
+	public Response removeGroup(@PathParam("groupId") String groupId) {
+		if(ServiceHandler.getDatabaseView().getGroupView().remove(groupId)){
+			return Response.ok().build();
+		}
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+				.entity("Fehler beim entfernen der Gruppe")
+				.build();
 	}
 	
 }

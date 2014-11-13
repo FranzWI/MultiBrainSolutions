@@ -33,11 +33,13 @@ import org.json.simple.parser.ParseException;
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.MessageView;
+import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.db.elasticsearch.views.ElasticsearchGroupview;
 import de.mbs.db.elasticsearch.views.ElasticsearchMessageview;
+import de.mbs.db.elasticsearch.views.ElasticsearchNotificationview;
 import de.mbs.db.elasticsearch.views.ElasticsearchPortletview;
 import de.mbs.db.elasticsearch.views.ElasticsearchSettingsview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
@@ -51,6 +53,7 @@ public class ElasticsearchView extends DatabaseView{
 	private ElasticsearchPortletview portletview;
 	private ElasticsearchSettingsview settingview;
 	private ElasticsearchMessageview messageview;
+	private ElasticsearchNotificationview notificationview;
 	
 	public ElasticsearchView() {
 		Settings settings = ImmutableSettings.settingsBuilder()
@@ -75,6 +78,7 @@ public class ElasticsearchView extends DatabaseView{
 		this.portletview = new ElasticsearchPortletview();
 		this.messageview = new ElasticsearchMessageview();
 		this.settingview = new ElasticsearchSettingsview();
+		this.notificationview = new ElasticsearchNotificationview();
 		this.printESStructure();
 	}
 
@@ -279,5 +283,10 @@ public class ElasticsearchView extends DatabaseView{
 	@Override
 	public SettingsView getSettingsView() {
 		return this.settingview;
+	}
+
+	@Override
+	public NotificationView getNotificationView() {
+		return this.notificationview;
 	}
 }

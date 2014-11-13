@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.MessageView;
+import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserView;
@@ -118,6 +119,8 @@ public abstract class DatabaseView {
 	public abstract MessageView getMessageView();
 	
 	public abstract SettingsView getSettingsView();
+	
+	public abstract NotificationView getNotificationView();
 	
 	public ModulContainer getModulContainer(){
 		return ModulContainer.initialise();
