@@ -79,6 +79,8 @@ public class ElasticsearchView extends DatabaseView{
 		this.messageview = new ElasticsearchMessageview();
 		this.settingview = new ElasticsearchSettingsview();
 		this.notificationview = new ElasticsearchNotificationview();
+		this.addSearchableView(this.getUserView());
+		this.addSearchableView(this.getMessageView());
 		this.printESStructure();
 	}
 

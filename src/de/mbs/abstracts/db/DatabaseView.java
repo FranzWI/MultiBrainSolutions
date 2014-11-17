@@ -71,7 +71,6 @@ public abstract class DatabaseView {
 			}
 
 		});
-		// TODO Thread als
 		t.setDaemon(true);
 		t.start();
 	}

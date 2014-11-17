@@ -2,7 +2,7 @@ package de.mbs.abstracts.db.views.definition;
 
 import java.util.Vector;
 
-import groovy.xml.MarkupBuilder;
+import de.mbs.abstracts.db.utils.SearchResult;
 
 public interface SearchableView {
 
@@ -15,5 +15,5 @@ public interface SearchableView {
 	 * @param search
 	 * @return
 	 */
-	public Vector<MarkupBuilder> search(String search);
+	public Vector<SearchResult> search(String search);
 }

@@ -36,6 +36,9 @@ public class JavaView extends DatabaseView {
 		this.settingview = new JavaSettingsview();
 		this.messageview = new JavaMessageview(this);
 		this.notificationview = new JavaNotificationview(this);
+
+		this.addSearchableView(this.getUserView());
+		this.addSearchableView(this.getMessageView());
 	}
 
 	@Override

@@ -1,16 +1,15 @@
 package de.mbs.db.elasticsearch.views;
 
-import groovy.xml.MarkupBuilder;
-
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.Message;
+import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.MessageView;
 
 public class ElasticsearchMessageview extends MessageView {
 
 	@Override
-	public Vector<MarkupBuilder> search(String search) {
+	public Vector<SearchResult> search(String search) {
 		// TODO Auto-generated method stub
 		return null;
 	}
