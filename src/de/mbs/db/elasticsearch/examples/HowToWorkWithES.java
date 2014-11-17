@@ -39,12 +39,23 @@ public class HowToWorkWithES
 		Object myEsClient = null;
 		return myEsClient;
 	}
-		
-	private void addSomething(Object newDataset)
+	
+	/**
+	 * Here you need the Index where you want to put the JSON object into, the type and the ID:
+	 * the newDataSet should be a JSON object in the propper form
+	 */
+	private void addSomething_withID(Object newDataset)
 	{
-		
+		IndexResponse response = getESClient().prepareIndex(getIndex(),getType(),getID()).setSource(newDataSet).execute().actionGet();
+	}
+	private void addSomething_withoutID(Object newDataset)
+	{
+		IndexResponse response = getESClient().prepareIndex(getIndex(),getType()).setSource(newDataSet).execute().actionGet();
 	}
 	
+	/**
+	 * Edit a JSON object in a specific Index
+	 */
 	private void editSomething(Object newDataset)
 	{
 		/*
@@ -65,9 +76,19 @@ public class HowToWorkWithES
 		
 	}
 	
+	/**
+	 * TODO: Should this method contain a GET-Request or should it used to search in an index? 
+	 */
 	private void findSomething()
 	{
+		//Way to get an JSON Object with ID from a given Type in a given Index.
+		IndexRequest indexRequest = new IndexRequest(getIndex(),getType(),getID());
+		IndexRequest response = getESClient().index(indexRequest).actionGet();
 		
+		//Way to find in an specific index
+		
+		
+		//Way to find over all indexes
 	}
 
 	/**
