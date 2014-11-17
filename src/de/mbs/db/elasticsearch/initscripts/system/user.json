@@ -6,40 +6,16 @@
                 "index":"not_analyzed"
             },
             "firstName":{
-                "type":"multi_field",
-                "fields":{
-                    "firstName":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    },
-                    "divided":{
-                        "type":"string"
-                    }
-                }
+                "type":"string",
+                "index":"not_analyzed"
             },
             "lastName":{
-                "type":"multi_field",
-                "fields":{
-                    "lastName":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    },
-                    "divided":{
-                        "type":"string"
-                    }
-                }
+                "type":"string",
+                "index":"not_analyzed"
             },
             "email":{
-                "type":"multi_field",
-                "fields":{
-                    "email":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    },
-                    "divided":{
-                        "type":"string"
-                    }
-                }
+                "type":"string",
+                "index":"not_analyzed"
             },
             "pw":{
                 "type":"string",
@@ -50,7 +26,8 @@
                 "index":"not_analyzed"
             },
             "sessionID":{
-                "type":"integer"
+                "type":"string",
+                "index":"not_analyzed"
             },
             "inGroups":{
                 "type":"string",
@@ -59,6 +36,9 @@
             "usesPortlets":{
                 "type":"string",
                 "index":"not_analyzed"
+            },
+            "isActive":{
+                "type":"boolean"
             }
         }
     }
