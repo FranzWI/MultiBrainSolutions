@@ -42,7 +42,7 @@ public class JavaView extends DatabaseView {
 	}
 
 	@Override
-	public Map<String,MarkupBuilder> search(String search) {
+	public MarkupBuilder search(String search, MarkupBuilder builder) {
 		
 		// TODO Auto-generated method stub
 		return null;
