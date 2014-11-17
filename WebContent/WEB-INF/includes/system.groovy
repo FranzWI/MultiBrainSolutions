@@ -23,7 +23,13 @@ html.div {
 				li{
 					a(href:"#user", 'data-toggle':"tab"){
 						span('class':"visible-xs"){ i('class':"entypo-user") }
-						span('class':"hidden-xs", "Nutzer & Gruppen")
+						span('class':"hidden-xs", "Nutzer")
+					}
+				}
+				li{
+					a(href:"#group", 'data-toggle':"tab"){
+						span('class':"visible-xs"){ i('class':"entypo-user") }
+						span('class':"hidden-xs", "Gruppen")
 					}
 				}
 				li{
@@ -51,6 +57,10 @@ html.div {
 				div('class':"tab-pane", id:"user"){
 					span ""
 					include('/WEB-INF/includes/system/user.groovy')
+				}
+				div('class':"tab-pane", id:"group"){
+					span ""
+					include('/WEB-INF/includes/system/group.groovy')
 				}
 				div('class':"tab-pane", id:"portlets"){
 					span ""

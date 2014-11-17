@@ -72,6 +72,9 @@ html.html('lang':"de"){
 		}
 	}
 
+	link(rel:"stylesheet", href:"assets/js/select2/select2-bootstrap.css")
+	link(rel:"stylesheet", href:"assets/js/select2/select2.css")
+	
 	script(src:"assets/js/gsap/main-gsap.js")
 	script(src:"assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js")
 	script(src:"assets/js/bootstrap.js")
@@ -85,5 +88,5 @@ html.html('lang':"de"){
 	script(src:"assets/js/jquery.timeago.js")
 	script(src:"assets/js/jquery.timeago.de.js")
 	script(src:"assets/js/toastr.js")
-	script(src:"assets/js/jsurl.js")
+	script(src:"assets/js/select2/select2.min.js")
 }
