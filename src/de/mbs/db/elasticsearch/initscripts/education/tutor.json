@@ -1,0 +1,67 @@
+{
+    "tutor":{
+        "properties":{
+            "persNumber":{
+                "type":"string"
+            },
+            "degree":{
+                "type":"multi_field",
+                "fields":{
+                    "degree":{
+                        "type":"string"
+                    },
+                    "original":{
+                        "type":"string",
+                        "index":"not_analyzed"
+                    }
+                }
+            },
+            "firstName":{
+                "type":"multi_field",
+                "fields":{
+                    "firstName":{
+                        "type":"string"
+                    },
+                    "original":{
+                        "type":"string",
+                        "index":"not_analyzed"
+                    }
+                    
+                }
+            },
+            "lastName":{
+                "type":"multi_field",
+                "fields":{
+                    "lastName":{
+                        "type":"string"
+                    },
+                    "original":{
+                        "type":"string",
+                        "index":"not_analyzed"
+                    }
+                    
+                }
+            },
+            "salaried":{
+                "type":"boolean"
+            },
+            "email":{
+                "type":"multi_field",
+                "fields":{
+                    "email":{
+                        "type":"string"
+                    },
+                    "original":{
+                        "type":"string",
+                        "index":"not_analyzed"
+                    }
+                    
+                }
+            },
+            "birthday":{
+                "type":"date",
+                "format":"dd.MM.yyyy"
+            }
+        }
+    }
+}
