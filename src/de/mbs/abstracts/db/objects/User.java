@@ -16,6 +16,10 @@ public class User extends DatabaseObject {
 	public User(String id) {
 		super(id);
 	}
+	
+	public User(String id, long version){
+		super(id, version);
+	}
 
 	public String getUsername() {
 		return username;

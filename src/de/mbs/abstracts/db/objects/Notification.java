@@ -26,10 +26,6 @@ public class Notification extends DatabaseObject {
 		super(id, timestamp);
 	}
 
-	public Notification(String id, int version, long timestamp) {
-		super(id, version, timestamp);
-	}
-
 	public String getSubject() {
 		return subject;
 	}

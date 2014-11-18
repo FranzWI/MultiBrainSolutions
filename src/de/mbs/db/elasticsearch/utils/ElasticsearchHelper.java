@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
+import org.json.simple.JSONArray;
 
 
 public class ElasticsearchHelper {
@@ -27,6 +29,13 @@ public class ElasticsearchHelper {
 			}
 		}
 		return null;
+	}
+	
+	public static JSONArray vectorToJSONArray(Vector<String> data){
+		JSONArray array = new JSONArray();
+		for(String string:data)
+			array.add(string);
+		return array;
 	}
 	
 }

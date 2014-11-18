@@ -32,10 +32,6 @@ public class Message extends DatabaseObject {
 		super(id, timestamp);
 	}
 
-	public Message(String id, int version, long timestamp) {
-		super(id, version, timestamp);
-	}
-
 	public Date getSendDate() {
 		return sendDate;
 	}

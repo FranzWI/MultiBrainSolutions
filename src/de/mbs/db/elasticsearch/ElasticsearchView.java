@@ -15,8 +15,12 @@ import java.util.Vector;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.count.CountResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
@@ -31,6 +35,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.DatabaseView;
+import de.mbs.abstracts.db.objects.Group;
+import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.NotificationView;
@@ -56,6 +62,23 @@ public class ElasticsearchView extends DatabaseView{
 	private ElasticsearchNotificationview notificationview;
 	
 	public ElasticsearchView() {
+		this.connect();
+		this.init();
+	}
+	
+	public ElasticsearchView(boolean reset){
+		this.connect();
+		if(reset){
+			// ACHTUNG alle indexe löschen !
+			DeleteIndexResponse response = client.admin().indices().delete(new DeleteIndexRequest("_all")).actionGet();
+			if(response.isAcknowledged()){
+				System.out.println("ES: Index gelöscht");
+			}
+		}
+		this.init();
+	}
+	
+	private void connect(){
 		Settings settings = ImmutableSettings.settingsBuilder()
 				.put("cluster.name", "MBS Management Cockpit Cluster")
 				.put("node.data", false).put("network.host", "localhost")
@@ -63,25 +86,57 @@ public class ElasticsearchView extends DatabaseView{
 		Node node = nodeBuilder().client(true).settings(settings)
 				.clusterName("MBS Management Cockpit Cluster").node();
 		client = node.client();
-		System.out.println("ES: initialisiert verbunden");
-		if (!this.isInstalled()) {
-			System.out.println("ES: nicht installiert");
-			if (this.install()) {
-				System.out.println("ES: erfolgreich installiert");
-			} else {
-				System.out.println("ES: installation fehlgeschlagen");
-			}
-
-		}
-		this.userview = new ElasticsearchUserview();
+		System.out.println("ES: initialisiert, verbunden");
+	}
+	
+	private void init(){
+		this.userview = new ElasticsearchUserview(this);
 		this.groupview = new ElasticsearchGroupview();
 		this.portletview = new ElasticsearchPortletview();
 		this.messageview = new ElasticsearchMessageview();
 		this.settingview = new ElasticsearchSettingsview();
 		this.notificationview = new ElasticsearchNotificationview();
+		if (!this.isInstalled()) {
+			System.out.println("ES: nicht installiert");
+			if (this.install()) {
+				System.out.println("ES: erfolgreich installiert");
+				
+				System.out.println("ES: initialisiere default Data");
+				User admin = new User(null);
+				admin.setFirstname("Admini");
+				admin.setLastname("Strator");
+				admin.setUsername("admin");
+				admin.setEmail("ich@michaelkuerbis.de");
+				admin.setPw("admin");
+				//TODO kommentare entfernen wenn groupview geht
+				//for (Group group : this.getGroupView().getAll()) {
+				//	admin.addMembership(group.getId());
+				//}
+				System.out.println("ES: DEBUG ID Admin "+this.getUserView().add(admin));
+
+				// Nutzer anlegen
+				User user = new User(null);
+				user.setFirstname("Default");
+				user.setLastname("'User");
+				user.setUsername("user");
+				user.setEmail("ich@michaelkuerbis.de");
+				user.setPw("user");
+				//TODO kommentare entfernen wenn groupview geht
+				//for (Group group : this.getGroupView().getAll()) {
+				//	if (group.getName().equals("Nutzer"))
+				//		user.addMembership(group.getId());
+				//}
+				System.out.println("ES: DEBUG ID User "+this.getUserView().add(user));
+				//TODO entfernen ist nur test
+				this.getUserView().getAll();
+			} else {
+				System.out.println("ES: installation fehlgeschlagen");
+			}
+
+		}
 		this.addSearchableView(this.getUserView());
 		this.addSearchableView(this.getMessageView());
-		this.printESStructure();
+		//this.printESStructure();
 	}
 
 	public Client getESClient() {
@@ -210,7 +265,6 @@ public class ElasticsearchView extends DatabaseView{
 				// Datie endet mit .json
 				if (file.getName().matches(".*json")) {
 					try {
-						System.out.println("DEBUG "+dir+"/"+file.getName());
 						JSONObject obj = (JSONObject) parser
 								.parse(new FileReader(file));
 						maps.put(file.getName().replace(".json", ""), obj);
