@@ -2,7 +2,7 @@ package de.mbs.mail.sendgrid;
 
 public class SGProp {
 
-	protected final static String USER = "mkuerbis";
-	protected final static String PASSWORD = "ngKFM}9C%&gPWBs";
+	public final static String USER = "mkuerbis";
+	public final static String PASSWORD = "w}34Vya*yVUM%C*";
 	
 }
