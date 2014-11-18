@@ -105,4 +105,6 @@ public class User extends DatabaseObject {
 		this.active = active;
 	}
 	
+	//TODO: No SessionID?
+	
 }
