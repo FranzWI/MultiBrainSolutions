@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -12,6 +14,7 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.get.GetField;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
@@ -31,9 +34,18 @@ public class ElasticsearchUserview extends UserView {
 
 	private ElasticsearchView view;
 
-	private String[] fieldList = ["userName", "firstName", "lastName",
-			"email", "pw", "apiKey", "inGroups", "usesPortlets", "sessionID",
-			"isActive" ];
+	private String[] fieldList = [
+		"userName",
+		"firstName",
+		"lastName",
+		"email",
+		"pw",
+		"apiKey",
+		"inGroups",
+		"usesPortlets",
+		"sessionID",
+		"isActive"
+	];
 
 	public ElasticsearchUserview(ElasticsearchView view) {
 		this.view = view;
@@ -50,7 +62,10 @@ public class ElasticsearchUserview extends UserView {
 		// FIXME: In meinen Augen ist es nicht korrekt das das Passwort hier hin
 		// im klartext �bergeben wird
 		jsonUser.put("pw", Crypt.getCryptedPassword(data.getPw()));
-		jsonUser.put("apiKey", data.getApikey());
+		
+		//
+		// apikey erzeugen
+		jsonUser.put("apiKey", UUID.randomUUID().toString() );
 		// FIXME Falls die anpassung in der User.java falsch war, muss diese
 		// Stelle �berarbeitet werden
 		jsonUser.put("sessionID", data.getSessionId());
@@ -58,12 +73,12 @@ public class ElasticsearchUserview extends UserView {
 		// Group Views laufen
 		jsonUser.put("inGroups",
 				ElasticsearchHelper.vectorToJSONArray(data.getMembership())
-						.toJSONString());
+				.toJSONString());
 		// FIXME pr�fen ob IDs g�ltig sind -> erst m�glich wenn Portlet und
 		// Group Views laufen
 		jsonUser.put("usesPortlets",
 				ElasticsearchHelper.vectorToJSONArray(data.getPortlets())
-						.toJSONString());
+				.toJSONString());
 		jsonUser.put("isActive", data.isActive());
 
 		IndexResponse response = this.view.getESClient()
@@ -104,10 +119,10 @@ public class ElasticsearchUserview extends UserView {
 		jsonUser.put("apiKey", data.getApikey());
 		jsonUser.put("inGroups",
 				ElasticsearchHelper.vectorToJSONArray(data.getMembership())
-						.toJSONString());
+				.toJSONString());
 		jsonUser.put("usesPortlets",
 				ElasticsearchHelper.vectorToJSONArray(data.getPortlets())
-						.toJSONString());
+				.toJSONString());
 		jsonUser.put("sessionId", data.getSessionId());
 		jsonUser.put("isActive", data.isActive());
 
@@ -115,8 +130,8 @@ public class ElasticsearchUserview extends UserView {
 				.getESClient()
 				.prepareBulk()
 				.add(view.getESClient()
-						.prepareIndex("system", "user", data.getId())
-						.setSource(jsonUser.toJSONString())).execute()
+				.prepareIndex("system", "user", data.getId())
+				.setSource(jsonUser.toJSONString())).execute()
 				.actionGet();
 		// Wenn update funktioniert hat, dann datensatz, sonst null
 		if (!response.hasFailures()) {
@@ -145,18 +160,29 @@ public class ElasticsearchUserview extends UserView {
 
 	@Override
 	public String login(String username, String password) {
-		// TODO: kommt das passwort hier schon crypted oder klartext?
-		/*
-		 * Vector<SearchHit> userFound = search(username);
-		 * 
-		 * if (userFound.size() != 1) { User user =
-		 * this.get(userFound(1).getId()); if (user.getPw() != new
-		 * Crypt().getCryptedPassword(password)) if (user.isActive) return
-		 * user.getId(); } else
-		 */
+		// Passwort in klartext
+		SearchResponse response = this.view.getESClient()
+				.prepareSearch("system")
+				.setTypes("user")
+				.addFields(fieldList)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.matchQuery("userName", username))
+						.must(QueryBuilders.matchQuery("pw", Crypt.getCryptedPassword(password))))
+				.execute()
+				.actionGet();
+				
+				
+		SearchHit[] hits = response.getHits().getHits();
+		if(hits.length == 1 ){
+			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
+			if(u != null)
+				return u;
+		}
 		return null;
 	}
 
+	// Achtung diese suche ist für das Frontend gedacht
 	@Override
 	public Vector<SearchResult> search(String search) {
 		/*
@@ -193,16 +219,20 @@ public class ElasticsearchUserview extends UserView {
 
 	@Override
 	public User getUserByApikey(String apikey) {
-		/*
-		 * SearchResponse response = this.view.getESClient()
-		 * .prepareSearch("system").setTypes("user")
-		 * .setQuery(QueryBuilder.matchQuery("apiKey", apikey)).execute()
-		 * .actionGet();
-		 * 
-		 * SearchHit result = response.getHits().getHits();
-		 * 
-		 * return this.responseToUser(get(result.getId()));
-		 */
+		SearchResponse response = this.view.getESClient()
+		.prepareSearch("system")
+		.setTypes("user")
+		.addFields(fieldList)
+		.setQuery(QueryBuilders.matchQuery("apiKey", apikey) )
+		.execute()
+		.actionGet();
+		
+		SearchHit[] hits = response.getHits().getHits();
+		if(hits.length == 1 ){
+			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
+			if(u != null)
+				return u;
+		}
 		return null;
 
 	}
@@ -213,40 +243,40 @@ public class ElasticsearchUserview extends UserView {
 			for (String key : fields.keySet()) {
 				def field = fields.get(key);
 				switch (key) {
-				case "userName":
+					case "userName":
 					user.setUsername(field.getValue() == null ? "" : field
-							.getValue().toString());
+					.getValue().toString());
 					break;
-				case "firstName":
+					case "firstName":
 					user.setFirstname(field.getValue() == null ? "" : field
-							.getValue().toString());
+					.getValue().toString());
 					break;
-				case "lastName":
+					case "lastName":
 					user.setLastname(field.getValue() == null ? "" : field
-							.getValue().toString());
+					.getValue().toString());
 					break;
-				case "email":
+					case "email":
 					user.setEmail(field.getValue() == null ? "" : field
-							.getValue().toString());
+					.getValue().toString());
 					break;
-				case "pw":
+					case "pw":
 					user.setPw(field.getValue() == null ? "" : field.getValue()
-							.toString());
+					.toString());
 					break;
-				case "apiKey":
+					case "apiKey":
 					user.setApikey(field.getValue() == null ? "" : field
-							.getValue().toString());
+					.getValue().toString());
 					break;
-				case "sessionID":
+					case "sessionID":
 					user.setSessionId(field.getValue() == null ? "" : field
-							.getValue().toString());
+					.getValue().toString());
 					break;
-				case "isActive":
+					case "isActive":
 					user.setActive(field.getValue() == null ? false : Boolean
-							.getBoolean(field.getValue().toString()));
+					.getBoolean(field.getValue().toString()));
 					break;
 
-				case "inGroups":
+					case "inGroups":
 					Vector<String> groups = new Vector<String>();
 					if (field.getValues() != null) {
 						List<Object> values = field.getValues();
@@ -256,7 +286,7 @@ public class ElasticsearchUserview extends UserView {
 					}
 					user.setMembership(groups);
 					break;
-				case "usesPortlets":
+					case "usesPortlets":
 					Vector<String> portlets = new Vector<String>();
 					if (field.getValues() != null) {
 						List<Object> values = field.getValues();

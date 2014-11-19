@@ -2,6 +2,8 @@ package de.mbs.test.backend;
 
 import static org.junit.Assert.*;
 
+import java.util.UUID;
+
 import org.junit.Test;
 
 import de.mbs.abstracts.db.objects.User;
@@ -14,7 +16,7 @@ import de.mbs.test.TestExecuter;
  *
  */
 public class UserviewTest {
-
+	
 	@Test
 	public void testIsUserViewImplemented() {
 		UserView userView = TestExecuter.getView().getUserView();
@@ -47,6 +49,8 @@ public class UserviewTest {
 		assertEquals("Nachname sind nicht gleich", testUser.getLastname(),
 				newUser.getLastname());
 
+		assertNotNull("Nutzer konnte nicht am ApiKey abgerufen werden!", userView.getUserByApikey(newUser.getApikey()));
+		assertNull("Ungültigen APIKey übergeben und dennoch einen Nutzer erhalten!!", userView.getUserByApikey(UUID.randomUUID().toString()));
 	}
 	
 	@Test
@@ -54,9 +58,12 @@ public class UserviewTest {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 	}
+
 	
 	@Test
 	public void testLogin() {
-		
+		UserView userView = TestExecuter.getView().getUserView();
+		assertNotNull("Login als Admin funktioniert nicht!", userView.login("admin", "admin"));
+		assertNotNull("Login als User funktioniert nicht!", userView.login("user", "user"));
 	}
 }

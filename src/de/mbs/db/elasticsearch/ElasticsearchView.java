@@ -19,8 +19,6 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.count.CountResponse;
-import org.elasticsearch.action.delete.DeleteRequest;
-import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
@@ -35,7 +33,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.DatabaseView;
-import de.mbs.abstracts.db.objects.Group;
 import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.MessageView;
@@ -48,7 +45,6 @@ import de.mbs.db.elasticsearch.views.ElasticsearchMessageview;
 import de.mbs.db.elasticsearch.views.ElasticsearchNotificationview;
 import de.mbs.db.elasticsearch.views.ElasticsearchPortletview;
 import de.mbs.db.elasticsearch.views.ElasticsearchSettingsview;
-import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
 
 public class ElasticsearchView extends DatabaseView{
