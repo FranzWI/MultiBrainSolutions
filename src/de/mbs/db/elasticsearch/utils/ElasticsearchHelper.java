@@ -6,9 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Vector;
+import java.util.function.Consumer;
 
 import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 public class ElasticsearchHelper {
@@ -36,6 +39,21 @@ public class ElasticsearchHelper {
 		for(String string:data)
 			array.add(string);
 		return array;
+	}
+	
+	public static Vector<String> jsonArrayToVector(String jsonArrayAsString) throws ParseException{
+		JSONParser parser = new JSONParser();
+		JSONArray data = (JSONArray) parser.parse(jsonArrayAsString);
+		final Vector<String> vector = new Vector<String>();
+		data.forEach(new Consumer(){
+
+			@Override
+			public void accept(Object t) {
+				vector.add(t.toString());
+			}
+			
+		});
+		return vector;
 	}
 	
 }

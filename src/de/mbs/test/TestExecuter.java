@@ -6,6 +6,7 @@ import org.junit.runner.notification.Failure;
 
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
+import de.mbs.db.java.JavaView;
 import de.mbs.test.backend.AllBackendTests;
 
 /**
@@ -37,6 +38,7 @@ public class TestExecuter {
 	public static void main(String[] args) {
 		// TODO hier die zu testenden Database hinterlegen
 		TestExecuter.start(new ElasticsearchView(true));
+		TestExecuter.start(new JavaView());
 	}
 
 }

@@ -110,7 +110,7 @@ public class User extends DatabaseObject {
 	}
 	
 	//TODO: Franz - 19.11.2014 -> get/set Session ID added
-	public void getSessionId()
+	public String getSessionId()
 	{
 		return sessionId;
 	}

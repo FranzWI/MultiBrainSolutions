@@ -49,6 +49,7 @@ import de.mbs.db.elasticsearch.views.ElasticsearchNotificationview;
 import de.mbs.db.elasticsearch.views.ElasticsearchPortletview;
 import de.mbs.db.elasticsearch.views.ElasticsearchSettingsview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
+import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
 
 public class ElasticsearchView extends DatabaseView{
 
