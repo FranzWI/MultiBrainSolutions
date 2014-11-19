@@ -76,7 +76,6 @@ public class ElasticsearchUserview extends UserView {
 	@Override
 	public User edit(User data) 
 	{
-	
 		// FIXME: Funktioniert das so überhaupt?
 		
 		BulkResponse response = client().prepareBulk()
@@ -92,7 +91,7 @@ public class ElasticsearchUserview extends UserView {
 					.setType("user").setScript("ctx._source.pw" = data.getPW()))
 				.add(this.view.getESClient().prepareIndex().setIndex("system")
 					.setType("user").setScript("ctx._source.apiKey" = data.getApikey()))
-			//FIXME: ist das hier an der stelle überhaupt möglich JSON Strings darein zu bauen?
+		//FIXME: ist das hier an der stelle überhaupt möglich JSON Strings darein zu bauen?
 				.add(this.view.getESClient().prepareIndex().setIndex("system")
 					.setType("user")
 					.setScript("ctx._source.inGroups" = ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString()))
@@ -123,9 +122,7 @@ public class ElasticsearchUserview extends UserView {
 		
 		if (response.isExists()) 
 		{
-			responseToUser(user);
-
-			return user;
+			return responseToUser(response);
 		} 
 		else
 			return null;
