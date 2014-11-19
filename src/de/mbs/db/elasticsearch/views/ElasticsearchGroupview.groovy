@@ -122,7 +122,7 @@ public class ElasticsearchGroupview extends GroupView {
 						group.setName(field.getValue() == null ? "" : field
 						.getValue().toString());
 						break;
-					case "firstName":
+					case "description":
 						group.setDescription(field.getValue() == null ? "" : field
 						.getValue().toString());
 						break;
