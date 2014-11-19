@@ -87,15 +87,15 @@ public class ElasticsearchView extends DatabaseView{
 	}
 	
 	private void init(){
-		this.userview = new ElasticsearchUserview(this);
-		this.groupview = new ElasticsearchGroupview();
-		this.portletview = new ElasticsearchPortletview();
-		this.messageview = new ElasticsearchMessageview();
-		this.settingview = new ElasticsearchSettingsview();
-		this.notificationview = new ElasticsearchNotificationview();
 		if (!this.isInstalled()) {
 			System.out.println("ES: nicht installiert");
 			if (this.install()) {
+				this.groupview = new ElasticsearchGroupview(this);
+				this.portletview = new ElasticsearchPortletview();
+				this.userview = new ElasticsearchUserview(this);
+				this.messageview = new ElasticsearchMessageview();
+				this.settingview = new ElasticsearchSettingsview();
+				this.notificationview = new ElasticsearchNotificationview();
 				System.out.println("ES: erfolgreich installiert");
 				
 				System.out.println("ES: initialisiere default Data");
@@ -124,12 +124,16 @@ public class ElasticsearchView extends DatabaseView{
 				//		user.addMembership(group.getId());
 				//}
 				System.out.println("ES: DEBUG ID User "+this.getUserView().add(user));
-				//TODO entfernen ist nur test
-				this.getUserView().getAll();
 			} else {
 				System.out.println("ES: installation fehlgeschlagen");
 			}
-
+		}else{
+			this.groupview = new ElasticsearchGroupview(this);
+			this.portletview = new ElasticsearchPortletview();
+			this.userview = new ElasticsearchUserview(this);
+			this.messageview = new ElasticsearchMessageview();
+			this.settingview = new ElasticsearchSettingsview();
+			this.notificationview = new ElasticsearchNotificationview();
 		}
 		this.addSearchableView(this.getUserView());
 		this.addSearchableView(this.getMessageView());
