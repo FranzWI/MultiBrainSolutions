@@ -81,30 +81,12 @@ public class ElasticsearchUserview extends UserView {
 				.toJSONString());
 		jsonUser.put("isActive", data.isActive());
 
-		IndexResponse response = this.view.getESClient()
-				.prepareIndex("system", "user")
-				.setSource(jsonUser.toJSONString()).execute().actionGet();
-
-		// Logisch das ich nicht selbst drauf gekommen bin das im Kommentar der
-		// AddableView der gew�nschte R�ckgabewert steht :D :D :D :D :D
-		if (response.isCreated()) {
-			// TODO
-			// WICHTIG es muss scheinbar der Index jedes mal geflusht werden
-			// damit die DATEN
-			// sofort zur verfügung stehen!!!
-			view.getESClient().admin().indices()
-					.flush(new FlushRequest("system")).actionGet();
-			return response.getId();
-		} else {
-			return null;
-		}
+		return ElasticsearchHelper.add(view, "system", "user", jsonUser.toJSONString());
 	}
 
 	@Override
 	public boolean remove(String id) {
-		DeleteResponse response = view.getESClient()
-				.prepareDelete("system", "user", id).execute().actionGet();
-		return response.isFound();
+		return ElasticsearchHelper.remove(view, "system", "user", id);
 	}
 
 	@Override
@@ -126,25 +108,7 @@ public class ElasticsearchUserview extends UserView {
 		jsonUser.put("sessionId", data.getSessionId());
 		jsonUser.put("isActive", data.isActive());
 
-		BulkResponse response = view
-				.getESClient()
-				.prepareBulk()
-				.add(view.getESClient()
-				.prepareIndex("system", "user", data.getId())
-				.setSource(jsonUser.toJSONString())).execute()
-				.actionGet();
-		// Wenn update funktioniert hat, dann datensatz, sonst null
-		if (!response.hasFailures()) {
-			// TODO
-			// WICHTIG es muss scheinbar der Index jedes mal geflusht werden
-			// damit die DATEN
-			// sofort zur verfügung stehen!!!
-			view.getESClient().admin().indices()
-					.flush(new FlushRequest("system")).actionGet();
-			return data;
-		} else {
-			return null;
-		}
+		return ElasticsearchHelper.edit(view, "system", "user", jsonUser.toJSONString(), data);
 	}
 
 	@Override

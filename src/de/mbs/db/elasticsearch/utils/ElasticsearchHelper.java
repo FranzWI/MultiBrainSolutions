@@ -9,9 +9,16 @@ import java.util.Vector;
 import java.util.function.Consumer;
 
 import org.apache.commons.codec.binary.Base64;
+import org.elasticsearch.action.admin.indices.flush.FlushRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.index.IndexResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import de.mbs.abstracts.db.objects.definition.DatabaseObject;
+import de.mbs.db.elasticsearch.ElasticsearchView;
 
 
 public class ElasticsearchHelper {
@@ -54,6 +61,45 @@ public class ElasticsearchHelper {
 			
 		});
 		return vector;
+	}
+	
+	public static String add(ElasticsearchView view, String index, String type, String json){
+		IndexResponse response = view.getESClient()
+				.prepareIndex(index, type)
+				.setSource(json).execute().actionGet();
+		if (response.isCreated()) {
+			view.getESClient().admin().indices()
+					.flush(new FlushRequest(index)).actionGet();
+			return response.getId();
+		} else {
+			return null;
+		}
+	}
+	
+	public static <A extends DatabaseObject> A edit(ElasticsearchView view, String index, String type, String json, A data){
+		BulkResponse response = view
+				.getESClient()
+				.prepareBulk()
+				.add(view.getESClient()
+				.prepareIndex(index, type, data.getId())
+				.setSource(json)).execute()
+				.actionGet();
+				
+		if (!response.hasFailures()) {
+			view.getESClient().admin().indices()
+					.flush(new FlushRequest(index)).actionGet();
+			return data;
+		} else {
+			return null;
+		}
+	}
+	
+	public static boolean remove(ElasticsearchView view, String index, String type, String id){
+		DeleteResponse response = view.getESClient()
+				.prepareDelete(index, type, id).execute().actionGet();
+		view.getESClient().admin().indices()
+				.flush(new FlushRequest(index)).actionGet();
+		return response.isFound();
 	}
 	
 }
