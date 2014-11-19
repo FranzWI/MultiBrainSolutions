@@ -6,7 +6,7 @@ import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 
 public class User extends DatabaseObject {
 
-	private String username, firstname, lastname, email, pw, apikey;
+	private String username, firstname, lastname, email, pw, apikey, sessionId;
 
 	private Vector<String> membership = new Vector<String>();
 	private Vector<String> portlets = new Vector<String>();
@@ -109,6 +109,15 @@ public class User extends DatabaseObject {
 		this.active = active;
 	}
 	
-	//TODO: No SessionID?
+	//TODO: Franz - 19.11.2014 -> get/set Session ID added
+	public void getSessionId()
+	{
+		return sessionId;
+	}
+	
+	public void setSessionId(String sessionId)
+	{
+		this.sessionId = sessionId;
+	}
 	
 }

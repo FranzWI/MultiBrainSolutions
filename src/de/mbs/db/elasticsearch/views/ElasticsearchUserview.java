@@ -26,6 +26,8 @@ import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
 
 public class ElasticsearchUserview extends UserView {
 
+	// FIXME: es gibt keine register methode???
+		
 	private ElasticsearchView view;
 
 	public ElasticsearchUserview(ElasticsearchView view) {
@@ -33,95 +35,204 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public String add(User data) {
+	public String add(User data) 
+	{
 		JSONObject jsonUser = new JSONObject();
+		
 		jsonUser.put("userName", data.getUsername());
 		jsonUser.put("firstName", data.getFirstname());
 		jsonUser.put("lastName", data.getLastname());
 		jsonUser.put("email", data.getEmail());
-		// TODO Passwort verschlÃ¼sseln
-		jsonUser.put("pw", data.getPw());
+		// FIXME: In meinen Augen ist es nicht korrekt das das Passwort hier hin im klartext übergeben wird
+		jsonUser.put("pw", new Crypt().getCryptedPassword(data.getPw()));
 		jsonUser.put("apiKey", data.getApikey());
-		// TODO: No data.getSessionID() yet
-		jsonUser.put("sessionID", "");
-		// TODO: Hier gilt das gleiche wie bei den Portlets
-		// FIXME prÃ¼fen ob die IDs gÃ¼ltig sind
-		jsonUser.put("inGroups",
-				ElasticsearchHelper.vectorToJSONArray(data.getMembership())
-						.toJSONString());
-		// siehe ElasticsearchHelper ...
-		// FIXME prÃ¼fen ob die IDs gÃ¼ltig sind
-		jsonUser.put("usesPortlets",
-				ElasticsearchHelper.vectorToJSONArray(data.getPortlets())
-						.toJSONString());
+		// FIXME Falls die anpassung in der User.java falsch war, muss diese Stelle überarbeitet werden
+		jsonUser.put("sessionID", data.getSessionId());
+		// FIXME prüfen ob IDs gültig sind -> erst möglich wenn Portlet und Group Views laufen
+		jsonUser.put("inGroups", ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString());
+		// FIXME prüfen ob IDs gültig sind -> erst möglich wenn Portlet und Group Views laufen
+		jsonUser.put("usesPortlets", ElasticsearchHelper.vectorToJSONArray(data.getPortlets()).toJSONString());
 		jsonUser.put("isActive", data.isActive());
-
-		IndexResponse response = this.view.getESClient()
-				.prepareIndex("system", "user")
-				.setSource(jsonUser.toJSONString()).execute().actionGet();
-		// siehe definition der add Methode -->
-		// de.mbs.abstracts.db.views.definition.AddableView
-		if (response.isCreated()) {
+		
+		IndexResponse response = this.view.getESClient().prepareIndex("system", "user").setSource(jsonUser.toJSONString()).execute().actionGet();
+		// Logisch das ich nicht selbst drauf gekommen bin das im Kommentar der AddableView der gewünschte Rückgabewert steht :D :D :D :D :D
+		if (response.isCreated()) 
+		{
 			return response.getId();
-		} else {
+		} 
+		else 
+		{
 			return null;
 		}
 	}
 
 	@Override
-	public boolean remove(String id) {
-		DeleteResponse response = view.getESClient()
-				.prepareDelete("system", "user", id).execute().actionGet();
+	public boolean remove(String id) 
+	{
+		DeleteResponse response = view.getESClient().prepareDelete("system", "user", id).execute().actionGet();
 		return response.isFound();
 	}
 
 	@Override
-	public User edit(User data) {
-		// TODO Auto-generated method stub
-		return null;
+	public User edit(User data) 
+	{
+	
+		// FIXME: Funktioniert das so überhaupt?
+		
+		BulkResponse response = client().prepareBulk()
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user").setScript("ctx._source.userName" = data.getUsername()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user").setScript("ctx._source.firstName" = data.getFirstname()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")	
+					.setType("user").setScript("ctx._source.lastName" = data.getLastname()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user").setScript("ctx._source.email" = data.getEmail()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user").setScript("ctx._source.pw" = data.getPW()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user").setScript("ctx._source.apiKey" = data.getApikey()))
+			//FIXME: ist das hier an der stelle überhaupt möglich JSON Strings darein zu bauen?
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user")
+					.setScript("ctx._source.inGroups" = ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user")
+					.setScript("ctx._source.usesPortlets" = ElasticsearchHelper.vectorToJSONArray(data.getPortlets()).toJSONString()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user").setScript("ctx._source.sessionID" = data.getSessionId()))
+				.add(this.view.getESClient().prepareIndex().setIndex("system")
+					.setType("user").setScript("ctx._source.isActive" = data.isActive()))
+				.execute.actionGet();
+		
+		//Wenn update funktioniert hat, dann datensatz, sonst null
+		if (response.isCreated()) 
+		{
+			return this.responseToUser(response);
+		} 
+		else 
+		{
+			return null;
+		}
 	}
 
 	@Override
-	public User get(String id) {
-		GetResponse response = this.view.getESClient()
-				.prepareGet("system", "user", id).execute().actionGet();
-		// wenn es einen solchen datensatz gibt :)
-		if (response.isExists()) {
-			// bei jeden DB objekt was wir abholen
-			User user = new User(response.getId(), response.getVersion());
-
-			// TODO: Here I should clarify how to work with the response!
-			user.setUsername("");
+	public User get(String id) 
+	{
+		GetResponse response = this.view.getESClient().prepareGet("system", "user", id).execute().actionGet();
+		
+		if (response.isExists()) 
+		{
+			responseToUser(user);
 
 			return user;
-		} else
-			// kein treffer fÃ¼r die ID, gibt null
+		} 
+		else
 			return null;
 	}
 
 	@Override
-	public String login(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+	public String login(String username, String password) 
+	{
+		//TODO: kommt das passwort hier schon crypted oder klartext?
+		Vector<SearchHit> userFound = search(username);
+        
+		if(userFound.size()!=1)
+		{
+			User user = this.get(userFound(1).getId());
+			if(user.getPw() != new Crypt().getCryptedPassword(password))
+				if(user.isActive)
+					return user.getId();
+		}
+		else
+			return null;
 	}
 
 	@Override
-	public Vector<SearchResult> search(String search) {
-		// TODO
-		return null;
+	public Vector<SearchHit> search(String search) 
+	{
+		SearchResponse response = this.view.getESClient().prepareSearch("system")
+				.setTypes("user")
+				.setQuery(QueryBuilder.queryString(search))
+				.execute().actionGet();
+
+		SearchHit[] hit = response.getHits().getHits();
+		
+		Vector<SearchHit> hits = new Vector<SearchHit>();
+		
+		for(SearchHit  myhit : hit)
+		{
+			hits.add(myhit);
+		}
+		
+		if (hits!=null)
+			return hits;
+		else
+			return null;
 	}
 
 	@Override
-	public Vector<User> getAll() {
+	public Vector<User> getAll() 
+	{
+		
+		// FIXME: GEHT NICHT GIBTS NICHT :-*
+		//    Ich habe mir hier ein Workarround überlegt: 
+		//	  Suche einen Type druch mit allen Indexen != 0 => Wir erhalten alle indexe 
+		//    Nun itteriere durch alle erhaltenen Indexe und mach ein get
+		//    erzeuge aus den Response von Get User und add into vector
 		Vector<User> users = new Vector<User>();
-		// TODO geht nicht ....
-		return users;
+		
+		//Suche alle Elemente die im Index System unter dem Typ user abgelegt wurden
+		SearchResponse response = this.view.getESClient().prepareSearch("system")
+				.setTypes("user")
+				.execute().actionGet();
+		
+		// TODO: @Franz -> Warum doppelt .getHits()??? http://stackoverflow.com/questions/14297329/elasticsearch-full-text-search-using-java-api
+		SearchHit[] results = respones.getHits().getHits();
+		
+		for(SearchHit hit : results)
+		{
+			users.add(this.get(hit.getId()));
+		}
+		
+		if(users != null)
+			return users;
+		else
+			return null;
 	}
 
 	@Override
-	public User getUserByApikey(String apikey) {
-		// TODO Auto-generated method stub
-		return null;
+	public User getUserByApikey(String apikey) 
+	{
+		SearchResponse response = this.view.getESClient().prepareSearch("system")
+				.setTypes("user")
+				.setQuery(QueryBuilder.matchQuery("apiKey",apikey))
+				.execute().actionGet();
+		
+		SearchHit result = response.getHits().getHits();
+		
+		User user = responseToUser(get(result.getId()));
+		
+		if(user!=null)
+			return user;
+		else
+			return null;
+	}
+	
+	private User responseToUser(Response response)
+	{
+		User user = new User(response.getId(), response.getVersion());
+		
+		user.setUsername(response.getField("userName"));
+		user.setFirstname(response.getField("firstName"));
+		user.setLastName(response.getField("lastName"));
+		user.setEmail(response.getField("email"));
+		user.setPw(response.getField("pw"));
+		user.setApikey(response.getField("apiKey"));
+		user.setMembership(response.getField("inGroups"));
+		user.setPortlets(response.getField("usesPortlets"));
+		user.setSessionId(response.getField("sessionID"));
+		user.setActive(response.getField("isActive"));
 	}
 
 }
