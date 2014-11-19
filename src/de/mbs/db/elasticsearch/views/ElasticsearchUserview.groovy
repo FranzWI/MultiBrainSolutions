@@ -168,10 +168,7 @@ public class ElasticsearchUserview extends UserView {
 	@Override
 	public Vector<User> getAll() {
 		Vector<User> users = new Vector<User>();
-		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system").setTypes("user").addFields(fieldList)
-				.setQuery(new MatchAllQueryBuilder()).execute().actionGet();
-		for (SearchHit hit : response.getHits().getHits()) {
+		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "user", fieldList)) {
 			if(hit.getFields() != null){
 				User u = this.responseToUser(hit.getId(), hit.getVersion(), hit.getFields());
 				if(u != null)

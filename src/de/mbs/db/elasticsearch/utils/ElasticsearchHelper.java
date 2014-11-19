@@ -13,6 +13,8 @@ import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.search.SearchHit;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -100,6 +102,12 @@ public class ElasticsearchHelper {
 		view.getESClient().admin().indices()
 				.flush(new FlushRequest(index)).actionGet();
 		return response.isFound();
+	}
+	
+	public static SearchHit[] getAll(ElasticsearchView view, String index, String type, String[] fieldList){
+		return view.getESClient()
+				.prepareSearch(index).setTypes(type).addFields(fieldList)
+				.setQuery(new MatchAllQueryBuilder()).execute().actionGet().getHits().getHits();
 	}
 	
 }
