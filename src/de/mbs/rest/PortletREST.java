@@ -1,5 +1,6 @@
 package de.mbs.rest;
 
+import java.util.Vector;
 import java.util.function.Consumer;
 
 import javax.ws.rs.GET;
@@ -119,7 +120,7 @@ public class PortletREST {
 		try {
 			JSONObject obj = (JSONObject) parser.parse(json);
 			final Portlet p = new Portlet(null);
-			return this.editPortlet(obj, p);
+			return this.editPortlet(obj, p,false);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return Response.status(Response.Status.BAD_REQUEST)
@@ -144,7 +145,7 @@ public class PortletREST {
 			if (id != null
 					&& (p = ServiceHandler.getDatabaseView().getPortletView()
 							.get(id)) != null) {
-				return this.editPortlet(obj, p);
+				return this.editPortlet(obj, p, true);
 			} else {
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("Portlet ID ungültig").build();
@@ -160,13 +161,16 @@ public class PortletREST {
 		}
 	}
 
-	private Response editPortlet(JSONObject obj, final Portlet p)
+	private Response editPortlet(JSONObject obj, final Portlet p, boolean isEdit)
 			throws ParseException, NumberFormatException {
 		JSONParser parser = new JSONParser();
 		for (Object oKey : obj.keySet()) {
 			String key = oKey.toString().toLowerCase();
-			String value = obj.get(key).toString();
+			String value = obj.get(key) == null ? "" : obj.get(key).toString();
 			switch (key) {
+			case "id":
+				break;
+			
 			case "name":
 				p.setName(value);
 				break;
@@ -177,8 +181,8 @@ public class PortletREST {
 				p.setPath(value);
 				break;
 			case "groups":
-				System.out.println("DEBUG " + value);
 				JSONArray array = (JSONArray) parser.parse(value);
+				final Vector<String> newgroups = new Vector<String>();
 				array.forEach(new Consumer() {
 
 					@Override
@@ -187,22 +191,23 @@ public class PortletREST {
 								.getGroupView().get(t.toString());
 						if (g != null
 								&& !p.getUsedByGroups().contains(g.getId())) {
-							p.addUseableGroup(g.getId());
+							newgroups.add(g.getId());
 						}
 					}
 				});
+				p.setUsedByGroups(newgroups);
 				break;
 			case "xs":
-				p.setSizeXS(Integer.parseInt(value));
+				p.setSizeXS(Integer.parseInt((value.isEmpty()?"0":value)));
 				break;
 			case "sm":
-				p.setSizeSM(Integer.parseInt(value));
+				p.setSizeSM(Integer.parseInt((value.isEmpty()?"0":value)));
 				break;
 			case "md":
-				p.setSizeMD(Integer.parseInt(value));
+				p.setSizeMD(Integer.parseInt((value.isEmpty()?"0":value)));
 				break;
 			case "lg":
-				p.setSizeMD(Integer.parseInt(value));
+				p.setSizeMD(Integer.parseInt((value.isEmpty()?"0":value)));
 				break;
 			default:
 				return Response
@@ -212,12 +217,21 @@ public class PortletREST {
 			}
 		}
 		if (p.getUsedByGroups().size() > 0) {
+			if(isEdit){
+				if (ServiceHandler.getDatabaseView().getPortletView().edit(p) != null) {
+					return Response.ok().build();
+				} else {
+					return Response.status(Response.Status.BAD_REQUEST)
+							.entity("Fehler beim Ändern des Portlets").build();
+				}
+			}else{
+			
 			if (ServiceHandler.getDatabaseView().getPortletView().add(p) != null) {
 				return Response.ok().build();
 			} else {
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("Fehler beim Anlegen des Portlets").build();
-			}
+			}}
 		} else {
 			return Response
 					.status(Response.Status.BAD_REQUEST)
