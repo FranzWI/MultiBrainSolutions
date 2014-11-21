@@ -22,6 +22,7 @@ import de.mbs.abstracts.mail.definition.Mail;
 import de.mbs.filter.Admin;
 import de.mbs.filter.User;
 import de.mbs.handler.ServiceHandler;
+import de.mbs.rest.utils.RESTHelper;
 
 @Path("portlet")
 public class PortletREST {
@@ -39,20 +40,7 @@ public class PortletREST {
 			obj.put("description", p.getDescription());
 			obj.put("path", p.getPath());
 			// Gruppe auslesen
-			JSONArray groups = new JSONArray();
-			for (String groupId : p.getUsedByGroups()) {
-				Group g = ServiceHandler.getDatabaseView().getGroupView()
-						.get(groupId);
-				// TODO G == null
-				if (g != null) {
-					JSONObject group = new JSONObject();
-					group.put("id", g.getId());
-					group.put("name", g.getName());
-					group.put("description", g.getDescription());
-					groups.add(group);
-				}
-			}
-			obj.put("groups", groups);
+			obj.put("groups", RESTHelper.groupsToJSONArray(p.getUsedByGroups()));
 			obj.put("xs", p.getSizeXS());
 			obj.put("sm", p.getSizeSM());
 			obj.put("md", p.getSizeMD());
@@ -189,8 +177,7 @@ public class PortletREST {
 					public void accept(Object t) {
 						Group g = ServiceHandler.getDatabaseView()
 								.getGroupView().get(t.toString());
-						if (g != null
-								&& !p.getUsedByGroups().contains(g.getId())) {
+						if (g != null) {
 							newgroups.add(g.getId());
 						}
 					}
