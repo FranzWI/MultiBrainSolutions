@@ -15,6 +15,7 @@ import de.mbs.abstracts.db.objects.Group;
 import de.mbs.filter.Admin;
 import de.mbs.filter.User;
 import de.mbs.handler.ServiceHandler;
+import de.mbs.rest.utils.RESTHelper;
 
 @Path("/group")
 public class GroupREST {
@@ -54,10 +55,8 @@ public class GroupREST {
 	@Path("/add/{groupJSON}")
 	@Admin
 	public Response addGroup(@PathParam("groupJSON") String groupJSON) {
-		groupJSON = groupJSON.replaceAll("\\(", "{").replaceAll("\\)", "}");
-		JSONParser parser = new JSONParser();
 		try {
-			JSONObject obj = (JSONObject) parser.parse(groupJSON);
+			JSONObject obj = RESTHelper.stringToJSONObject(groupJSON);
 			Group group = new Group(null);
 			group.setName(obj.get("name").toString());
 			group.setDescription(obj.get("description").toString());
@@ -81,10 +80,8 @@ public class GroupREST {
 	@Admin
 	public Response editGroup(@PathParam("groupJSON") String groupJSON) {
 		// TODO Admin und Usergruppe dürfen nicht geändert werden!!
-		groupJSON = groupJSON.replaceAll("\\(", "{").replaceAll("\\)", "}");
-		JSONParser parser = new JSONParser();
 		try {
-			JSONObject obj = (JSONObject) parser.parse(groupJSON);
+			JSONObject obj = RESTHelper.stringToJSONObject(groupJSON);
 			Group group = ServiceHandler.getDatabaseView().getGroupView()
 					.get(obj.get("id").toString());
 			if (group != null) {

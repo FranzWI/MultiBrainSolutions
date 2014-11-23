@@ -103,10 +103,8 @@ public class PortletREST {
 	@Path("/add/{json}")
 	@Admin
 	public Response add(@PathParam("json") String json) {
-		JSONParser parser = new JSONParser();
-		json = json.replaceAll("\\(", "{").replaceAll("\\)", "}");
 		try {
-			JSONObject obj = (JSONObject) parser.parse(json);
+			JSONObject obj = RESTHelper.stringToJSONObject(json);
 			final Portlet p = new Portlet(null);
 			return this.editPortlet(obj, p,false);
 		} catch (ParseException e) {
@@ -124,10 +122,8 @@ public class PortletREST {
 	@Path("/edit/{json}")
 	@Admin
 	public Response edit(@PathParam("json") String json) {
-		JSONParser parser = new JSONParser();
-		json = json.replaceAll("\\(", "{").replaceAll("\\)", "}");
 		try {
-			JSONObject obj = (JSONObject) parser.parse(json);
+			JSONObject obj = RESTHelper.stringToJSONObject(json);
 			String id = obj.get("id") == null ? null : obj.get("id").toString();
 			Portlet p = null;
 			if (id != null

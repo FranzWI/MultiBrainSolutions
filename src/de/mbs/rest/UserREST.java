@@ -22,6 +22,7 @@ import de.mbs.abstracts.db.objects.Notification;
 import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.mail.MailView;
 import de.mbs.abstracts.mail.definition.Mail;
+import de.mbs.crypt.Crypt;
 import de.mbs.filter.Admin;
 import de.mbs.filter.User;
 import de.mbs.handler.ServiceHandler;
@@ -36,11 +37,8 @@ public class UserREST {
 	@POST
 	@Path("/register/{userJSON}")
 	public Response registerUser(@PathParam("userJSON") String userJSON) {
-
-		JSONParser parser = new JSONParser();
-		userJSON = userJSON.replaceAll("\\(", "{").replaceAll("\\)", "}");
 		try {
-			JSONObject obj = (JSONObject) parser.parse(userJSON);
+			JSONObject obj = RESTHelper.stringToJSONObject(userJSON);
 			de.mbs.abstracts.db.objects.User u = new de.mbs.abstracts.db.objects.User(
 					null);
 			u.setActive(false);
@@ -189,10 +187,8 @@ public class UserREST {
 	@Path("/add/{userJSON}")
 	@Admin
 	public Response add(@PathParam("userJSON") String json) {
-		JSONParser parser = new JSONParser();
-		json = json.replaceAll("\\(", "{").replaceAll("\\)", "}");
 		try {
-			JSONObject obj = (JSONObject) parser.parse(json);
+			JSONObject obj = RESTHelper.stringToJSONObject(json);
 			de.mbs.abstracts.db.objects.User user = new de.mbs.abstracts.db.objects.User(null);
 			return this.editUser(obj, user,false);
 		} catch (ParseException e) {
@@ -210,10 +206,8 @@ public class UserREST {
 	@Path("/edit/{userJSON}")
 	@Admin
 	public Response edit(@PathParam("userJSON") String json) {
-		JSONParser parser = new JSONParser();
-		json = json.replaceAll("\\(", "{").replaceAll("\\)", "}");
 		try {
-			JSONObject obj = (JSONObject) parser.parse(json);
+			JSONObject obj = RESTHelper.stringToJSONObject(json);
 			String id = obj.get("id") == null ? null : obj.get("id").toString();
 			de.mbs.abstracts.db.objects.User p = null;
 			if (id != null
@@ -247,6 +241,15 @@ public class UserREST {
 		}
 	}
 
+	/**
+	 * 
+	 * @param obj - der User als JSON Objekt
+	 * @param user - der Nutzer in den die DAten des JSONObjekts gespeichert werden sollen
+	 * @param isEdit - true falls es ein bereits existierender Nutzer ist, false fals nicht
+	 * @return
+	 * @throws ParseException
+	 * @throws NumberFormatException
+	 */
 	private Response editUser(JSONObject obj,
 			final de.mbs.abstracts.db.objects.User user, boolean isEdit)
 			throws ParseException, NumberFormatException {
@@ -333,8 +336,20 @@ public class UserREST {
 	@Path("/get/{id}")
 	@Admin
 	public Response getUser(@PathParam("id") String id) {
-		//TODO fertig machen
-		return Response.ok().build();
+		JSONObject obj = new JSONObject();
+		de.mbs.abstracts.db.objects.User user = ServiceHandler.getDatabaseView().getUserView().get(id);
+		if(user == null){
+			return Response.status(Response.Status.BAD_REQUEST).entity("Unbekannte ID").build();
+		}
+		obj.put("id", user.getId());
+		obj.put("username", user.getUsername());
+		obj.put("firstname", user.getFirstname());
+		obj.put("lastname", user.getLastname());
+		obj.put("apikey", user.getApikey());
+		obj.put("active", user.isActive());
+		obj.put("email",user.getEmail());
+		obj.put("groups", RESTHelper.groupsToJSONArray(user.getMembership()));
+		return Response.ok(obj.toJSONString()).build();
 	}
 	
 	@GET
@@ -387,6 +402,24 @@ public class UserREST {
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 				.entity("Fehler konnte keinen gültigen ApiKey erzeugen.")
 				.build();
+	}
+	
+	@GET
+	@Path("/resetPassword/{id}")
+	@Admin
+	public Response resetPassword(@PathParam("id") String id) {
+		de.mbs.abstracts.db.objects.User user = ServiceHandler.getDatabaseView().getUserView().get(id);
+		if(user == null){
+			return Response.status(Response.Status.BAD_REQUEST).entity("Unbekannte ID").build();
+		}
+		String password = RESTHelper.randomPassword();
+		user.setPw(Crypt.getCryptedPassword(password));
+		if(ServiceHandler.getDatabaseView().getUserView().edit(user) != null){
+			Mail mail = new Mail(user.getEmail(), "Passwort zurück gesetzt", "multibraincockpit@ba-dresden.de", "Ihr neues Passwort lautet:\n"+password);
+			ServiceHandler.getDatabaseView().sendMail(mail);
+			return Response.ok().build();
+		}
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Fehler beim speichern des Nutzers").build();
 	}
 
 }

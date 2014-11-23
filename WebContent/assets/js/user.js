@@ -69,7 +69,15 @@ $(document).ready(function(){
 	$('#pwreset-user').click(function() {
 		var id = $('#select-user-pwreset').select2('data').id;
 		if(id){
-			alert('Passwort zurücksetzen');
+			$.ajax({
+				type : "GET",
+				url : "rest/user/resetPassword/"+id,
+				timeout : 10000
+			}).done(function(json) {
+				toastr.success("Passwort erfolgreich zurückgesetzt");
+			}).fail(function(jqXHR, textStatus) {
+				toastr.error("Fehlschlag!");
+			});
 		}
 	});
 	

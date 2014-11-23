@@ -26,7 +26,7 @@ public class JavaUserview extends UserView {
 		admin.setFirstname("Admini");
 		admin.setLastname("Strator");
 		admin.setUsername("admin");
-		admin.setEmail("ich@michaelkuerbis.de");
+		admin.setEmail("derdudele@gmail.com");
 		admin.setPw("admin");
 		for (Group group : view.getGroupView().getAll()) {
 			admin.addMembership(group.getId());
@@ -38,7 +38,7 @@ public class JavaUserview extends UserView {
 		user.setFirstname("Default");
 		user.setLastname("'User");
 		user.setUsername("user");
-		user.setEmail("ich@michaelkuerbis.de");
+		user.setEmail("derdudele@gmail.com");
 		user.setPw("user");
 		for (Group group : view.getGroupView().getAll()) {
 			if (group.getName().equals("Nutzer"))
