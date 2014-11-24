@@ -5,8 +5,13 @@ import groovy.xml.MarkupBuilder;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 import java.util.Vector;
 
+import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
+import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.NotificationView;
@@ -83,7 +88,30 @@ public abstract class DatabaseView {
 		return this.searchable;
 	}
 	
-	public abstract MarkupBuilder search(String search, MarkupBuilder builder);
+	public Map<String,Vector<Pair<SearchResult,String>>> search(String search, User u){
+		Map<String,Vector<Pair<SearchResult,String>>> result = new TreeMap<String,Vector<Pair<SearchResult,String>>>();
+		for(SearchableView searchable : this.getSearchable()){
+			Vector<Pair<SearchResult,String>> foo = searchable.search(search, u);
+			result.put(searchable.getTabName(), foo == null ? new Vector<Pair<SearchResult,String>>():foo );
+		}
+		Vector<Pair<SearchResult,String>> all = new Vector<Pair<SearchResult,String>>();
+		for(String key: result.keySet()){
+			all.addAll(result.get(key));
+		}
+		if(all.size()>0){
+			Random r = new Random();
+			for(int i=0; i<100;i++){
+				int start = Math.abs(r.nextInt())%all.size();
+				int stop = Math.abs(r.nextInt())%all.size();
+				Pair<SearchResult,String> foo = all.elementAt(start);
+				Pair<SearchResult,String> bar = all.elementAt(stop);
+				all.set(start, bar);
+				all.set(stop, foo);
+			}
+		}
+		result.put("all", all);
+		return result;
+	}
 	
 	public void setMailView(MailView mailView) {
 		this.mailView = mailView;

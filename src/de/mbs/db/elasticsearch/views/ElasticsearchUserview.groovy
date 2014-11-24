@@ -1,5 +1,7 @@
 package de.mbs.db.elasticsearch.views;
 
+import groovy.xml.MarkupBuilder;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -22,6 +24,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
 import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.abstracts.mail.MailView;
@@ -65,7 +68,7 @@ public class ElasticsearchUserview extends UserView {
 		// FIXME: In meinen Augen ist es nicht korrekt das das Passwort hier hin
 		// im klartext �bergeben wird
 		jsonUser.put("pw", Crypt.getCryptedPassword(data.getPw()));
-		
+
 		//
 		// apikey erzeugen
 		jsonUser.put("apiKey", UUID.randomUUID().toString() );
@@ -104,7 +107,7 @@ public class ElasticsearchUserview extends UserView {
 					"Ihr Account wurde "+(data.isActive()?"aktiviert":"deaktiviert"));
 			ServiceHandler.getDatabaseView().sendHtmlMail(m);
 		}
-		
+
 		JSONObject jsonUser = new JSONObject();
 		jsonUser.put("userName", data.getUsername());
 		jsonUser.put("firstName", data.getFirstname());
@@ -143,13 +146,13 @@ public class ElasticsearchUserview extends UserView {
 				.setTypes("user")
 				.addFields(fieldList)
 				.setQuery(
-						QueryBuilders.boolQuery()
-						.must(QueryBuilders.matchQuery("userName", username))
-						.must(QueryBuilders.matchQuery("pw", Crypt.getCryptedPassword(password))))
+				QueryBuilders.boolQuery()
+				.must(QueryBuilders.matchQuery("userName", username))
+				.must(QueryBuilders.matchQuery("pw", Crypt.getCryptedPassword(password))))
 				.execute()
 				.actionGet();
-				
-				
+
+
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
 			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
@@ -161,20 +164,8 @@ public class ElasticsearchUserview extends UserView {
 
 	// Achtung diese suche ist für das Frontend gedacht
 	@Override
-	public Vector<SearchResult> search(String search) {
-		/*
-		 * SearchResponse response = this.view.getESClient()
-		 * .prepareSearch("system").setTypes("user")
-		 * .setQuery(QueryBuilder.queryString(search)).execute() .actionGet();
-		 * 
-		 * SearchHit[] hit = response.getHits().getHits();
-		 * 
-		 * Vector<SearchHit> hits = new Vector<SearchHit>();
-		 * 
-		 * for (SearchHit myhit : hit) { hits.add(myhit); }
-		 * 
-		 * if (hits != null) return hits; else return null;
-		 */
+	public Vector<Pair<SearchResult, String>> search(String search, User u) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -194,13 +185,13 @@ public class ElasticsearchUserview extends UserView {
 	@Override
 	public User getUserByApikey(String apikey) {
 		SearchResponse response = this.view.getESClient()
-		.prepareSearch("system")
-		.setTypes("user")
-		.addFields(fieldList)
-		.setQuery(QueryBuilders.matchQuery("apiKey", apikey) )
-		.execute()
-		.actionGet();
-		
+				.prepareSearch("system")
+				.setTypes("user")
+				.addFields(fieldList)
+				.setQuery(QueryBuilders.matchQuery("apiKey", apikey) )
+				.execute()
+				.actionGet();
+
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
 			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
@@ -218,58 +209,58 @@ public class ElasticsearchUserview extends UserView {
 				def field = fields.get(key);
 				switch (key) {
 					case "userName":
-					user.setUsername(field.getValue() == null ? "" : field
-					.getValue().toString());
-					break;
+						user.setUsername(field.getValue() == null ? "" : field
+						.getValue().toString());
+						break;
 					case "firstName":
-					user.setFirstname(field.getValue() == null ? "" : field
-					.getValue().toString());
-					break;
+						user.setFirstname(field.getValue() == null ? "" : field
+						.getValue().toString());
+						break;
 					case "lastName":
-					user.setLastname(field.getValue() == null ? "" : field
-					.getValue().toString());
-					break;
+						user.setLastname(field.getValue() == null ? "" : field
+						.getValue().toString());
+						break;
 					case "email":
-					user.setEmail(field.getValue() == null ? "" : field
-					.getValue().toString());
-					break;
+						user.setEmail(field.getValue() == null ? "" : field
+						.getValue().toString());
+						break;
 					case "pw":
-					user.setPw(field.getValue() == null ? "" : field.getValue()
-					.toString());
-					break;
+						user.setPw(field.getValue() == null ? "" : field.getValue()
+						.toString());
+						break;
 					case "apiKey":
-					user.setApikey(field.getValue() == null ? "" : field
-					.getValue().toString());
-					break;
+						user.setApikey(field.getValue() == null ? "" : field
+						.getValue().toString());
+						break;
 					case "sessionID":
-					user.setSessionId(field.getValue() == null ? "" : field
-					.getValue().toString());
-					break;
+						user.setSessionId(field.getValue() == null ? "" : field
+						.getValue().toString());
+						break;
 					case "isActive":
-					user.setActive(field.getValue() == null ? false : Boolean
-					.getBoolean(field.getValue().toString()));
-					break;
+						user.setActive(field.getValue() == null ? false : Boolean
+						.getBoolean(field.getValue().toString()));
+						break;
 
 					case "inGroups":
-					Vector<String> groups = new Vector<String>();
-					if (field.getValues() != null) {
-						List<Object> values = field.getValues();
-						for (Object o : values) {
-							groups.add(o.toString());
+						Vector<String> groups = new Vector<String>();
+						if (field.getValues() != null) {
+							List<Object> values = field.getValues();
+							for (Object o : values) {
+								groups.add(o.toString());
+							}
 						}
-					}
-					user.setMembership(groups);
-					break;
+						user.setMembership(groups);
+						break;
 					case "usesPortlets":
-					Vector<String> portlets = new Vector<String>();
-					if (field.getValues() != null) {
-						List<Object> values = field.getValues();
-						for (Object o : values) {
-							portlets.add(o.toString());
+						Vector<String> portlets = new Vector<String>();
+						if (field.getValues() != null) {
+							List<Object> values = field.getValues();
+							for (Object o : values) {
+								portlets.add(o.toString());
+							}
 						}
-					}
-					user.setPortlets(portlets);
-					break;
+						user.setPortlets(portlets);
+						break;
 				}
 			}
 

@@ -1,6 +1,7 @@
 package de.mbs.modules.interfaces;
 
 import java.util.Map;
+import java.util.Vector;
 
 import javax.ws.rs.core.UriInfo;
 
@@ -12,7 +13,7 @@ import de.mbs.modules.DataContainer;
 public interface Modul extends Plugin{
 
 	/**
-	 * @return den Namen der im Menü angezeigt wird
+	 * @return den Namen der im Menï¿½ angezeigt wird
 	 */
 	public String getMenuName();
 
@@ -65,26 +66,26 @@ public interface Modul extends Plugin{
 	
 	/**
 	 * 
-	 * @return den Pfad für den Configoberfläche des Administrators, falls keine Config null
+	 * @return den Pfad fï¿½r den Configoberflï¿½che des Administrators, falls keine Config null
 	 */
 	public String getConfigFile();
 	
 	/**
 	 * 
-	 * Schlüssel ist der Name des Portlets, Value ist der Dateipfad
+	 * Schlï¿½ssel ist der Name des Portlets, Value ist der Dateipfad
 	 * 
-	 * @return Pfade für die Portlets falls keine dann null
+	 * @return Pfade fï¿½r die Portlets falls keine dann null
 	 */
 	public Map<String,String> getPortletFiles();
 	
 	/**
-	 * Methode die beim Starten des Management Cockpits ausgeführt wird (Tomcat start)
+	 * Methode die beim Starten des Management Cockpits ausgefï¿½hrt wird (Tomcat start)
 	 * @return true falls erfolgreich, false falls nicht
 	 */
 	public boolean startup();
 	
 	/**
-	 *  Methode die beim Herunterfahren des Management Cockpits ausgeführt wird (Tomcat stop, undeploy)
+	 *  Methode die beim Herunterfahren des Management Cockpits ausgefï¿½hrt wird (Tomcat stop, undeploy)
 	 * @return true falls erfolgreich, false falls nicht
 	 */
 	public boolean shutdown();
@@ -108,12 +109,19 @@ public interface Modul extends Plugin{
 	public boolean requiresRestart();
 	
 	/**
-	 * Wird von der Klasse ModulREST  verwendet um der Methode die Abfrage über zuhelfen
+	 * Wird von der Klasse ModulREST  verwendet um der Methode die Abfrage ï¿½ber zuhelfen
 	 * 
 	 * @param uriInfo - Parameter
-	 * @param obj - Das JSONObject welches dem CLient als String zurück geliefert werden soll
-	 * @return String der an den Aufrufer übergeben werden muss
+	 * @param obj - Das JSONObject welches dem CLient als String zurï¿½ck geliefert werden soll
+	 * @return String der an den Aufrufer ï¿½bergeben werden muss
 	 */
 	public void handleRest(UriInfo uriInfo, JSONObject obj);
+	
+	/**
+	 * liste der Javascript dateien die verwendet werden sollen
+	 * 
+	 * @return
+	 */
+	public Vector<String> getJavascripts();
 	
 }

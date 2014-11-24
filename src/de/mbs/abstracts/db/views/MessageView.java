@@ -31,9 +31,9 @@ public abstract class MessageView implements SearchableView,
 	 */
 	public abstract Vector<Message> getUnreadMessagesForUser(String id);
 	
-	@Override
-	public String searchId() {
-		return "Message";
-	}
 
+	public String getTabName(){
+		return "Nachrichten";
+	}
+	
 }

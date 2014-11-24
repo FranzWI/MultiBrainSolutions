@@ -1,10 +1,14 @@
 package de.mbs.db.java.views;
 
+import groovy.xml.MarkupBuilder;
+
 import java.util.UUID;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.Group;
+import de.mbs.abstracts.db.objects.Message;
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
 import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.abstracts.mail.MailView;
@@ -89,21 +93,41 @@ public class JavaUserview extends UserView {
 	}
 
 	@Override
-	public String searchId() {
-		return "User";
-	}
-
-	@Override
-	public Vector<SearchResult> search(String search) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector<Pair<SearchResult,String>> search(String search,User u) {
+		Vector<Pair<SearchResult,String>> result = new Vector<Pair<SearchResult,String>>();
+		for(User user : this.getAll()){
+			if(user.getFirstname().contains(search) || user.getLastname().contains(search) || user.getEmail().contains(search)){
+				SearchResult data = new SearchResult();
+				data.setHeading("Nutzer: "+user.getFirstname()+" "+user.getLastname());
+				data.setContent(user.getFirstname()+" "+user.getLastname()+"<br> <a href=\"#\">"+user.getEmail()+"</a>");
+				def sb = new StringWriter();
+				def builder = new MarkupBuilder(sb);
+				builder.doubleQuotes = true
+				builder.expandEmptyElements = true
+				builder.omitEmptyAttributes = false
+				builder.omitNullAttributes = false
+				builder.li('class':"search-result"){
+					div('class':"sr-inner"){
+						h4(''){
+							a(href:"#", "Huhu "+data.getHeading())
+						}
+						p{
+							builder.mkp.yieldUnescaped(data.getContent())
+						}
+					}
+				}
+				Pair<SearchResult,String> pair = new Pair<SearchResult,String>(data, sb.toString());
+				result.add(pair);
+			}
+		}
+		return result;
 	}
 
 	@Override
 	public String login(String username, String password) {
 		for (User u : this.users) {
 			if (u.isActive() && u.getUsername().equals(username)
-					&& Crypt.getCryptedPassword(password).equals(u.getPw())) {
+			&& Crypt.getCryptedPassword(password).equals(u.getPw())) {
 				return u.getId();
 			}
 		}

@@ -34,12 +34,15 @@ import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
+import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserView;
+import de.mbs.abstracts.db.views.definition.SearchableView;
 import de.mbs.db.elasticsearch.views.ElasticsearchGroupview;
 import de.mbs.db.elasticsearch.views.ElasticsearchMessageview;
 import de.mbs.db.elasticsearch.views.ElasticsearchNotificationview;
@@ -327,9 +330,12 @@ public class ElasticsearchView extends DatabaseView{
 	}
 
 	@Override
-	public MarkupBuilder search(String search, MarkupBuilder builder) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String,Vector<Pair<SearchResult,String>>> search(String search, User u) {
+		Map<String,Vector<Pair<SearchResult,String>>> result = new TreeMap<String,Vector<Pair<SearchResult,String>>>();
+		for(SearchableView searchable : this.getSearchable()){
+			//TODO suchen :)
+		}
+		return result;
 	}
 
 	@Override

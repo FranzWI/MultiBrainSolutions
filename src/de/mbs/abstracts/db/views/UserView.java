@@ -26,9 +26,8 @@ public abstract class UserView implements AddableView<User>,
 	 */
 	public abstract User getUserByApikey(String apikey);
 	
-	@Override
-	public String searchId() {
-		return "User";
-	}
 	
+	public String getTabName(){
+		return "Nutzer";
+	}
 }

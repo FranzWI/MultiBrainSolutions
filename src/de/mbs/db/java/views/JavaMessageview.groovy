@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.Message;
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
 import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.db.java.JavaView;
@@ -41,9 +42,18 @@ public class JavaMessageview extends MessageView {
 	}
 
 	@Override
-	public Vector<SearchResult> search(String search) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector<Pair<SearchResult,String>> search(String search, User u) {
+		Vector<Pair<SearchResult,String>> result = new Vector<Pair<SearchResult,String>>();
+		for(Message m : this.getMessagesForUser(u.getId())){
+			if(m.getContent().contains(search) || m.getTopic().contains(search)){
+				SearchResult data = new SearchResult();
+				data.setHeading("Nachricht: "+m.getTopic());
+				data.setContent(m.getContent());
+				Pair<SearchResult,String> pair = new Pair<SearchResult,String>(data, null);
+				result.add(pair);
+			}
+		}
+		return result;
 	}
 
 	@Override

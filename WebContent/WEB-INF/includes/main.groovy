@@ -133,14 +133,14 @@ html.div('class':"page-container sidebar-collapsed"){
 												}
 											}
 											/*
-											li('class':"unread notification-secondary"){
-												a(href:"#"){
-													i('class':"entypo-heart pull-right")
-													span('class':"line"){ strong "Es wurde ein Dokument mit Ihnen geteilt" }
-													span('class':"line small", "vor 2 Minuten")
-												}
-											}
-											*/
+											 li('class':"unread notification-secondary"){
+											 a(href:"#"){
+											 i('class':"entypo-heart pull-right")
+											 span('class':"line"){ strong "Es wurde ein Dokument mit Ihnen geteilt" }
+											 span('class':"line small", "vor 2 Minuten")
+											 }
+											 }
+											 */
 										}
 									}
 									//li('class':"external"){
@@ -243,6 +243,14 @@ html.div('class':"page-container sidebar-collapsed"){
 		}
 	}
 	script(src:'assets/js/notifications.js')
+	def modules = ModulContainer.initialise()
+	for(mod in modules.getModules()){
+		if(mod.isInstalled() && mod.getJavascripts()){
+			for(String jscript:mod.getJavascripts()){
+				script(src:jscript)
+			}
+		}
+	}
 	script('') { println """
 			jQuery(document).ready(function() {
 			  jQuery("time.timeago").timeago();

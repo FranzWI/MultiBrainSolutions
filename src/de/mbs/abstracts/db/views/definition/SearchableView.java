@@ -2,18 +2,20 @@ package de.mbs.abstracts.db.views.definition;
 
 import java.util.Vector;
 
+import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
 import de.mbs.abstracts.db.utils.SearchResult;
 
 public interface SearchableView {
 
+
+	public String getTabName();
 	
-	public String searchId();
-	
+
 	/**
-	 * Diese Methode führt die eigentliche Suche aus
-	 * 
-	 * @param search
+	 * @param search - Suchanfrage
+	 * @param u - Nutzer der die Suchanfrage durchführt
 	 * @return
 	 */
-	public Vector<SearchResult> search(String search);
+	public Vector<Pair<SearchResult, String>> search(String search, User u);
 }
