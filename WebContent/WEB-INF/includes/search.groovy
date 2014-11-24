@@ -83,7 +83,7 @@ html.div{
 								for(Pair<SearchResult,String> result : maps.get("all")){
 									String heading = result.getA().getHeading();
 									String content = result.getA().getContent();
-									String link = result.getAt().getLink() == null ? "#":result.getAt().getLink();
+									String link = result.getA().getLink() == null ? "#":result.getA().getLink();
 									if(result.getB() != null ){
 										html.mkp.yieldUnescaped(result.getB())
 									}else{
@@ -116,7 +116,7 @@ html.div{
 									for(Pair<SearchResult,String> result : data){
 										String heading = result.getA().getHeading();
 										String content = result.getA().getContent();
-										String link = result.getAt().getLink() == null ? "#":result.getAt().getLink();
+										String link = result.getA().getLink() == null ? "#":result.getA().getLink();
 										if(result.getB() != null ){
 											html.mkp.yieldUnescaped(result.getB())
 										}else{
