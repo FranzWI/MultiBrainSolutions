@@ -4,14 +4,16 @@ import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 
-public class User extends DatabaseObject {
+public class User extends DatabaseObject implements Cloneable{
+
+	private static final long serialVersionUID = 6807965873485985071L;
 
 	private String username, firstname, lastname, email, pw, apikey, sessionId;
 
 	private Vector<String> membership = new Vector<String>();
 	private Vector<String> portlets = new Vector<String>();
 
-	private boolean active = true;
+	private boolean active = false;
 	
 	public User(String id) {
 		super(id);

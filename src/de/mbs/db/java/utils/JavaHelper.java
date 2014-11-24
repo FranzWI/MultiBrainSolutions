@@ -20,7 +20,7 @@ public class JavaHelper {
 	public static <A extends DatabaseObject> A get(String id, Vector<A> data) {
 		for (A u : data) {
 			if (u.getId().equals(id)) {
-				return u;
+				return u.makeClone();
 			}
 		}
 		return null;

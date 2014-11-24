@@ -111,7 +111,7 @@ html.div('class':"page-container sidebar-collapsed"){
 									// Alle Benachrichtigungen markieren
 									li('class':"top"){
 										p('class':"small"){
-											a(href:"#", 'class':"pull-right"," Alle als gelesen markieren")
+											a(href:"#",id:"read-all-notifications", 'class':"pull-right"," Alle als gelesen markieren")
 											i "Sie haben"
 											strong (""+notifications.size())
 											i "neue Benachrichtigungen"
@@ -242,6 +242,7 @@ html.div('class':"page-container sidebar-collapsed"){
 			}
 		}
 	}
+	script(src:'assets/js/notifications.js')
 	script('') { println """
 			jQuery(document).ready(function() {
 			  jQuery("time.timeago").timeago();

@@ -1,7 +1,11 @@
 package de.mbs.abstracts.db.objects.definition;
 
-public class DatabaseObject {
+import java.io.Serializable;
 
+public class DatabaseObject implements Serializable {
+
+	private static final long serialVersionUID = -3454418128438341284L;
+	
 	private String id = null;
 	private long version = -1;
 
@@ -29,5 +33,15 @@ public class DatabaseObject {
 	public void setId(String id){
 		this.id = id;
 	}
-
+	
+	public <A extends DatabaseObject> A makeClone(){
+		try {
+			return (A) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

@@ -1,12 +1,17 @@
 package de.mbs.abstracts.db.objects;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 
-public class Message extends DatabaseObject {
+public class Message extends DatabaseObject implements Cloneable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -63279819451435228L;
 	private Date sendDate;
 	private Vector<String> toUser = new Vector<String>();
 	private Vector<String> toGroup = new Vector<String>();

@@ -28,6 +28,7 @@ public class JavaUserview extends UserView {
 		admin.setLastname("Strator");
 		admin.setUsername("admin");
 		admin.setEmail("derdudele@gmail.com");
+		admin.setActive(true);
 		admin.setPw("admin");
 		for (Group group : view.getGroupView().getAll()) {
 			admin.addMembership(group.getId());
@@ -41,6 +42,7 @@ public class JavaUserview extends UserView {
 		user.setUsername("user");
 		user.setEmail("derdudele@gmail.com");
 		user.setPw("user");
+		user.setActive(true);
 		for (Group group : view.getGroupView().getAll()) {
 			if (group.getName().equals("Nutzer"))
 				user.addMembership(group.getId());
@@ -77,6 +79,7 @@ public class JavaUserview extends UserView {
 					"Ihr Account wurde "+(data.isActive()?"aktiviert":"deaktiviert"));
 			ServiceHandler.getDatabaseView().sendHtmlMail(m);
 		}
+		System.out.println("DEBUG alt "+old.isActive()+" neu: "+data.isActive());
 		return JavaHelper.edit(data, this.users);
 	}
 

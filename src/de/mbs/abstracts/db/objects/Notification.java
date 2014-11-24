@@ -1,11 +1,17 @@
 package de.mbs.abstracts.db.objects;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 
-public class Notification extends DatabaseObject {
+public class Notification extends DatabaseObject implements Cloneable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1126333873991410817L;
 
 	private String subject, icon, link;
 

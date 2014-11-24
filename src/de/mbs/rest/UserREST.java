@@ -210,11 +210,11 @@ public class UserREST {
 		try {
 			JSONObject obj = RESTHelper.stringToJSONObject(json);
 			String id = obj.get("id") == null ? null : obj.get("id").toString();
-			de.mbs.abstracts.db.objects.User p = null;
+			de.mbs.abstracts.db.objects.User user = null;
 			if (id != null
-					&& (p = ServiceHandler.getDatabaseView().getUserView()
+					&& (user = ServiceHandler.getDatabaseView().getUserView()
 							.get(id)) != null) {
-				return this.editUser(obj, p, true);
+				return this.editUser(obj, user, true);
 			} else {
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("User ID ungültig").build();
@@ -336,7 +336,7 @@ public class UserREST {
 								.add(not);
 					}
 					// Email an den neuen Nutzer
-					//TODO URL des Servers mitabfragen
+					//TODO URL des Servers mitabfragen so das diese mit in die mail kann
 					Mail m = new Mail(user.getEmail(),
 							"Registrierung am Multi Brain Cockpit",
 							MailView.SENDER,

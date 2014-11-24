@@ -1,11 +1,16 @@
 package de.mbs.abstracts.db.objects;
 
+import java.io.Serializable;
 import java.util.Properties;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 
-public class Settings extends DatabaseObject {
+public class Settings extends DatabaseObject implements Cloneable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1494391711001912536L;
 	private Properties mailProperties, dbProperties, proxyProperties;
 	
 	public Settings(String id) {

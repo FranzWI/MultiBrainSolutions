@@ -1,11 +1,16 @@
 package de.mbs.abstracts.db.objects;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;
 
-public class Portlet extends DatabaseObject {
+public class Portlet extends DatabaseObject implements Cloneable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3841872276961844960L;
 	private String name, description, path;
 	private Vector<String> usedByGroups = new Vector<String>();
 
