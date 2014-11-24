@@ -189,8 +189,9 @@ public class UserREST {
 	public Response add(@PathParam("userJSON") String json) {
 		try {
 			JSONObject obj = RESTHelper.stringToJSONObject(json);
-			de.mbs.abstracts.db.objects.User user = new de.mbs.abstracts.db.objects.User(null);
-			return this.editUser(obj, user,false);
+			de.mbs.abstracts.db.objects.User user = new de.mbs.abstracts.db.objects.User(
+					null);
+			return this.editUser(obj, user, false);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return Response.status(Response.Status.BAD_REQUEST)
@@ -229,23 +230,30 @@ public class UserREST {
 		}
 	}
 
-	@POST
+	@GET
 	@Path("/remove/{id}")
 	@Admin
 	public Response remove(@PathParam("id") String id) {
 		if (ServiceHandler.getDatabaseView().getUserView().remove(id)) {
 			return Response.ok().build();
 		} else {
-			return Response.status(Response.Status.BAD_REQUEST)
-					.entity("ID " + id + " ungültig").build();
+			return Response
+					.status(Response.Status.BAD_REQUEST)
+					.entity("ID " + id + " ungültig oder Fehler beim entfernen")
+					.build();
 		}
 	}
 
 	/**
 	 * 
-	 * @param obj - der User als JSON Objekt
-	 * @param user - der Nutzer in den die DAten des JSONObjekts gespeichert werden sollen
-	 * @param isEdit - true falls es ein bereits existierender Nutzer ist, false fals nicht
+	 * @param obj
+	 *            - der User als JSON Objekt
+	 * @param user
+	 *            - der Nutzer in den die DAten des JSONObjekts gespeichert
+	 *            werden sollen
+	 * @param isEdit
+	 *            - true falls es ein bereits existierender Nutzer ist, false
+	 *            fals nicht
 	 * @return
 	 * @throws ParseException
 	 * @throws NumberFormatException
@@ -276,7 +284,7 @@ public class UserREST {
 				user.setApikey(value);
 				break;
 			case "active":
-				user.setActive(Boolean.getBoolean(value));
+				user.setActive(Boolean.valueOf(value));
 				break;
 			case "groups":
 				JSONArray array = (JSONArray) parser.parse(value);
@@ -311,17 +319,35 @@ public class UserREST {
 							.entity("Fehler beim Ändern des Nutzers").build();
 				}
 			} else {
-			// neu anlegen
-				if(user.getPw() != null && !user.getPw().isEmpty()){
-					if (ServiceHandler.getDatabaseView().getUserView().add(user) != null) {
-						return Response.ok().build();
-					} else {
-						return Response.status(Response.Status.BAD_REQUEST)
-								.entity("Fehler beim Anlegen des Nutzers").build();
+				// neu anlegen
+				String pw = RESTHelper.randomPassword();
+				user.setPw(pw);
+				if (ServiceHandler.getDatabaseView().getUserView().add(user) != null) {
+					// BEnachrichtigung für den Admin
+					if(!user.isActive()){
+						Notification not = new Notification(null);
+						not.setSubject(user.getFirstname() + " " + user.getLastname()
+								+ " freischalten");
+						not.setIcon("entypo-user-add");
+						not.addGroup(ServiceHandler.getDatabaseView()
+								.getGroupView().getAdminGroupId());
+						// TODO link hinterlegen
+						ServiceHandler.getDatabaseView().getNotificationView()
+								.add(not);
 					}
-				}else{
+					// Email an den neuen Nutzer
+					//TODO URL des Servers mitabfragen
+					Mail m = new Mail(user.getEmail(),
+							"Registrierung am Multi Brain Cockpit",
+							MailView.SENDER,
+							"F&uuml;r Sie wurde ein Account angelegt<br/>"
+							+ "Anmeldename: "+user.getUsername()+"<br/>"
+									+ "Passwort: "+pw+"<br/><br/>"+(user.isActive()?"":"Sie m&uuml;ssen aber noch Ihre aktivierung abwarten."));
+					ServiceHandler.getDatabaseView().sendHtmlMail(m);
+					return Response.ok().build();
+				} else {
 					return Response.status(Response.Status.BAD_REQUEST)
-							.entity("Es muss ein Passwort angegeben werden").build();
+							.entity("Fehler beim Anlegen des Nutzers").build();
 				}
 			}
 		} else {
@@ -337,9 +363,11 @@ public class UserREST {
 	@Admin
 	public Response getUser(@PathParam("id") String id) {
 		JSONObject obj = new JSONObject();
-		de.mbs.abstracts.db.objects.User user = ServiceHandler.getDatabaseView().getUserView().get(id);
-		if(user == null){
-			return Response.status(Response.Status.BAD_REQUEST).entity("Unbekannte ID").build();
+		de.mbs.abstracts.db.objects.User user = ServiceHandler
+				.getDatabaseView().getUserView().get(id);
+		if (user == null) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Unbekannte ID").build();
 		}
 		obj.put("id", user.getId());
 		obj.put("username", user.getUsername());
@@ -347,47 +375,50 @@ public class UserREST {
 		obj.put("lastname", user.getLastname());
 		obj.put("apikey", user.getApikey());
 		obj.put("active", user.isActive());
-		obj.put("email",user.getEmail());
+		obj.put("email", user.getEmail());
 		obj.put("groups", RESTHelper.groupsToJSONArray(user.getMembership()));
 		return Response.ok(obj.toJSONString()).build();
 	}
-	
+
 	@GET
 	@Path("/getAllAdmin")
 	@Admin
-	public Response getAllAdmin(){
+	public Response getAllAdmin() {
 		JSONArray array = new JSONArray();
-		for(de.mbs.abstracts.db.objects.User user : ServiceHandler.getDatabaseView().getUserView().getAll()){
+		for (de.mbs.abstracts.db.objects.User user : ServiceHandler
+				.getDatabaseView().getUserView().getAll()) {
 			JSONObject obj = new JSONObject();
 			obj.put("id", user.getId());
 			obj.put("username", user.getUsername());
 			obj.put("firstname", user.getFirstname());
 			obj.put("lastname", user.getLastname());
 			obj.put("apikey", user.getApikey());
-			obj.put("email",user.getEmail());
-			obj.put("groups", RESTHelper.groupsToJSONArray(user.getMembership()));
+			obj.put("email", user.getEmail());
+			obj.put("groups",
+					RESTHelper.groupsToJSONArray(user.getMembership()));
 			array.add(obj);
 		}
 		return Response.ok(array.toJSONString()).build();
 	}
-	
+
 	@GET
 	@Path("/getAll")
 	@User
-	public Response getAll(){
+	public Response getAll() {
 		JSONArray array = new JSONArray();
-		for(de.mbs.abstracts.db.objects.User user : ServiceHandler.getDatabaseView().getUserView().getAll()){
+		for (de.mbs.abstracts.db.objects.User user : ServiceHandler
+				.getDatabaseView().getUserView().getAll()) {
 			JSONObject obj = new JSONObject();
 			obj.put("id", user.getId());
 			obj.put("username", user.getUsername());
 			obj.put("firstname", user.getFirstname());
 			obj.put("lastname", user.getLastname());
-			obj.put("email",user.getEmail());
+			obj.put("email", user.getEmail());
 			array.add(obj);
 		}
 		return Response.ok(array.toJSONString()).build();
 	}
-	
+
 	@GET
 	@Path("/apikey")
 	@Admin
@@ -403,23 +434,28 @@ public class UserREST {
 				.entity("Fehler konnte keinen gültigen ApiKey erzeugen.")
 				.build();
 	}
-	
+
 	@GET
 	@Path("/resetPassword/{id}")
 	@Admin
 	public Response resetPassword(@PathParam("id") String id) {
-		de.mbs.abstracts.db.objects.User user = ServiceHandler.getDatabaseView().getUserView().get(id);
-		if(user == null){
-			return Response.status(Response.Status.BAD_REQUEST).entity("Unbekannte ID").build();
+		de.mbs.abstracts.db.objects.User user = ServiceHandler
+				.getDatabaseView().getUserView().get(id);
+		if (user == null) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Unbekannte ID").build();
 		}
 		String password = RESTHelper.randomPassword();
 		user.setPw(Crypt.getCryptedPassword(password));
-		if(ServiceHandler.getDatabaseView().getUserView().edit(user) != null){
-			Mail mail = new Mail(user.getEmail(), "Passwort zurück gesetzt", "multibraincockpit@ba-dresden.de", "Ihr neues Passwort lautet:\n"+password);
+		if (ServiceHandler.getDatabaseView().getUserView().edit(user) != null) {
+			Mail mail = new Mail(user.getEmail(), "Passwort zurück gesetzt",
+					MailView.SENDER,
+					"Ihr neues Passwort lautet:\n" + password);
 			ServiceHandler.getDatabaseView().sendMail(mail);
 			return Response.ok().build();
 		}
-		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Fehler beim speichern des Nutzers").build();
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+				.entity("Fehler beim speichern des Nutzers").build();
 	}
 
 }

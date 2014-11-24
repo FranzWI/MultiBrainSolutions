@@ -137,35 +137,34 @@ $(document).ready(
 						var json = {};
 						var data = $('#portlet-select-edit').select2('data').id;
 						if(data){
-						json['id']= data;
-						$('.portlet-edit').each(function() {
-							json[$(this).attr('name')] = $(this).val();
-						});
-						json[$('select.portlet-edit-select').attr('name')] = $(
-								'select.portlet-edit-select').val();
-						$.ajax(
-								{
-									type : "POST",
-									url : "rest/portlet/edit/"
-											+ escape(JSON.stringify(json)
-													.replace(/{/g, "(")
-													.replace(/}/g, ")"))
-								}).done(function() {
-							toastr.success("Portlet erfolgreich geändert");
-							$('.portlet-edit').val('');
-						}).fail(function(jqXHR, textStatus) {
-							toastr.error("ändern fehlgeschlagen.");
-							$('.portlet-edit').val('');
-						}).always(function(){
-							refreshPortlets();
-							$('#portlet-edit-groups option').each(function(){
-								$(this).removeAttr("selected");
+							json['id']= data;
+							$('.portlet-edit').each(function() {
+								json[$(this).attr('name')] = $(this).val();
 							});
-							$('select.portlet-group').select2({
-								placeholder : "Gruppen auswählen"
+							json[$('select.portlet-edit-select').attr('name')] = $(
+									'select.portlet-edit-select').val();
+							$.ajax(
+									{
+										type : "POST",
+										url : "rest/portlet/edit/"
+												+ escape(JSON.stringify(json)
+														.replace(/{/g, "(")
+														.replace(/}/g, ")"))
+									}).done(function() {
+								toastr.success("Portlet erfolgreich geändert");
+								$('.portlet-edit').val('');
+							}).fail(function(jqXHR, textStatus) {
+								toastr.error("ändern fehlgeschlagen.");
+								$('.portlet-edit').val('');
+							}).always(function(){
+								refreshPortlets();
+								$('#portlet-edit-groups option').each(function(){
+									$(this).removeAttr("selected");
+								});
+								$('select.portlet-group').select2({
+									placeholder : "Gruppen auswählen"
+								});
 							});
-						});
-
 						}
 					});
 

@@ -54,7 +54,7 @@ html.div {
 										div('class':"form-group"){
 											label('for':"activ",'class':"col-sm-1 control-label", "Aktiv")
 											div('class':"col-sm-1"){
-												input(type:"checkbox",name:'activ','class':"form-control user-add")
+												input(type:"checkbox",name:'active','class':"form-control user-add")
 											}
 										}
 										div('class':"form-group"){
@@ -109,13 +109,13 @@ html.div {
 										div('class':"form-group"){
 											label('for':"activ",'class':"col-sm-1 control-label", "Aktiv")
 											div('class':"col-sm-1"){
-												input(type:"checkbox",name:'activ','class':"form-control user-edit")
+												input(type:"checkbox",name:'active','class':"form-control user-edit")
 											}
 										}
 										div('class':"form-group"){
 											label('for':"apikey",'class':"col-sm-1 control-label", "Apikey")
 											div('class':"col-sm-5"){
-												input(type:"text",name:'apikey','class':"form-control user-edit", 'placeholder':"Apikey", readonly:"")
+												input(type:"text",id:"user-apikey",name:'apikey','class':"form-control user-edit", 'placeholder':"Apikey", readonly:"")
 											}
 											div('class':"col-sm-1"){
 												button('class':"btn btn-info", id:"edit-refresh-api"){ i('class':"entypo-arrows-ccw") }

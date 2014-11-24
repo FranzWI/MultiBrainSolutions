@@ -24,9 +24,12 @@ import org.json.simple.parser.ParseException;
 import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.UserView;
+import de.mbs.abstracts.mail.MailView;
+import de.mbs.abstracts.mail.definition.Mail;
 import de.mbs.crypt.Crypt;
 import de.mbs.db.elasticsearch.ElasticsearchView;
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
+import de.mbs.handler.ServiceHandler;
 
 public class ElasticsearchUserview extends UserView {
 
@@ -91,7 +94,17 @@ public class ElasticsearchUserview extends UserView {
 
 	@Override
 	public User edit(User data) {
-
+		User old = this.get(data.getId());
+		if (old == null)
+			return null;
+		if(old.isActive() != data.isActive()){
+			Mail m = new Mail(data.getEmail(),
+					"Accountstatus am Multi Brain Cockpit",
+					MailView.SENDER,
+					"Ihr Account wurde "+(data.isActive()?"aktiviert":"deaktiviert"));
+			ServiceHandler.getDatabaseView().sendHtmlMail(m);
+		}
+		
 		JSONObject jsonUser = new JSONObject();
 		jsonUser.put("userName", data.getUsername());
 		jsonUser.put("firstName", data.getFirstname());
