@@ -1,6 +1,10 @@
 package de.mbs.rest;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +19,7 @@ import de.mbs.filter.Admin;
 import de.mbs.filter.User;
 import de.mbs.modules.DataContainer;
 import de.mbs.modules.ModulContainer;
+import de.mbs.modules.ModulHelper;
 import de.mbs.modules.interfaces.Modul;
 
 @Path("/modules")
@@ -51,6 +56,24 @@ public class ModulREST {
 						DataContainer cont = new DataContainer(
 								new File(jarPath));
 						success = mod.install(cont);
+						// Installation erfolgreich?
+						if (success) {
+							//jar selber noch verfügbar machen
+							File source = new File(jarPath);
+							File target = new File(
+									ModulHelper.getSerlvetContextPath()
+											+ "/WEB-INF/lib/"
+											+ source.getName());
+							try {
+								Files.copy(source.toPath(), target.toPath(),
+										StandardCopyOption.REPLACE_EXISTING);
+
+							} catch (IOException e) {
+								e.printStackTrace();
+								success = false;
+							}
+						}
+
 						error = mod.getError();
 					}
 				}
