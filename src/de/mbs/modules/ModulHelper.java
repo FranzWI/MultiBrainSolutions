@@ -8,19 +8,29 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * Sammlung von Methoden und Variablen für die Module
+ * Sammlung von Methoden und Variablen fï¿½r die Module
  * 
- * @author MKürbis
+ * @author MKï¿½rbis
  *
  */
 public class ModulHelper {
 
 	public final static String MODUL_LIB_PATH = "/WEB-INF/lib/modules/";
 	public final static String MODUL_FRONTEND_PATH = "/WEB-INF/includes/modules/";
-	
+
 	private static String serlvetContextPath = "";
-	
+
 	public static boolean jarEntryToFile(JarFile jar, JarEntry entry, File f) {
+		if (!f.exists()) {
+			try {
+				if (!f.createNewFile()) {
+					return false;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
 		try {
 			InputStream is = jar.getInputStream(entry);
 			FileOutputStream fos = new FileOutputStream(f);

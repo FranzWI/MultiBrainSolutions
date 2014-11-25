@@ -6,6 +6,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.json.simple.JSONObject;
@@ -22,9 +23,8 @@ public class ModulREST {
 	@POST
 	@Path("/install/{modulname}/{version}")
 	@Admin
-	public String install(@PathParam("modulname") String modulname,
+	public Response install(@PathParam("modulname") String modulname,
 			@PathParam("version") String version) {
-		JSONObject obj = new JSONObject();
 		ModulContainer modules = ModulContainer.initialise();
 		boolean hit = false, success = false;
 		String error = null;
@@ -33,17 +33,23 @@ public class ModulREST {
 					&& mod.getVersion().equals(version)) {
 				hit = true;
 				if (mod.isInstalled()) {
-					obj.put("error", "Modul " + modulname + " in Version "
-							+ version + " bereits installiert.");
+					return Response
+							.status(Response.Status.BAD_REQUEST)
+							.entity("Modul " + modulname + " in Version "
+									+ version + " bereits installiert.")
+							.build();
 				} else {
 					String jarPath = modules.getJarFileToModul(mod);
 					if (jarPath == null) {
-						obj.put("error", "Modul " + modulname + " in Version "
-								+ version + " konnte Jar Datei nicht finden");
+						return Response
+								.status(Response.Status.BAD_REQUEST)
+								.entity("Modul " + modulname + " in Version "
+										+ version
+										+ " konnte Jar Datei nicht finden")
+								.build();
 					} else {
 						DataContainer cont = new DataContainer(
 								new File(jarPath));
-
 						success = mod.install(cont);
 						error = mod.getError();
 					}
@@ -52,46 +58,23 @@ public class ModulREST {
 			}
 		}
 		if (!hit) {
-			obj.put("error", "Modul " + modulname + " in Version " + version
-					+ " wurde nicht gefunden");
+			return Response
+					.status(Response.Status.BAD_REQUEST)
+					.entity("Modul " + modulname + " in Version " + version
+							+ " wurde nicht gefunden").build();
 		} else {
 			if (success) {
-				obj.put("status", "ok");
+				return Response.ok().build();
 			} else {
-				obj.put("error",
-						"Modul "
+				return Response
+						.status(Response.Status.INTERNAL_SERVER_ERROR)
+						.entity("Modul "
 								+ modulname
 								+ " in Version "
 								+ version
 								+ " konnte nicht installiert werden ein Fehler ist aufgetretten.\n"
-								+ error);
+								+ error).build();
 			}
 		}
-		return obj.toString();
-	}
-	
-	@POST
-	@Path("/use/{modulname}/{version}")
-	@User
-	public String moduleCall(@PathParam("modulname") String modulname,@PathParam("version") String version, @Context UriInfo uriInfo){
-		JSONObject obj = new JSONObject();
-		ModulContainer modules = ModulContainer.initialise();
-		boolean hit = false;
-		for(Modul mod : modules.getModules()){
-			if (mod.getModulName().equals(modulname)
-					&& mod.getVersion().equals(version)) {
-				if(mod.isInstalled()){
-				hit = true;
-				mod.handleRest(uriInfo, obj);
-				}else{
-					obj.put("error", "Modul " + modulname + " in Version "
-							+ version + " nicht installiert.");
-				}
-			}
-		}
-		if(!hit)
-			obj.put("error", "Modul " + modulname + " in Version " + version
-					+ " wurde nicht gefunden");
-		return obj.toString();
 	}
 }

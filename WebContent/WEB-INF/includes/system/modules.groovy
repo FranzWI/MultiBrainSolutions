@@ -36,7 +36,7 @@ html.div {
 						if(mod.isInstalled()){
 							
 						}else{
-							button('class':"btn btn-default","data-mod":mod.getModulName(),"data-version":mod.getVersion()){
+							button('class':"btn btn-default btn-install","data-mod":mod.getModulName(),"data-version":mod.getVersion()){
 								i('class':"entypo-install")
 								span "installieren"
 							}
@@ -59,41 +59,5 @@ html.div {
 	script(src:"assets/js/datatables/responsive/js/datatables.responsive.js")
 	script(src:"assets/js/select2/select2.min.js")
 
-	script('') { println """
-		var responsiveHelper;
-		var breakpointDefinition = {
-		    tablet: 1024,
-		    phone : 480
-		};
-		var tableContainer;
-		\$(document).ready(function() {
-			tableContainer = \$("#table-1");
-		
-			tableContainer.dataTable({
-				"sPaginationType": "bootstrap",
-				"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-				"bStateSave": true,
-				
-	
-			    // Responsive Settings
-			    bAutoWidth     : false,
-			    fnPreDrawCallback: function () {
-			        // Initialize the responsive datatables helper once.
-			        if (!responsiveHelper) {
-			            responsiveHelper = new ResponsiveDatatablesHelper(tableContainer, breakpointDefinition);
-			        }
-			    },
-			    fnRowCallback  : function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-			        responsiveHelper.createExpandIcon(nRow);
-			    },
-			    fnDrawCallback : function (oSettings) {
-			        responsiveHelper.respond();
-			    }
-			});
-			
-			\$(".dataTables_wrapper select").select2({
-				minimumResultsForSearch: -1
-			});
-		});
-		""" }
+	script(src:'assets/js/module.js')
 }

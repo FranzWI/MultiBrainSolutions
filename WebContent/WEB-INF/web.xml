@@ -19,11 +19,6 @@
 		<url-pattern>*.groovy</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>Modulhandler</servlet-name>
-		<servlet-class>de.mbs.servlet.ModulServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
 		<servlet-name>Servicehandler</servlet-name>
 		<servlet-class>de.mbs.servlet.ServiceServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
@@ -35,12 +30,17 @@
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<param-value>de.mbs.rest, de.mbs.filter</param-value>
 		</init-param>
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Jersey Rest</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>Modulhandler</servlet-name>
+		<servlet-class>de.mbs.servlet.ModulServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
 	<listener>
 		<listener-class>de.mbs.listener.SessionListener</listener-class>
 	</listener>

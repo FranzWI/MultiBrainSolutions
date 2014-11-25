@@ -1,20 +1,16 @@
 package de.mbs.db.java;
 
-import groovy.xml.MarkupBuilder;
-
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.DatabaseView;
-import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserView;
-import de.mbs.abstracts.db.views.definition.SearchableView;
 import de.mbs.db.java.views.JavaGroupview;
 import de.mbs.db.java.views.JavaMessageview;
 import de.mbs.db.java.views.JavaNotificationview;

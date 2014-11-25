@@ -1,7 +1,5 @@
 package de.mbs.abstracts.db;
 
-import groovy.xml.MarkupBuilder;
-
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.LinkedList;
 import java.util.Map;
@@ -35,7 +33,7 @@ public abstract class DatabaseView {
 	protected MailView mailView;
 	protected static LinkedList<Mail> mailQueue = new LinkedList<Mail>();
 	protected static LinkedList<Mail> htmlMailQueue = new LinkedList<Mail>();
-	protected static Vector<SearchableView> searchable = new Vector<SearchableView>();
+	protected Vector<SearchableView> searchable = new Vector<SearchableView>();
 	
 	public DatabaseView() {
 		Thread t = new Thread(new Runnable() {

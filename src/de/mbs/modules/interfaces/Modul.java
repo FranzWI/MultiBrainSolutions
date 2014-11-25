@@ -1,11 +1,6 @@
 package de.mbs.modules.interfaces;
 
-import java.util.Map;
 import java.util.Vector;
-
-import javax.ws.rs.core.UriInfo;
-
-import org.json.simple.JSONObject;
 
 import net.xeoh.plugins.base.Plugin;
 import de.mbs.modules.DataContainer;
@@ -71,14 +66,6 @@ public interface Modul extends Plugin{
 	public String getConfigFile();
 	
 	/**
-	 * 
-	 * Schl�ssel ist der Name des Portlets, Value ist der Dateipfad
-	 * 
-	 * @return Pfade f�r die Portlets falls keine dann null
-	 */
-	public Map<String,String> getPortletFiles();
-	
-	/**
 	 * Methode die beim Starten des Management Cockpits ausgef�hrt wird (Tomcat start)
 	 * @return true falls erfolgreich, false falls nicht
 	 */
@@ -108,14 +95,6 @@ public interface Modul extends Plugin{
 	 */
 	public boolean requiresRestart();
 	
-	/**
-	 * Wird von der Klasse ModulREST  verwendet um der Methode die Abfrage �ber zuhelfen
-	 * 
-	 * @param uriInfo - Parameter
-	 * @param obj - Das JSONObject welches dem CLient als String zur�ck geliefert werden soll
-	 * @return String der an den Aufrufer �bergeben werden muss
-	 */
-	public void handleRest(UriInfo uriInfo, JSONObject obj);
 	
 	/**
 	 * liste der Javascript dateien die verwendet werden sollen
