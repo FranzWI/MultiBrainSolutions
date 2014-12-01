@@ -26,7 +26,7 @@ public class SessionListener implements HttpSessionListener {
      */
     public void sessionDestroyed(HttpSessionEvent arg0)  { 
     	if(activeSessions > 0)
-    		activeSessions--;
+    		activeSessions--; 
     }
 	
     
