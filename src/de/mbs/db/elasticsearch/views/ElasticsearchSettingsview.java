@@ -18,14 +18,15 @@ public class ElasticsearchSettingsview extends SettingsView {
 	@Override
 	public Settings get(String id) 
 	{
-		GetResponse response = this.view.getESClient().prepareGet("system", "settings", id).execute().actionGet();
-		
+		//GetResponse response = this.view.getESClient().prepareGet("system", "settings", id).execute().actionGet();
+		/*
 		if (response.isExists()) 
 		{
 			return responseToSettings(response);
 
 		} 
 		else
+		*/
 			return null;
 	}
 

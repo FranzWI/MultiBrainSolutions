@@ -1,0 +1,18 @@
+{
+    "exam":{
+        "properties":{
+            "module":{
+                "type":"string"
+            },
+            "subModule":{
+                "type":"string"
+            },
+            "student":{
+                "type":"string"
+            },
+            "grade":{
+                "type":"float"
+            }
+        }
+    }
+}

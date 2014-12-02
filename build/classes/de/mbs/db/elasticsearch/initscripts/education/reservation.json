@@ -1,0 +1,27 @@
+{
+    "reservation":{
+        "properties":{
+            "room":{
+                "type":"string"
+            },
+            "owner":{
+                "type":"multi_field",
+                "fields":{
+                    "tutor":{
+                        "type":"string"
+                    },
+                    "class":{
+                        "type":"string"
+                    }
+                }
+            },
+            "date":{
+                "type":"date",
+                "format":"dd.MM.yyyy"
+            },
+            "lessons":{
+                "type":"byte"
+            }
+        }
+    }
+}
