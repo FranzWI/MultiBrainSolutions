@@ -20,6 +20,9 @@ def groupView = dbView.getGroupView();
 def user = userView.get(session.user);
 def messagesView = dbView.getMessageView();
 
+def page = request.getParameter("page")
+def modul = request.getParameter("modul")
+def search = request.getParameter("q")
 
 
 html.div('class':"page-container sidebar-collapsed"){
@@ -39,13 +42,13 @@ html.div('class':"page-container sidebar-collapsed"){
 		}
 		// Menü
 		ul(id:"main-menu"){
-			li(id:"search"){
+			li(id:"search", 'class':(search?"active":"")){
 				form (method:"get", action:""){
 					input (type:"text", name:"q", 'class':"search-input", placeholder:"Suche")
 					button(type:"submit"){ i('class':"entypo-search") }
 				}
 			}
-			li{
+			li('class':(!page && !modul && !search?"active":"")){
 				a(href:"index.groovy"){
 					i('class':"entypo-gauge")
 					span "Cockpit"
@@ -55,7 +58,7 @@ html.div('class':"page-container sidebar-collapsed"){
 			def modules = ModulContainer.initialise()
 			for(mod in modules.getModules()){
 				if(mod.isInstalled()){
-					li {
+					li('class':(modul && modul.equals(mod.getModulName())?"active":"")) {
 						a(href:"index.groovy?modul="+mod.getModulName()){
 							i('class':mod.getMenuIcon())
 							span mod.getMenuName();
@@ -65,7 +68,7 @@ html.div('class':"page-container sidebar-collapsed"){
 			}
 			// Ist der Nutzer Admin?
 			if(user.getMembership().contains(groupView.getAdminGroupId())){
-				li{
+				li('class':(page && page.equals("system")?"active":"")){
 					a(href:"index.groovy?page=system"){
 						i('class':"entypo-tools")
 						span "System"
@@ -206,9 +209,6 @@ html.div('class':"page-container sidebar-collapsed"){
 			}
 		}
 		hr()
-		def page = request.getParameter("page")
-		def modul = request.getParameter("modul")
-		def search = request.getParameter("q")
 
 		i(style:"display:none;")
 		if(!page && !modul && !search){
