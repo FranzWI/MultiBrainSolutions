@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 
 import de.mbs.filter.Admin;
 import de.mbs.filter.User;
+import de.mbs.handler.ServiceHandler;
 import de.mbs.modules.DataContainer;
 import de.mbs.modules.ModulContainer;
 import de.mbs.modules.ModulHelper;
@@ -54,7 +55,7 @@ public class ModulREST {
 								.build();
 					} else {
 						DataContainer cont = new DataContainer(
-								new File(jarPath));
+								new File(jarPath), ServiceHandler.getDatabaseView());
 						success = mod.install(cont);
 						// Installation erfolgreich?
 						if (success) {

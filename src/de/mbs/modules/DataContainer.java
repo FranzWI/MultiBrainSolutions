@@ -2,16 +2,19 @@ package de.mbs.modules;
 
 import java.io.File;
 
+import de.mbs.abstracts.db.DatabaseView;
+
 /**
- * Beinhaltet die Pfade für
+ * Beinhaltet das JarFile zum installieren und Ã¼bergibt die Datenbannk verbindung
  * 
  * 
- * @author MKürbis
+ * @author MKï¿½rbis
  * 
  */
 public class DataContainer {
 
 	private File jarfile;
+	private DatabaseView databaseview;
 
 	// TODO Datenbank verbindung mit aufnehmen
 
@@ -20,8 +23,9 @@ public class DataContainer {
 	 * @param jarfile
 	 *            - File in dem die Datenstehen
 	 */
-	public DataContainer(File jarfile) {
+	public DataContainer(File jarfile, DatabaseView view) {
 		this.jarfile = jarfile;
+		this.setDatabaseview(view);
 	}
 
 	public File getJarfile() {
@@ -30,6 +34,14 @@ public class DataContainer {
 
 	public void setJarfile(File jarfile) {
 		this.jarfile = jarfile;
+	}
+
+	public DatabaseView getDatabaseview() {
+		return databaseview;
+	}
+
+	public void setDatabaseview(DatabaseView databaseview) {
+		this.databaseview = databaseview;
 	}
 
 }
