@@ -19,6 +19,8 @@ public class ElasticsearchGroupview extends GroupView {
 
 	private String[] fieldList = ["name", "description"];
 
+	//TODO:  Wenn ich  es richtig verstehe ist das dazu da um die initialen Nutzergruppen Admin und Nutzer anzulegen??
+
 	public ElasticsearchGroupview(ElasticsearchView view){
 		this.view = view;
 
