@@ -1,7 +1,6 @@
 package de.mbs.db.elasticsearch;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
-import groovy.xml.MarkupBuilder;
 
 import java.io.File;
 import java.io.FileReader;
