@@ -55,7 +55,8 @@ public class JavaUserview extends UserView {
 	}
 
 	@Override
-	public String add(User data) {
+	public String add(User data2) {
+		User data = data2.makeClone();
 		// ID des neuen Nutzers setzen
 		data.setId(UUID.randomUUID().toString());
 		// Apikey vergeben
