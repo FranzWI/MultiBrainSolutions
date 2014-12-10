@@ -1,35 +1,23 @@
 {
     "settings":{
         "properties":{
-            "mail":{
-                "type":"multi_field",
-                "fields":{
-                    "type":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    },
-                    "user":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    },
-                    "pw":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    }
-                }
+            "mailType":{
+                "type":"string",
+                "index":"not_analyzed"
             },
-            "db":{
-                "type":"multi_field",
-                "fields":{
-                    "user":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    },
-                    "pw":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    }
-                }
+            "mailUser":{
+                "type":"string"
+            },
+            "mailPw":{
+                "type":"string",
+                "index":"not_analyzed"
+            },
+            "dbUser":{
+                "type":"string"
+            },
+            "dbPw":{
+                "type":"string",
+                "index":"not_analyzed"
             },
             "proxy":{
                 "type":"string",
