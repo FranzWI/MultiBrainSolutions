@@ -83,8 +83,7 @@ public class ElasticsearchHelper {
 				.getESClient()
 				.prepareBulk()
 				.add(view.getESClient()
-				.prepareIndex(index, type, data.getId())
-				.setSource(json)).execute()
+				.prepareUpdate(index, type, data.getId()).setDoc(json)).execute()
 				.actionGet();
 				
 		if (!response.hasFailures()) {
