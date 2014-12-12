@@ -1,5 +1,7 @@
 package de.mbs.abstracts.db.views;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.Message;
@@ -9,9 +11,9 @@ import de.mbs.abstracts.db.views.definition.FindableView;
 import de.mbs.abstracts.db.views.definition.RemoveableView;
 import de.mbs.abstracts.db.views.definition.SearchableView;
 
-public abstract class MessageView implements SearchableView,
+public abstract class MessageView extends Observable implements SearchableView,
 		AddableView<Message>, EditableView<Message>, FindableView<Message>,
-		RemoveableView<Message> {
+		RemoveableView<Message>, Observer {
 
 	/**
 	 * 
@@ -35,5 +37,7 @@ public abstract class MessageView implements SearchableView,
 	public String getTabName(){
 		return "Nachrichten";
 	}
+	
+	public void update(Observable o, Object arg) {}
 	
 }

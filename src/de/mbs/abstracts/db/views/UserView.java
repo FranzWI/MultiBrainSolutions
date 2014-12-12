@@ -1,5 +1,8 @@
 package de.mbs.abstracts.db.views;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.definition.AddableView;
 import de.mbs.abstracts.db.views.definition.EditableView;
@@ -7,8 +10,8 @@ import de.mbs.abstracts.db.views.definition.FindableView;
 import de.mbs.abstracts.db.views.definition.RemoveableView;
 import de.mbs.abstracts.db.views.definition.SearchableView;
 
-public abstract class UserView implements AddableView<User>,
-		RemoveableView<User>, EditableView<User>, FindableView<User>,SearchableView {
+public abstract class UserView extends Observable implements AddableView<User>,
+		RemoveableView<User>, EditableView<User>, FindableView<User>,SearchableView, Observer {
 
 	/**
 	 * 
@@ -26,6 +29,7 @@ public abstract class UserView implements AddableView<User>,
 	 */
 	public abstract User getUserByApikey(String apikey);
 	
+	public void update(Observable o, Object arg) {}
 	
 	public String getTabName(){
 		return "Nutzer";

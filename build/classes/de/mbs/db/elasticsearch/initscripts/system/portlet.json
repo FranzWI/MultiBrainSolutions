@@ -14,17 +14,23 @@
             "usedByGroups":{
                 "type":"string"
             },
-            "sizeXS":{
-                "type":"byte"
-            },
-            "sizeSM":{
-                "type":"byte"
-            },
-            "sizeMD":{
-                "type":"byte"
-            },
-            "sizeLG":{
-                "type":"byte"
+            "size":{
+                "type":"object",
+                "properties":{
+                    "xs":{
+                        "type":"byte"
+                    },
+                    "sm":{
+                        "type":"byte"
+                    },
+                    "md":{
+                        "type":"byte"
+                    },
+                    "lg":{
+                        "type":"byte"
+                    }
+                    
+                }
             }
         }
     }
