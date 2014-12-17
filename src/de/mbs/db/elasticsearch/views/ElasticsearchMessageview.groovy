@@ -15,11 +15,19 @@ import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.utils.Pair;
 import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.MessageView;
+import de.mbs.db.elasticsearch.ElasticsearchView;
 
 public class ElasticsearchMessageview extends MessageView {
 	
 	private String[] fieldList = ["subject", "timestamp","from", "toUser", "toGroup", "content","file","prevMessage", "read"];
-
+	
+	private ElasticsearchView view; 
+	
+	public ElasticsearchMessageview(ElasticsearchView view) 
+	{
+		this.view = view;
+	}
+	
 	@Override
 	public Vector<Pair<SearchResult, String>> search(String search, User u) {
 		// TODO Auto-generated method stub
@@ -33,7 +41,6 @@ public class ElasticsearchMessageview extends MessageView {
 	public Vector<Message> getMessagesForUser(String id) 
 	{
 		Vector<Message> AllMyMessages = new Vector<Message>();
-		//FIXME: Geht es überhaupt auf den return wert einer methode eine Foreach schleife zu machen? WZKW
 		for(Message myMess : this.getAll())
 		{
 			if(myMess.getId() == id)
@@ -49,7 +56,6 @@ public class ElasticsearchMessageview extends MessageView {
 	public Vector<Message> getUnreadMessagesForUser(String id) 
 	{
 		Vector<Message> AllMyUnreadedMessages = new Vector<Message>();
-		//FIXME: Geht es überhaupt auf den return wert einer methode eine Foreach schleife zu machen? WZKW
 		for(Message myMess : this.getMessagesForUser(id))
 		{
 			if(myMess.isRead() != true)
