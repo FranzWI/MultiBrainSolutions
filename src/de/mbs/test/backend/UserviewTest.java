@@ -36,10 +36,11 @@ public class UserviewTest {
 		// ..
 		// die anderen Felder füllen
 		// ..
-		// Nutzer in Datenbank schreiben lassen
+		// Nutzer in Datenbank schreiben lassen 
 		String id = userView.add(testUser);
 		// wenn die ID nicht null ist
 		assertNotNull("Nutzer wurde nicht angelegt", id);
+		System.out.println("id "+id);
 
 		// okey scheinbar wurde der Nutzer angelegt
 		// prüfen ob die Datengleich sind
@@ -54,20 +55,27 @@ public class UserviewTest {
 		assertEquals("Username nicht gleich", testUser.getUsername(),
 				newUser.getUsername());
 				newUser.getPw();
-		System.out.println("übergebenes PW"+testUser.getPw());
-		System.out.println("gespeichertes PW"+newUser.getPw());
 		assertFalse("Passwort wurde nicht verschlüsselt",testUser.getPw().equals(newUser.getPw()));
 		assertNotNull("Nutzer konnte nicht am ApiKey abgerufen werden!", userView.getUserByApikey(newUser.getApikey()));
 		assertNull("Ungültigen APIKey übergeben und dennoch einen Nutzer erhalten!!", userView.getUserByApikey(UUID.randomUUID().toString()));
 	}
-	
-	/*@Test
+
+	@Test
 	public void testEditUser() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
+		UserView userView = TestExecuter.getView().getUserView();
+		//TODO Kürby, wie frage ich eine userId ab oder übergebe sie von der testAddUser Methode?
+		String id = "";
+		User testUser =new User(id);
+		testUser.setUsername("TestUser");
+		User editedUser = userView.edit(testUser);
+		assertNotNull("User konnte nicht geändert werden",editedUser);
+		assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
+
 	}
 
-	
+	/*
 	@Test
 	public void testLogin() {
 		UserView userView = TestExecuter.getView().getUserView();
