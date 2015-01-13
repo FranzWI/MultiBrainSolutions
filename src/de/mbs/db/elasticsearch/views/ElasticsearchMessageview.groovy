@@ -29,7 +29,8 @@ public class ElasticsearchMessageview extends MessageView {
 	}
 	
 	@Override
-	public Vector<Pair<SearchResult, String>> search(String search, User u) {
+	public Vector<Pair<SearchResult, String>> search(String search, User u) 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -59,6 +59,8 @@ public class ElasticsearchUserview extends UserView {
 
 	@Override
 	public String add(User data) {
+		
+		//FIXME: sicherstellen das jeder username nur einmal vergeben werden kann
 		JSONObject jsonUser = new JSONObject();
 
 		jsonUser.put("userName", data.getUsername());
@@ -201,6 +203,27 @@ public class ElasticsearchUserview extends UserView {
 		return null;
 
 	}
+	
+	//INFO: auf wunsch von Denise nachgerüstet
+	public User getUserByUserName(String username)
+	{
+		SearchResponse response = this.view.getESClient()
+				.prepareSearch("system")
+				.setTypes("user")
+				.addFields(fieldList)
+				.setQuery(QueryBuilders.matchQuery("userName", username) )
+				.execute()
+				.actionGet();
+
+		SearchHit[] hits = response.getHits().getHits();
+		if(hits.length == 1 )
+		{
+			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
+			if(user != null)
+				return user;
+		}
+			return null;
+		}
 
 	private User responseToUser(id,version, fields) {
 		try {
