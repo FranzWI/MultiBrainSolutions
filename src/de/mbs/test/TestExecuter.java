@@ -16,22 +16,28 @@ import de.mbs.test.backend.AllBackendTests;
  * @author MKuerbis
  *
  */
-public class TestExecuter {
+public class TestExecuter 
+{
 
 	private static DatabaseView view = null;
 
-	public static void start(DatabaseView view) {
+	public static void start(DatabaseView view) 
+	{
 		TestExecuter.view = view;
 		System.out.println("Beginne Backend Testfälle");
 		Result r = JUnitCore.runClasses(AllBackendTests.class);
-		for (Failure failure : r.getFailures()) {
+		
+		for (Failure failure : r.getFailures()) 
+		{
 			System.err.println(failure.toString());
 		}
+		
 		System.out.println("Backend Testdauer: "+r.getRunTime()+"ms");
 		System.out.println("Backend Fehlgeschlagene Testfälle: "+r.getFailureCount()+" / "+r.getRunCount());
 	}
 
-	public static DatabaseView getView() {
+	public static DatabaseView getView() 
+	{
 		return TestExecuter.view;
 	}
 
