@@ -13,6 +13,7 @@ import de.mbs.abstracts.db.views.definition.SearchableView;
 public abstract class UserView extends Observable implements AddableView<User>,
 		RemoveableView<User>, EditableView<User>, FindableView<User>,SearchableView, Observer {
 
+	
 	/**
 	 * 
 	 * @param username
@@ -28,6 +29,7 @@ public abstract class UserView extends Observable implements AddableView<User>,
 	 * @return null falls der Apikey keinem Nutzer zugewiesen werden kann, den User falls doch
 	 */
 	public abstract User getUserByApikey(String apikey);
+	public abstract User getUserByUserName(String userName);
 	
 	public void update(Observable o, Object arg) {}
 	
