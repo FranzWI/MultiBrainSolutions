@@ -17,7 +17,7 @@ public class ElasticsearchSettingsview extends SettingsView
 	
 	private ElasticsearchView view;
 	
-	public ElasticsearchNotificationview(ElasticsearchView view)
+	public ElasticsearchSettingsview(ElasticsearchView view)
 	{
 		this.view = view;
 	}
