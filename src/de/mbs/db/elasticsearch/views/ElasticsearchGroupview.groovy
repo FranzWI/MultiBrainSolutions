@@ -1,6 +1,7 @@
 package de.mbs.db.elasticsearch.views;
 
 import java.util.Vector;
+
 import org.elasticsearch.action.get.GetResponse
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.search.SearchHit
@@ -10,16 +11,14 @@ import org.json.simple.JSONObject
 import de.mbs.abstracts.db.objects.Group;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.db.elasticsearch.ElasticsearchView
-
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
+import de.mbs.modules.neuigkeiten.db.objects.Category;
 
 public class ElasticsearchGroupview extends GroupView {
 
 	private ElasticsearchView view;
 
 	private String[] fieldList = ["name", "description"];
-
-	//TODO:  Wenn ich  es richtig verstehe ist das dazu da um die initialen Nutzergruppen Admin und Nutzer anzulegen??
 
 	public ElasticsearchGroupview(ElasticsearchView view){
 		this.view = view;
@@ -58,12 +57,15 @@ public class ElasticsearchGroupview extends GroupView {
 				.actionGet();
 
 		SearchHit[] hits = response.getHits().getHits();
-		if(hits.length == 1 ){
-			return hits.getId();
+		if(hits.length == 1 )
+		{
+			Group myGroup = this.responseToGroup(hits[0].getId(),hits[0].getVersion(), hits[0].getFields());
+			if(myGroup != null)
+				return myGroup.getId();
 		}
 		return null;
 	}
-
+	
 	@Override
 	public String add(Group data) {
 		JSONObject group = new JSONObject();
@@ -115,26 +117,24 @@ public class ElasticsearchGroupview extends GroupView {
 	}
 
 	private Group responseToGroup(id,version, fields) {
-		try {
-			Group group = new Group(id, version);
-			for (String key : fields.keySet()) {
-				def field = fields.get(key);
-				switch (key) {
-					case "name":
-						group.setName(field.getValue() == null ? "" : field
-						.getValue().toString());
-						break;
-					case "description":
-						group.setDescription(field.getValue() == null ? "" : field
-						.getValue().toString());
-						break;
-				}
+		
+		Group group = new Group(id, version);
+		for (String key : fields.keySet()) {
+			def field = fields.get(key);
+			switch (key) {
+				case "name":
+					group.setName(field.getValue() == null ? "" : field
+					.getValue().toString());
+					break;
+				case "description":
+					group.setDescription(field.getValue() == null ? "" : field
+					.getValue().toString());
+					break;
 			}
-
-			return group;
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			return null;
 		}
+		if(group!=null)
+			return group;
+		return null;
+		
 	}
 }

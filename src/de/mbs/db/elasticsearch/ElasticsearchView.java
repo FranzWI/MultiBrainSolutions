@@ -108,9 +108,9 @@ public class ElasticsearchView extends DatabaseView{
 				admin.setEmail("ich@michaelkuerbis.de");
 				admin.setPw("admin");
 				//TODO kommentare entfernen wenn groupview geht
-				//for (Group group : this.getGroupView().getAll()) {
-				//	admin.addMembership(group.getId());
-				//}
+				/*for (Group group : this.getGroupView().getAll()) { 	//
+					admin.addMembership(group.getId());  				//
+				}		*/												//
 				System.out.println("ES: DEBUG ID Admin "+this.getUserView().add(admin));
 
 				// Nutzer anlegen
@@ -121,10 +121,10 @@ public class ElasticsearchView extends DatabaseView{
 				user.setEmail("ich@michaelkuerbis.de");
 				user.setPw("user");
 				//TODO kommentare entfernen wenn groupview geht
-				//for (Group group : this.getGroupView().getAll()) {
-				//	if (group.getName().equals("Nutzer"))
-				//		user.addMembership(group.getId());
-				//}
+				/*for (Group group : this.getGroupView().getAll()) {	//
+					if (group.getName().equals("Nutzer"))  			//
+						user.addMembership(group.getId());			//
+				} */													//
 				System.out.println("ES: DEBUG ID User "+this.getUserView().add(user));
 			} else {
 				System.out.println("ES: installation fehlgeschlagen");
