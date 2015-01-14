@@ -10,7 +10,8 @@ import de.mbs.abstracts.db.objects.Settings;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
 
-public class ElasticsearchSettingsview extends SettingsView {
+public class ElasticsearchSettingsview extends SettingsView 
+{
 
 	private String[] fieldList = ["mailProperties","dbProperties", "proxyProperties"];
 	
@@ -48,15 +49,17 @@ public class ElasticsearchSettingsview extends SettingsView {
 	}
 
 	@Override
-	public Vector<Settings> getAll() {
+	public Vector<Settings> getAll() 
+	{
 				
 		Vector<Settings> settings = new Vector<Settings>();
 		
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "settings", fieldList)) 
 		{
-			if(hit.getFields() != null){
+			if(hit.getFields() != null)
+			{
 				Settings set = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
-				if(not != null)
+				if(set != null)
 					settings.add(set);
 			}
 		}
