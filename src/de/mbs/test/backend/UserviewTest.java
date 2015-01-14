@@ -30,7 +30,7 @@ public class UserviewTest {
 		User testUser = new User(null);
 		testUser.setFirstname("De");
 		testUser.setLastname("Nizzle");
-		testUser.setUsername("deNizzle");
+		testUser.setUsername("deNizzle1");
 		testUser.setPw("Snickers123");
 		
 		// ..
@@ -60,20 +60,19 @@ public class UserviewTest {
 		assertNull("Ungültigen APIKey übergeben und dennoch einen Nutzer erhalten!!", userView.getUserByApikey(UUID.randomUUID().toString()));
 	}
 
-	@Test
+/*	@Test
 	public void testEditUser() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
+		String userName = "deNizzle1";
 		UserView userView = TestExecuter.getView().getUserView();
-		//TODO Kürby, wie frage ich eine userId ab oder übergebe sie von der testAddUser Methode?
-		String id = "";
-		User testUser =new User(id);
+		User testUser = userView.getUserByUserName(userName);
 		testUser.setUsername("TestUser");
 		User editedUser = userView.edit(testUser);
 		assertNotNull("User konnte nicht geändert werden",editedUser);
 		assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
 
-	}
+	}*/
 
 	/*
 	@Test
