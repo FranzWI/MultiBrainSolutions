@@ -12,7 +12,7 @@ import de.mbs.abstracts.db.objects.Group;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.db.elasticsearch.ElasticsearchView
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
-import de.mbs.modules.neuigkeiten.db.objects.Category;
+
 
 public class ElasticsearchGroupview extends GroupView {
 
