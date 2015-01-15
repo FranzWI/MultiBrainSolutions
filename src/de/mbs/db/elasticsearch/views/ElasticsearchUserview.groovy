@@ -98,11 +98,13 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public User edit(User data) {
+	public User edit(User data) 
+	{
 		User old = this.get(data.getId());
 		if (old == null)
 			return null;
-		if(old.isActive() != data.isActive()){
+		if(old.isActive() != data.isActive())
+		{
 			Mail m = new Mail(data.getEmail(),
 					"Accountstatus am Multi Brain Cockpit",
 					MailView.SENDER,
@@ -117,12 +119,8 @@ public class ElasticsearchUserview extends UserView {
 		jsonUser.put("email", data.getEmail());
 		jsonUser.put("pw", data.getPw());
 		jsonUser.put("apiKey", data.getApikey());
-		jsonUser.put("inGroups",
-				ElasticsearchHelper.vectorToJSONArray(data.getMembership())
-				.toJSONString());
-		jsonUser.put("usesPortlets",
-				ElasticsearchHelper.vectorToJSONArray(data.getPortlets())
-				.toJSONString());
+		jsonUser.put("inGroups",ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString());
+		jsonUser.put("usesPortlets", ElasticsearchHelper.vectorToJSONArray(data.getPortlets()).toJSONString());
 		jsonUser.put("sessionId", data.getSessionId());
 		jsonUser.put("isActive", data.isActive());
 
@@ -130,11 +128,15 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public User get(String id) {
+	public User get(String id) 
+	{
 		GetResponse response = this.view.getESClient()
-				.prepareGet("system", "user", id).setFields(fieldList)
-				.execute().actionGet();
-		if (response.isExists()) {
+				.prepareGet("system", "user", id)
+				.setFields(fieldList)
+				.execute()
+				.actionGet();
+		if (response.isExists()) 
+		{
 			return responseToUser(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
@@ -248,8 +250,8 @@ public class ElasticsearchUserview extends UserView {
 						.getValue().toString());
 						break;
 					case "pw":
-						user.setPw(field.getValue() == null ? "" : field.getValue()
-						.toString());
+						user.setPw(field.getValue() == null ? "" : field
+						.getValue().toString());
 						break;
 					case "apiKey":
 						user.setApikey(field.getValue() == null ? "" : field
