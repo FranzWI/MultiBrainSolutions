@@ -37,7 +37,7 @@ public class ElasticsearchMessageview extends MessageView {
 	
 	
 	//################################DONE############################################
-	
+	//INFO: Soll ich die get MessagesForUser und getUnreadMessagesForUser eigentlich nochmal umstellen in elasticsearch? 
 	@Override
 	public Vector<Message> getMessagesForUser(String id) 
 	{
