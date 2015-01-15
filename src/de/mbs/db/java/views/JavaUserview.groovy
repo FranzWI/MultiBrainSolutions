@@ -149,4 +149,14 @@ public class JavaUserview extends UserView {
 		return null;
 	}
 
+	@Override
+	public User getUserByUserName(String userName) {
+		for(User u:this.getAll()){
+			if(u.getUsername().equals(userName)){
+				return u;
+			}
+		}
+		return null;
+	}
+
 }
