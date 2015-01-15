@@ -30,7 +30,7 @@ public class UserviewTest {
 		User testUser = new User(null);
 		testUser.setFirstname("De");
 		testUser.setLastname("Nizzle");
-		testUser.setUsername("deNizzle1");
+		testUser.setUsername("deNizzle4");
 		testUser.setPw("Snickers123");
 		
 		// ..
@@ -60,19 +60,21 @@ public class UserviewTest {
 		assertNull("Ungültigen APIKey übergeben und dennoch einen Nutzer erhalten!!", userView.getUserByApikey(UUID.randomUUID().toString()));
 	}
 
-/*	@Test
+	@Test
 	public void testEditUser() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
-		String userName = "deNizzle1";
+		String userName = "deNizzle4";
 		UserView userView = TestExecuter.getView().getUserView();
 		User testUser = userView.getUserByUserName(userName);
+		System.out.println(testUser.toString());
+		assertNotNull("fail",testUser);
 		testUser.setUsername("TestUser");
-		User editedUser = userView.edit(testUser);
-		assertNotNull("User konnte nicht geändert werden",editedUser);
-		assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
+		//User editedUser = userView.edit(testUser);
+		//assertNotNull("User konnte nicht geändert werden",editedUser);
+		//assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
 
-	}*/
+	}
 
 	/*
 	@Test

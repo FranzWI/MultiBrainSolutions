@@ -44,7 +44,7 @@ public class TestExecuter
 	public static void main(String[] args) {
 		// TODO hier die zu testenden Database hinterlegen
 		TestExecuter.start(new ElasticsearchView(true));
-		// TestExecuter.start(new JavaView());
+		TestExecuter.start(new JavaView());
 	}
 
 }
