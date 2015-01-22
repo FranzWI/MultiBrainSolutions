@@ -16,6 +16,7 @@ import de.mbs.test.TestExecuter;
  *
  */
 public class UserviewTest {
+	private String testUserName = "deFranz";
 	
 	@Test
 	public void testIsUserViewImplemented() {
@@ -30,7 +31,7 @@ public class UserviewTest {
 		User testUser = new User(null);
 		testUser.setFirstname("De");
 		testUser.setLastname("Nizzle");
-		testUser.setUsername("deNizzle10");
+		testUser.setUsername(testUserName);
 		testUser.setPw("Snickers123");
 		
 		// ..
@@ -64,9 +65,8 @@ public class UserviewTest {
 	public void testEditUser() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
-		String userName = "deNizzle10";
 		UserView userView = TestExecuter.getView().getUserView();
-		User testUser = userView.getUserByUserName(userName);
+		User testUser = userView.getUserByUserName(testUserName);
 		assertNotNull("fail",testUser);
 		//testUser.setUsername("TestUser");
 		//User editedUser = userView.edit(testUser);
