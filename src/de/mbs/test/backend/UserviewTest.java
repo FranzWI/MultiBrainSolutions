@@ -30,7 +30,7 @@ public class UserviewTest {
 		User testUser = new User(null);
 		testUser.setFirstname("De");
 		testUser.setLastname("Nizzle");
-		testUser.setUsername("deNizzle4");
+		testUser.setUsername("deNizzle10");
 		testUser.setPw("Snickers123");
 		
 		// ..
@@ -64,12 +64,11 @@ public class UserviewTest {
 	public void testEditUser() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
-		String userName = "deNizzle4";
+		String userName = "deNizzle10";
 		UserView userView = TestExecuter.getView().getUserView();
 		User testUser = userView.getUserByUserName(userName);
-		System.out.println(testUser.toString());
 		assertNotNull("fail",testUser);
-		testUser.setUsername("TestUser");
+		//testUser.setUsername("TestUser");
 		//User editedUser = userView.edit(testUser);
 		//assertNotNull("User konnte nicht geändert werden",editedUser);
 		//assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
