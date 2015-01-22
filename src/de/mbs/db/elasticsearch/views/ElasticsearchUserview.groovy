@@ -223,8 +223,13 @@ public class ElasticsearchUserview extends UserView {
 			System.out.printl("getUserByUserName() hat einen user gefunden ");
 			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
 			if(user != null)
-				System.out.printl("ResponseToUser() ging schief!");
+			{
 				return user;
+			}
+			else
+			{
+				System.out.printl("ResponseToUser() ging schief!");
+			}
 		}
 			System.out.printl("getUserByUserName() konnte keinen user mit diesem namen finden");
 			return null;
