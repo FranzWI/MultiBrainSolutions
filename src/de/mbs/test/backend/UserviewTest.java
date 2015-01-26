@@ -26,7 +26,7 @@ public class UserviewTest
 	
 	public UserviewTest() 
 	{
-		testUserName = "user";
+		testUserName = "SnickSnick";
 	}
 	
 	@Test
@@ -79,10 +79,10 @@ public class UserviewTest
 		UserView userView = TestExecuter.getView().getUserView();
 		User testUser = userView.getUserByUserName(this.testUserName);
 		assertNotNull("User mit Namen "+this.testUserName+" nicht gefunden",testUser);
-		//testUser.setUsername("TestUser");
-		//User editedUser = userView.edit(testUser);
-		//assertNotNull("User konnte nicht geändert werden",editedUser);
-		//assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
+		testUser.setUsername("TestUser");
+		User editedUser = userView.edit(testUser);
+		assertNotNull("User konnte nicht geändert werden",editedUser);
+		assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
 
 	}
 
