@@ -2,9 +2,13 @@ package de.mbs.test.backend;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Method;
+import java.util.Comparator;
 import java.util.UUID;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.UserView;
@@ -15,6 +19,7 @@ import de.mbs.test.TestExecuter;
  * @author MKuerbis
  *
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserviewTest 
 {
 	private String testUserName;
@@ -73,7 +78,7 @@ public class UserviewTest
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
 		User testUser = userView.getUserByUserName(this.testUserName);
-		assertNotNull("fail",testUser);
+		assertNotNull("User mit Namen "+this.testUserName+" nicht gefunden",testUser);
 		//testUser.setUsername("TestUser");
 		//User editedUser = userView.edit(testUser);
 		//assertNotNull("User konnte nicht geändert werden",editedUser);

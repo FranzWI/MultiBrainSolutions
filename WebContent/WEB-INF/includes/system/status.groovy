@@ -59,7 +59,7 @@ html.div{
 			
 			h4("Dienste")
 			button('class':"btn btn-lg btn-block btn-warning disabled btn-icon icon-left",id:"db-status", "Datenbank "+es.getServiceName()){ i('class':"entypo-hourglass") }
-			button('class':"btn btn-lg btn-block btn-warning disabled btn-icon icon-left",id:"mail-status", "Mail "+mail.getServiceName()){ i('class':"entypo-hourglass") }
+			if(mail != null)button('class':"btn btn-lg btn-block btn-warning disabled btn-icon icon-left",id:"mail-status", "Mail "+mail.getServiceName()){ i('class':"entypo-hourglass") }
 		}
 	}
 	div('class':"row"){

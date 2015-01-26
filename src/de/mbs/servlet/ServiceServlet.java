@@ -18,9 +18,9 @@ public class ServiceServlet extends HttpServlet {
 		System.out.println("Starte Datenbankverbindung");
 		//ServiceHandler.setDatabaseView(new ElasticsearchView());
 		ServiceHandler.setDatabaseView(new JavaView());
-		MailView mailView = new SendGridView();
-		ServiceHandler.getDatabaseView().setMailView(mailView);
-		ServiceHandler.setMailView(mailView);
+		//MailView mailView = new SendGridView();
+		//ServiceHandler.getDatabaseView().setMailView(mailView);
+		//ServiceHandler.setMailView(mailView);
 		System.out.println("Verbindung zur Datenbank hergestellt");
 	}
 	
