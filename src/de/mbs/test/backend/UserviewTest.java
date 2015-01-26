@@ -53,8 +53,7 @@ public class UserviewTest
 		String id = userView.add(testUser);
 		// wenn die ID nicht null ist
 		assertNotNull("Nutzer wurde nicht angelegt", id);
-		System.out.println("id "+id);
-
+		
 		// okey scheinbar wurde der Nutzer angelegt
 		// prüfen ob die Datengleich sind
 		User newUser = userView.get(id);
@@ -78,14 +77,14 @@ public class UserviewTest
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
-		for(User u:userView.getAll()){System.out.println(u.getUsername());}
 		User testUser = userView.getUserByUserName(this.testUserName);
 		assertNotNull("User mit Namen "+this.testUserName+" nicht gefunden",testUser);
 		testUser.setUsername("TestUser");
 		User editedUser = userView.edit(testUser);
 		assertNotNull("User konnte nicht geändert werden",editedUser);
 		assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
-			for(User u:userView.getAll()){System.out.println(u.getUsername());}
+		//Ausgabe aller Benutzernamen 
+		//for(User u:userView.getAll()){System.out.println(u.getUsername());}
 	}
 		/*
 	@Test
