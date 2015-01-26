@@ -26,7 +26,7 @@ public class UserviewTest
 	
 	public UserviewTest() 
 	{
-		testUserName = "deFranz";
+		testUserName = "user";
 	}
 	
 	@Test
