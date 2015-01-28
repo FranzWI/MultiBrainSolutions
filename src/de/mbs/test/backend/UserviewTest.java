@@ -31,20 +31,20 @@ public class UserviewTest
 	}
 	
 	@Test
-	public void testIsUserViewImplemented() {
+	public void test1IsUserViewImplemented() {
 		UserView userView = TestExecuter.getView().getUserView();
 		assertNotNull("Userview nicht implementiert", userView);
 	}
 
 	@Test
-	public void testAddUser() {
+	public void test2AddUser() {
 		UserView userView = TestExecuter.getView().getUserView();
 		// Daten des neuen Nutzers anlegen
 		User testUser = new User(null);
 		testUser.setFirstname("De");
 		testUser.setLastname("Nizzle");
 		testUser.setUsername(this.testUserName);
-		testUser.setPw("Snickers123");
+		testUser.setPw("passwort");
 		
 		// ..
 		// die anderen Felder füllen
@@ -73,7 +73,7 @@ public class UserviewTest
 	}
 
 	@Test
-	public void testEditUser() {
+	public void test3EditUserName() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
@@ -86,11 +86,12 @@ public class UserviewTest
 		//Ausgabe aller Benutzernamen 
 		//for(User u:userView.getAll()){System.out.println(u.getUsername());}
 	}
-		/*
+		
 	@Test
-	public void testLogin() {
+	public void test4Login() {
 		UserView userView = TestExecuter.getView().getUserView();
 		assertNotNull("Login als Admin funktioniert nicht!", userView.login("admin", "admin"));
 		assertNotNull("Login als User funktioniert nicht!", userView.login("user", "user"));
-	}*/
+		assertNotNull("Login als TestUser funktioniert nicht!", userView.login("TestUser", "passwort"));
+	}
 }
