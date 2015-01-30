@@ -24,7 +24,7 @@ public class TestExecuter
 	public static void start(DatabaseView view) 
 	{
 		TestExecuter.view = view;
-		System.out.println("Beginne Backend Testfälle");
+		System.out.println("Beginne Backend Testfälle - " + TestExecuter.view);
 		Result r = JUnitCore.runClasses(AllBackendTests.class);
 		
 		for (Failure failure : r.getFailures()) 

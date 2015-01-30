@@ -23,11 +23,14 @@ import de.mbs.test.TestExecuter;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserviewTest 
 {
-	private String testUserName;
+	private String testUserNameAlt;
+	private String testUserNameNeu;
+	
 	
 	public UserviewTest() 
 	{
-		testUserName = "SnickSnick";
+		testUserNameAlt = "alterName";
+		testUserNameNeu = "neuerName";
 	}
 	
 	@Test
@@ -43,8 +46,9 @@ public class UserviewTest
 		User testUser = new User(null);
 		testUser.setFirstname("De");
 		testUser.setLastname("Nizzle");
-		testUser.setUsername(this.testUserName);
+		testUser.setUsername(this.testUserNameAlt);
 		testUser.setPw("passwort");
+		testUser.setActive(true);
 		
 		// ..
 		// die anderen Felder füllen
@@ -70,6 +74,7 @@ public class UserviewTest
 		assertFalse("Passwort wurde nicht verschlüsselt",testUser.getPw().equals(newUser.getPw()));
 		assertNotNull("Nutzer konnte nicht am ApiKey abgerufen werden!", userView.getUserByApikey(newUser.getApikey()));
 		assertNull("Ungültigen APIKey übergeben und dennoch einen Nutzer erhalten!!", userView.getUserByApikey(UUID.randomUUID().toString()));
+		assertTrue("testUser nicht aktiv",testUser.isActive());
 	}
 
 	@Test
@@ -77,9 +82,11 @@ public class UserviewTest
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
-		User testUser = userView.getUserByUserName(this.testUserName);
-		assertNotNull("User mit Namen "+this.testUserName+" nicht gefunden",testUser);
-		testUser.setUsername("TestUser");
+		User testUser = userView.getUserByUserName(this.testUserNameAlt);
+		assertNotNull("User mit Namen "+this.testUserNameAlt+" nicht gefunden",testUser);
+			testUser.setUsername(testUserNameNeu);
+			testUser.setFirstname("anderer");
+			testUser.setLastname("Name");
 		User editedUser = userView.edit(testUser);
 		assertNotNull("User konnte nicht geändert werden",editedUser);
 		assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
@@ -92,6 +99,11 @@ public class UserviewTest
 		UserView userView = TestExecuter.getView().getUserView();
 		assertNotNull("Login als Admin funktioniert nicht!", userView.login("admin", "admin"));
 		assertNotNull("Login als User funktioniert nicht!", userView.login("user", "user"));
-		assertNotNull("Login als TestUser funktioniert nicht!", userView.login("TestUser", "passwort"));
+		User testUser = userView.getUserByUserName(this.testUserNameNeu);
+		assertTrue("TestUser ist nicht aktiviert",testUser.isActive());
+		if (testUser.isActive()){
+			assertNotNull("Login als TestUser funktioniert nicht!", userView.login(testUserNameNeu, "passwort"));
+		}
+				
 	}
 }

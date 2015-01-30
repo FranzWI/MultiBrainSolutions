@@ -220,7 +220,7 @@ public class ElasticsearchUserview extends UserView {
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 )
 		{
-			System.out.println("getUserByUserName() hat einen user gefunden ");
+			System.out.println("getUserByUserName() hat einen user mit dem Username " +username +"gefunden ");
 			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
 			if(user != null)
 			{
@@ -231,7 +231,7 @@ public class ElasticsearchUserview extends UserView {
 				System.out.println("ResponseToUser() ging schief!");
 			}
 		}
-			System.out.println("getUserByUserName() konnte keinen user mit diesem namen finden");
+			System.out.println("getUserByUserName() konnte keinen user mit dem namen " +username +"finden");
 			return null;
 		}
 
