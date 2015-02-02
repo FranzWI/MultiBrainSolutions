@@ -19,12 +19,14 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.indices.IndexAlreadyExistsException;
 import org.elasticsearch.node.Node;
 import org.json.simple.JSONObject;
@@ -49,7 +51,7 @@ import de.mbs.db.elasticsearch.views.ElasticsearchPortletview;
 import de.mbs.db.elasticsearch.views.ElasticsearchSettingsview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
 
-public class ElasticsearchView extends DatabaseView{
+public class ElasticsearchView extends DatabaseView {
 
 	private Client client;
 
@@ -59,36 +61,33 @@ public class ElasticsearchView extends DatabaseView{
 	private ElasticsearchSettingsview settingview;
 	private ElasticsearchMessageview messageview;
 	private ElasticsearchNotificationview notificationview;
-	
+
 	public ElasticsearchView() {
 		this.connect();
 		this.init();
 	}
-	
-	public ElasticsearchView(boolean reset){
+
+	public ElasticsearchView(boolean reset) {
 		this.connect();
-		if(reset){
+		if (reset) {
 			// ACHTUNG alle indexe löschen !
-			DeleteIndexResponse response = client.admin().indices().delete(new DeleteIndexRequest("_all")).actionGet();
-			if(response.isAcknowledged()){
+			DeleteIndexResponse response = client.admin().indices()
+					.delete(new DeleteIndexRequest("_all")).actionGet();
+			if (response.isAcknowledged()) {
 				System.out.println("ES: Index gelöscht");
 			}
 		}
 		this.init();
 	}
-	
-	private void connect(){
+
+	private void connect() {
 		Settings settings = ImmutableSettings.settingsBuilder()
-				.put("cluster.name", "MBS Management Cockpit Cluster")
-				.put("node.data", false).put("network.host", "localhost")
-				.build();
-		Node node = nodeBuilder().client(true).settings(settings)
-				.clusterName("MBS Management Cockpit Cluster").node();
-		client = node.client();
+				.put("cluster.name", "MBS Management Cockpit Cluster").build();
+		client = new TransportClient(settings).addTransportAddress(new InetSocketTransportAddress("127.0.0.1", 9300));
 		System.out.println("ES: initialisiert, verbunden");
 	}
-	
-	private void init(){
+
+	private void init() {
 		if (!this.isInstalled()) {
 			System.out.println("ES: nicht installiert");
 			if (this.install()) {
@@ -99,7 +98,7 @@ public class ElasticsearchView extends DatabaseView{
 				this.settingview = new ElasticsearchSettingsview(this);
 				this.notificationview = new ElasticsearchNotificationview(this);
 				System.out.println("ES: erfolgreich installiert");
-				
+
 				System.out.println("ES: initialisiere default Data");
 				User admin = new User(null);
 				admin.setFirstname("Admini");
@@ -107,11 +106,13 @@ public class ElasticsearchView extends DatabaseView{
 				admin.setUsername("admin");
 				admin.setEmail("ich@michaelkuerbis.de");
 				admin.setPw("admin");
-				//TODO kommentare entfernen wenn groupview geht
-				/*for (Group group : this.getGroupView().getAll()) { 	//
-					admin.addMembership(group.getId());  				//
-				}		*/												//
-				System.out.println("ES: DEBUG ID Admin "+this.getUserView().add(admin));
+				// TODO kommentare entfernen wenn groupview geht
+				/*
+				 * for (Group group : this.getGroupView().getAll()) { //
+				 * admin.addMembership(group.getId()); // }
+				 *///
+				System.out.println("ES: DEBUG ID Admin "
+						+ this.getUserView().add(admin));
 
 				// Nutzer anlegen
 				User user = new User(null);
@@ -120,16 +121,18 @@ public class ElasticsearchView extends DatabaseView{
 				user.setUsername("user");
 				user.setEmail("ich@michaelkuerbis.de");
 				user.setPw("user");
-				//TODO kommentare entfernen wenn groupview geht
-				/*for (Group group : this.getGroupView().getAll()) {	//
-					if (group.getName().equals("Nutzer"))  			//
-						user.addMembership(group.getId());			//
-				} */													//
-				System.out.println("ES: DEBUG ID User "+this.getUserView().add(user));
+				// TODO kommentare entfernen wenn groupview geht
+				/*
+				 * for (Group group : this.getGroupView().getAll()) { // if
+				 * (group.getName().equals("Nutzer")) //
+				 * user.addMembership(group.getId()); // }
+				 *///
+				System.out.println("ES: DEBUG ID User "
+						+ this.getUserView().add(user));
 			} else {
 				System.out.println("ES: installation fehlgeschlagen");
 			}
-		}else{
+		} else {
 			this.groupview = new ElasticsearchGroupview(this);
 			this.portletview = new ElasticsearchPortletview();
 			this.userview = new ElasticsearchUserview(this);
@@ -139,7 +142,7 @@ public class ElasticsearchView extends DatabaseView{
 		}
 		this.addSearchableView(this.getUserView());
 		this.addSearchableView(this.getMessageView());
-		//this.printESStructure();
+		// this.printESStructure();
 	}
 
 	public Client getESClient() {
@@ -157,17 +160,17 @@ public class ElasticsearchView extends DatabaseView{
 		}
 	}
 
-	public String getServiceName(){
+	public String getServiceName() {
 		return "elasticsearch";
 	}
-	
+
 	/**
 	 * 
 	 * alle Indexe abfragen
 	 * 
 	 * @return
 	 */
-	public Vector<String> getDatabases(){
+	public Vector<String> getDatabases() {
 		Vector<String> indices = new Vector<String>();
 		ClusterStateResponse clusterStateResponse = client.admin().cluster()
 				.prepareState().execute().actionGet();
@@ -238,8 +241,7 @@ public class ElasticsearchView extends DatabaseView{
 
 	public boolean isInstalled() {
 		Vector<String> dbs = this.getDatabases();
-		return dbs.size() > 0
-				&& dbs.contains("system");
+		return dbs.size() > 0 && dbs.contains("system");
 	}
 
 	private JSONObject getProperties(String[][] data) {
@@ -329,10 +331,11 @@ public class ElasticsearchView extends DatabaseView{
 	}
 
 	@Override
-	public Map<String,Vector<Pair<SearchResult,String>>> search(String search, User u) {
-		Map<String,Vector<Pair<SearchResult,String>>> result = new TreeMap<String,Vector<Pair<SearchResult,String>>>();
-		for(SearchableView searchable : this.getSearchable()){
-			//TODO suchen :)
+	public Map<String, Vector<Pair<SearchResult, String>>> search(
+			String search, User u) {
+		Map<String, Vector<Pair<SearchResult, String>>> result = new TreeMap<String, Vector<Pair<SearchResult, String>>>();
+		for (SearchableView searchable : this.getSearchable()) {
+			// TODO suchen :)
 		}
 		return result;
 	}
