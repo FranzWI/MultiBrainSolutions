@@ -109,7 +109,9 @@ public class ElasticsearchUserview extends UserView {
 					"Accountstatus am Multi Brain Cockpit",
 					MailView.SENDER,
 					"Ihr Account wurde "+(data.isActive()?"aktiviert":"deaktiviert"));
-			ServiceHandler.getDatabaseView().sendHtmlMail(m);
+			if(ServiceHandler.getMailView() != null){
+				ServiceHandler.getDatabaseView().sendHtmlMail(m);
+			}
 		}
 
 		JSONObject jsonUser = new JSONObject();
