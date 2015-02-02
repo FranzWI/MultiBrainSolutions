@@ -28,12 +28,12 @@ public class ElasticsearchSettingsview extends SettingsView
 		JSONObject prob = new JSONObject();
 		
 		//wenn ich die Properties richtig verstehe und dazu tobis tabelle nehme gehe ich davon aus das ich direkt die get funktion nehmen muss damit ich auf die Objecte komme
-		//nach meinem Verständnis würde das getProperties die direkten Strings holen
+		//nach meinem Verstï¿½ndnis wï¿½rde das getProperties die direkten Strings holen
 		prob.put("mail", data.getMailProperties());
 		prob.put("db.user", data.getDbProperties());
 		prob.put("proxy", data.getProxyProperties());
 		
-		//FIXME: Gibt Settings dann wirklich ein "Settings" object zurück?
+		//FIXME: Gibt Settings dann wirklich ein "Settings" object zurï¿½ck?
 		// public static <A extends DatabaseObject> A edit(...) 
 		return ElasticsearchHelper.edit(view,"system","settings",prob.toJSONString(), data);
 	}
@@ -44,7 +44,7 @@ public class ElasticsearchSettingsview extends SettingsView
 	{
 		GetResponse response = this.view.getESClient().prepareGet("system", "settings", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToGroup(response.getId(), response.getVersion(), response.getSource());
 		} else
 			return null;
 	}
@@ -57,9 +57,9 @@ public class ElasticsearchSettingsview extends SettingsView
 		
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "settings", fieldList)) 
 		{
-			if(hit.getFields() != null)
+			if(hit.getSource() != null)
 			{
-				Settings set = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				Settings set = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getSource());
 				if(set != null)
 					settings.add(set);
 			}

@@ -139,7 +139,7 @@ public class ElasticsearchUserview extends UserView {
 				.actionGet();
 		if (response.isExists()) 
 		{
-			return responseToUser(response.getId(), response.getVersion(), response.getFields());
+			return responseToUser(response.getId(), response.getVersion(), response.getSource());
 		} else
 			return null;
 	}
@@ -161,7 +161,7 @@ public class ElasticsearchUserview extends UserView {
 
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
-			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
+			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getSource());
 			if(u != null)
 				return u;
 		}
@@ -179,8 +179,8 @@ public class ElasticsearchUserview extends UserView {
 	public Vector<User> getAll() {
 		Vector<User> users = new Vector<User>();
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "user", fieldList)) {
-			if(hit.getFields() != null){
-				User u = this.responseToUser(hit.getId(), hit.getVersion(), hit.getFields());
+			if(hit.getSource() != null){
+				User u = this.responseToUser(hit.getId(), hit.getVersion(), hit.getSource());
 				if(u != null)
 					users.add(u);
 			}
@@ -200,7 +200,7 @@ public class ElasticsearchUserview extends UserView {
 
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
-			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
+			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getSource());
 			if(u != null)
 				return u;
 		}

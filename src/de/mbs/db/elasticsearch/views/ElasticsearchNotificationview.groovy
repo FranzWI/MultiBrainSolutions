@@ -45,7 +45,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 	{
 		JSONObject not = new JSONObject();
 		
-		//FIXME: Hier heit es .getSubject() bei den Messages heißt die gleiche funktion .getTopic() wollen wir das noch vereinheitlich?
+		//FIXME: Hier heit es .getSubject() bei den Messages heiï¿½t die gleiche funktion .getTopic() wollen wir das noch vereinheitlich?
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
@@ -78,7 +78,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 	{
 		GetResponse response = this.view.getESClient().prepareGet("news", "notification", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToGroup(response.getId(), response.getVersion(), response.getSource());
 		} else
 			return null;
 	}
@@ -90,8 +90,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "news", "notification", fieldList)) 
 		{
-			if(hit.getFields() != null){
-				Notification not = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+			if(hit.getSource() != null){
+				Notification not = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getSource());
 				if(not != null)
 					notification.add(not);
 			}

@@ -58,7 +58,7 @@ public class ElasticsearchPortletview extends PortletView {
 		GetResponse response = this.view.getESClient().prepareGet("system", "portlet", id).setFields(fieldList).execute().actionGet();
 		
 		if(response.isExists())
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToGroup(response.getId(), response.getVersion(), response.getSource());
 		else
 			return null;
 	}
@@ -72,13 +72,13 @@ public class ElasticsearchPortletview extends PortletView {
 	@Override
 	public Vector<Portlet> getPossiblePortletsForUser(String id) 
 	{
-		//FIXME: Ich glaube ich habe wieder zu kompliziert gedacht, ich werde einfach später nochmal drüber schauen
+		//FIXME: Ich glaube ich habe wieder zu kompliziert gedacht, ich werde einfach spï¿½ter nochmal drï¿½ber schauen
 		
 		// TODO Hier muss jetzt die Auswahl pro user selektiert werden:
-		// übergebene ID entspricht user ID
+		// ï¿½bergebene ID entspricht user ID
 		// 1. Checke welcher Benutzergruppe user zugewiesen ist
-		// 2. Lese mithilfe von Gruppe die möglichen Portlets aus
-		// 3. Werfe die passenden Portlets zurück
+		// 2. Lese mithilfe von Gruppe die mï¿½glichen Portlets aus
+		// 3. Werfe die passenden Portlets zurï¿½ck
 		
 		Vector<Portlet> myPortlets = new Vector<Portlet>();
 		Vector<Portlet> allPortlets = this.getAll();
@@ -121,9 +121,9 @@ public class ElasticsearchPortletview extends PortletView {
 		Vector<Portlet> portlets = new Vector<Portlet>();
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "portlet", fieldList))
 		{
-			if(hit.getFields()!=null)
+			if(hit.getSource()!=null)
 			{
-				Portlet port = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				Portlet port = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getSource());
 				if(port != null)
 					users.add(u);
 			}
