@@ -22,8 +22,13 @@ public class SystemREST {
 			obj.put("status", ServiceHandler.getDatabaseView().isRunning());
 			break;
 		case "mail":
-			obj.put("name", ServiceHandler.getMailView().getServiceName());
-			obj.put("status", ServiceHandler.getMailView().isRunning());
+			if(ServiceHandler.getMailView() == null){
+				obj.put("name", "none");
+				obj.put("status", false);
+			}else{
+				obj.put("name", ServiceHandler.getMailView().getServiceName());
+				obj.put("status", ServiceHandler.getMailView().isRunning());
+			}
 			break;
 		default:
 			obj.put("error","Unbekannter Dienst");
