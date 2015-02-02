@@ -49,7 +49,7 @@ public class UserviewTest
 		testUser.setUsername(this.testUserNameAlt);
 		testUser.setPw("passwort");
 		testUser.setActive(true);
-		
+				
 		// ..
 		// die anderen Felder füllen
 		// ..
@@ -74,7 +74,7 @@ public class UserviewTest
 		assertFalse("Passwort wurde nicht verschlüsselt",testUser.getPw().equals(newUser.getPw()));
 		assertNotNull("Nutzer konnte nicht am ApiKey abgerufen werden!", userView.getUserByApikey(newUser.getApikey()));
 		assertNull("Ungültigen APIKey übergeben und dennoch einen Nutzer erhalten!!", userView.getUserByApikey(UUID.randomUUID().toString()));
-		assertTrue("testUser nicht aktiv",testUser.isActive());
+		assertTrue ("user nicht aktiviert", testUser.isActive());
 	}
 
 	@Test
@@ -87,11 +87,13 @@ public class UserviewTest
 			testUser.setUsername(testUserNameNeu);
 			testUser.setFirstname("anderer");
 			testUser.setLastname("Name");
-		User editedUser = userView.edit(testUser);
+			User editedUser = userView.edit(testUser);
+		
 		assertNotNull("User konnte nicht geändert werden",editedUser);
 		assertEquals("Username nicht identisch",testUser.getUsername(),editedUser.getUsername());
 		//Ausgabe aller Benutzernamen 
 		//for(User u:userView.getAll()){System.out.println(u.getUsername());}
+		
 	}
 		
 	@Test
@@ -99,11 +101,9 @@ public class UserviewTest
 		UserView userView = TestExecuter.getView().getUserView();
 		assertNotNull("Login als Admin funktioniert nicht!", userView.login("admin", "admin"));
 		assertNotNull("Login als User funktioniert nicht!", userView.login("user", "user"));
-		User testUser = userView.getUserByUserName(this.testUserNameNeu);
-		assertTrue("TestUser ist nicht aktiviert",testUser.isActive());
-		if (testUser.isActive()){
-			assertNotNull("Login als TestUser funktioniert nicht!", userView.login(testUserNameNeu, "passwort"));
+		User testUser = userView.getUserByUserName(testUserNameNeu);
+		if (!testUser.isActive()){
+		assertNull("Login funktioniert, obwohl User nicht aktiviert ist!", userView.login(testUserNameNeu, "passwort"));
 		}
-				
 	}
 }
