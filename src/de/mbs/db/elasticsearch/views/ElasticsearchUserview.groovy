@@ -223,7 +223,7 @@ public class ElasticsearchUserview extends UserView {
 		if(hits.length == 1 )
 		{
 			System.out.println("getUserByUserName() hat einen user mit dem Username " +username +"gefunden ");
-			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
+			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getSource());
 			if(user != null)
 			{
 				return user;
@@ -275,7 +275,6 @@ public class ElasticsearchUserview extends UserView {
 						user.setActive(field.getValue() == null ? false : Boolean
 						.getBoolean(field.getValue().toString()));
 						break;
-
 					case "inGroups":
 						Vector<String> groups = new Vector<String>();
 						if (field.getValues() != null) {
