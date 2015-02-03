@@ -106,4 +106,13 @@ public class UserviewTest
 		assertNull("Login funktioniert, obwohl User nicht aktiviert ist!", userView.login(testUserNameNeu, "passwort"));
 		}
 	}
+	@Test
+	public void test5Search(){
+			UserView userView = TestExecuter.getView().getUserView();
+		User testUser = userView.getUserByUserName("admin");
+		String testUserId = testUser.getId();
+		System.out.println("testUser ID:" + testUserId);
+		String testSearch = "mini";
+		assertNotNull("string " + testSearch + "nicht gefunden", userView.search(testSearch, testUser));
+	}
 }

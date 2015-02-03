@@ -95,6 +95,7 @@ public class JavaUserview extends UserView {
 
 	@Override
 	public Vector<Pair<SearchResult,String>> search(String search,User u) {
+		//uebergibt den aktuellen Nutzer (zur Pruefung der Berechtigungen) und einen Suchstring
 		Vector<Pair<SearchResult,String>> result = new Vector<Pair<SearchResult,String>>();
 		for(User user : this.getAll()){
 			if(user.getFirstname().contains(search) || user.getLastname().contains(search) || user.getEmail().contains(search)){
