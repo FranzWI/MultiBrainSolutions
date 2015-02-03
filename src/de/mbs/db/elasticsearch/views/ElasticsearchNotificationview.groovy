@@ -21,7 +21,11 @@ public class ElasticsearchNotificationview extends NotificationView {
 		this.view = view;
 	}
 	
+	//FIXME: Hier müssen noch die Anpassung umgezogen werden, da die Entrs im falschen Sub sysstem sind
+	
+	
 	//FIXME: Funktionstest.
+	
 	@Override
 	public Vector<Notification> getNotificationsForUser(String userId) 
 	{

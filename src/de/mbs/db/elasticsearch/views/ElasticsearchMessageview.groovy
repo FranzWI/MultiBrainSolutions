@@ -35,6 +35,8 @@ public class ElasticsearchMessageview extends MessageView {
 		return null;
 	}
 	
+	//FIXME: Hier müssen noch die Anpassung umgezogen werden, da die Entrs im falschen Sub sysstem sind
+	
 	
 	//################################DONE############################################
 	//INFO: Soll ich die get MessagesForUser und getUnreadMessagesForUser eigentlich nochmal umstellen in elasticsearch? 
