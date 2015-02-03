@@ -133,13 +133,13 @@ public class ElasticsearchUserview extends UserView {
 	public User get(String id) 
 	{
 		GetResponse response = this.view.getESClient()
-				.prepareGet("system", "user", id)
-				.setFields(fieldList)
+				.prepareGet("system", "user", id).setFields(fieldList)
 				.execute()
 				.actionGet();
+		
 		if (response.isExists()) 
 		{
-			return responseToUser(response.getId(), response.getVersion(), response.getSource());
+			return responseToUser(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -148,9 +148,7 @@ public class ElasticsearchUserview extends UserView {
 	public String login(String username, String password) {
 		// Passwort in klartext
 		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system")
-				.setTypes("user")
-				.addFields(fieldList)
+				.prepareSearch("system", "user")
 				.setQuery(
 				QueryBuilders.boolQuery()
 				.must(QueryBuilders.matchQuery("userName", username))
@@ -191,10 +189,8 @@ public class ElasticsearchUserview extends UserView {
 	@Override
 	public User getUserByApikey(String apikey) {
 		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system")
-				.setTypes("user")
-				.addFields(fieldList)
-				.setQuery(QueryBuilders.matchQuery("apiKey", apikey) )
+				.prepareSearch("system", "user")
+				.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("apiKey", apikey)) )
 				.execute()
 				.actionGet();
 
@@ -212,17 +208,15 @@ public class ElasticsearchUserview extends UserView {
 	public User getUserByUserName(String username)
 	{
 		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system")
-				.setTypes("user")
-				.addFields(fieldList)
-				.setQuery(QueryBuilders.matchQuery("userName", username) )
+				.prepareSearch("system","user")
+				.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("userName", username)) )
 				.execute()
 				.actionGet();
 
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 )
 		{
-			System.out.println("getUserByUserName() hat einen user mit dem Username " +username +"gefunden ");
+			System.out.println("getUserByUserName() hat einen user mit dem Username " +username +" gefunden ");
 			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getSource());
 			if(user != null)
 			{
@@ -233,12 +227,14 @@ public class ElasticsearchUserview extends UserView {
 				System.out.println("ResponseToUser() ging schief!");
 			}
 		}
-			System.out.println("getUserByUserName() konnte keinen user mit dem namen " +username +"finden");
+			System.out.println("getUserByUserName() konnte keinen user mit dem namen " +username +" finden");
 			return null;
 		}
 
 	private User responseToUser(id,version, fields) {
 		try {
+			if(fields == null)
+				return null;
 			User user = new User(id, version);
 			for (String key : fields.keySet()) {
 				def field = fields.get(key);
