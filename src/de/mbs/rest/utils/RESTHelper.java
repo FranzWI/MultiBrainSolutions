@@ -53,10 +53,18 @@ public class RESTHelper {
 		return password;
 	}
 
-	public static JSONObject stringToJSONObject(String s) throws ParseException {
+	private static Object stringToJSON(String s) throws ParseException{
 		JSONParser parser = new JSONParser();
 		s = s.replaceAll("\\(", "{").replaceAll("\\)", "}");
-		return (JSONObject) parser.parse(s);
+		return parser.parse(s);
+	}
+	
+	public static JSONObject stringToJSONObject(String s) throws ParseException {
+		return (JSONObject) RESTHelper.stringToJSON(s);
+	}
+	
+	public static JSONArray stringtoJSONArray(String s) throws ParseException {
+		return (JSONArray)RESTHelper.stringToJSON(s);
 	}
 
 	public static String decodeURIComponent(String encodedURI) {
