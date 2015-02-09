@@ -18,26 +18,38 @@ public class JavaPortletview extends PortletView {
 	public JavaPortletview(JavaView view) {
 		this.view = view;
 		Portlet p = new Portlet(null);
-		p.setName("Portlet 1");
-		p.setPath("portlet1.groovy");
+		p.setName("Festplattenauslastung");
+		p.setPath("admin/hdd.groovy");
 		p.setDescription("Test Portlet No. 1");
 		p.setSizeXS(6);
 		p.setSizeSM(6);
 		p.setSizeMD(3);
 		p.setSizeLG(2);
-
-		p.addUseableGroup(this.view.getGroupView().getUserGroupId());
+		p.addUseableGroup(this.view.getGroupView().getAdminGroupId());
 		this.add(p);
+		
 		Portlet p2 = new Portlet(null);
-		p2.setName("Portlet 2");
-		p2.setPath("portlet2.groovy");
+		p2.setName("RAM-Auslastung");
+		p2.setPath("admin/ram.groovy");
 		p2.setDescription("Test Portlet No. 2");
-		p2.addUseableGroup(this.view.getGroupView().getUserGroupId());
+		p2.addUseableGroup(this.view.getGroupView().getAdminGroupId());
 		p2.setSizeXS(6);
 		p2.setSizeSM(6);
 		p2.setSizeMD(3);
 		p2.setSizeLG(2);
 		this.add(p2);
+		
+		Portlet p4 = new Portlet(null);
+		p4.setName("Angemeldete Nutzer");
+		p4.setPath("admin/loginuser.groovy");
+		p4.setDescription("Test Portlet No. 2");
+		p4.addUseableGroup(this.view.getGroupView().getAdminGroupId());
+		p4.setSizeXS(6);
+		p4.setSizeSM(6);
+		p4.setSizeMD(3);
+		p4.setSizeLG(2);
+		this.add(p4);
+		
 		Portlet p3 = new Portlet(null);
 		p3.setName("Portlet 3");
 		p3.setPath("portlet3.groovy");

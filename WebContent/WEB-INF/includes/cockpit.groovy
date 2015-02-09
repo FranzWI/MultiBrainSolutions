@@ -40,7 +40,7 @@ html.div {
 			Vector<String> userPortlets = user.getPortlets();
 			if(!userPortlets || userPortlets.size() == 0){
 				div('class':"col-xs-12"){
-					div('class':"alert alert-danger"){
+					div('class':"alert alert-info"){
 						p("keine Portlets auf dem Dashboard")
 					}
 				}

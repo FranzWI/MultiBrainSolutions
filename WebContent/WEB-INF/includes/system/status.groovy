@@ -5,13 +5,14 @@ import de.mbs.abstracts.mail.MailView
 import de.mbs.handler.ServiceHandler
 
 
-//TODO maximale Nutzer anzahl aus Datenbank ermitteln
-def int totalUserCount = 20;
-def int totalSessionCount = SessionListener.getSessionCount()
 // Datenbank verbindung
 def DatabaseView es = ServiceHandler.getDatabaseView();
 // Email Dienst
 def MailView mail = ServiceHandler.getMailView();
+
+def int totalUserCount = es.getUserView().getAll().size();
+def int totalSessionCount = SessionListener.getSessionCount()
+
 
 def String indexSizeDonutData = "", indexCountDonutData = ""
 def long indexSize = 0l, indexCount = 0l
