@@ -25,10 +25,12 @@ import de.mbs.test.TestExecuter;
 public class UserviewTest {
 	private String testUserNameAlt;
 	private String testUserNameNeu;
-
+	private String testUserId; 
+	
 	public UserviewTest() {
 		testUserNameAlt = "alterName";
 		testUserNameNeu = "neuerName";
+		
 	}
 
 	@Test
@@ -52,13 +54,14 @@ public class UserviewTest {
 		// die anderen Felder füllen
 		// ..
 		// Nutzer in Datenbank schreiben lassen
-		String id = userView.add(testUser);
+		testUserId = userView.add(testUser);
+		System.out.println("Debug testUserId " +testUserId);
 		// wenn die ID nicht null ist
-		assertNotNull("Nutzer wurde nicht angelegt", id);
+		assertNotNull("Nutzer wurde nicht angelegt", testUserId);
 
 		// okey scheinbar wurde der Nutzer angelegt
 		// prüfen ob die Datengleich sind
-		User newUser = userView.get(id);
+		User newUser = userView.get(testUserId);
 
 		assertNotNull("Neuer Nutzer wurde nicht gefunden!", newUser);
 
@@ -85,8 +88,8 @@ public class UserviewTest {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
-		User testUser = userView.getUserByUserName(this.testUserNameAlt);
-		assertNotNull("User mit Namen " + this.testUserNameAlt
+		User testUser = userView.get(this.testUserId);
+		assertNotNull("User mit ID " + this.testUserId
 				+ " nicht gefunden", testUser);
 		testUser.setUsername(testUserNameNeu);
 		testUser.setFirstname("anderer");
@@ -106,7 +109,7 @@ public class UserviewTest {
 				userView.login("admin", "admin"));
 		assertNotNull("Login als User funktioniert nicht!",
 				userView.login("user", "user"));
-		User testUser = userView.getUserByUserName(this.testUserNameNeu);
+		User testUser = userView.get(this.testUserId);
 		assertTrue("TestUser ist nicht aktiviert", testUser.isActive());
 		if (testUser.isActive()) {
 			assertNotNull("Login als TestUser funktioniert nicht!",
