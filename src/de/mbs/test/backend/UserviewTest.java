@@ -7,12 +7,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
+import java.util.Vector;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
+import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.test.TestExecuter;
 
@@ -25,12 +28,12 @@ import de.mbs.test.TestExecuter;
 public class UserviewTest {
 	private String testUserNameAlt;
 	private String testUserNameNeu;
-	private String testUserId; 
-	
+	private String testUserId;
+
 	public UserviewTest() {
 		testUserNameAlt = "alterName";
 		testUserNameNeu = "neuerName";
-		
+
 	}
 
 	@Test
@@ -55,7 +58,7 @@ public class UserviewTest {
 		// ..
 		// Nutzer in Datenbank schreiben lassen
 		testUserId = userView.add(testUser);
-		System.out.println("Debug testUserId " +testUserId);
+		System.out.println("Debug testUserId " + testUserId);
 		// wenn die ID nicht null ist
 		assertNotNull("Nutzer wurde nicht angelegt", testUserId);
 
@@ -84,13 +87,17 @@ public class UserviewTest {
 	}
 
 	@Test
+	public void test2get() {
+		UserView userView = TestExecuter.getView().getUserView();
+		assertNotNull("Kein User mit der ID " +testUserId +"wurde gefunden",userView.get(this.testUserId));
+	}
+	
+	@Test
 	public void test3EditUserName() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
 		User testUser = userView.get(this.testUserId);
-		assertNotNull("User mit ID " + this.testUserId
-				+ " nicht gefunden", testUser);
 		testUser.setUsername(testUserNameNeu);
 		testUser.setFirstname("anderer");
 		testUser.setLastname("Name");
@@ -101,6 +108,7 @@ public class UserviewTest {
 		// Ausgabe aller Benutzernamen
 		// for(User u:userView.getAll()){System.out.println(u.getUsername());}
 	}
+	
 
 	@Test
 	public void test4Login() {
@@ -115,6 +123,21 @@ public class UserviewTest {
 			assertNotNull("Login als TestUser funktioniert nicht!",
 					userView.login(testUserNameNeu, "passwort"));
 		}
-
+	}
+	@Test
+	public void test4Search(){
+	String suchString = "mini";
+	UserView userView = TestExecuter.getView().getUserView();
+	Vector<Pair<SearchResult, String>> vec  = userView.search(suchString, userView.get(testUserId));
+	assertNotNull("Vektor ist Null",vec);
+	assertTrue("Vektor ist leer",vec.size()>0);
+	}
+	
+	@Test
+	public void test9Remove(){
+		UserView userView = TestExecuter.getView().getUserView();
+		assertTrue("User loeschen lief schief",userView.remove(testUserId));
+		
 	}
 }
+
