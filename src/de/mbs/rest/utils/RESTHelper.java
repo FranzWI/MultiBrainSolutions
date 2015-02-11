@@ -55,7 +55,8 @@ public class RESTHelper {
 
 	private static Object stringToJSON(String s) throws ParseException{
 		JSONParser parser = new JSONParser();
-		s = s.replaceAll("\\(", "{").replaceAll("\\)", "}");
+		s = s.replaceAll("SLasH", "/").replaceAll("\\(", "{").replaceAll("\\)", "}");
+		System.out.println(s);
 		return parser.parse(s);
 	}
 	

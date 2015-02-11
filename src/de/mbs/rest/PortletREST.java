@@ -24,7 +24,7 @@ import de.mbs.filter.User;
 import de.mbs.handler.ServiceHandler;
 import de.mbs.rest.utils.RESTHelper;
 
-@Path("portlet")
+@Path("/portlet")
 public class PortletREST {
 
 	@GET
