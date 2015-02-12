@@ -42,7 +42,7 @@ public class JavaUserview extends UserView {
 		// Nutzer anlegen
 		User user = new User(null);
 		user.setFirstname("Default");
-		user.setLastname("'User");
+		user.setLastname("User");
 		user.setUsername("user");
 		user.setEmail("derdudele@gmail.com");
 		user.setPw("user");

@@ -5,17 +5,24 @@ import java.util.Vector;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
-import org.json.JSONObject;
+import org.json.simple.JSONObject
 
 import de.mbs.abstracts.db.objects.Group;
 import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.PortletView;
+import de.mbs.db.elasticsearch.ElasticsearchView
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
 
 public class ElasticsearchPortletview extends PortletView {
 
 	private String[] fieldList = ["name", "path", "description", "usedByGroups", "sizeXS", "sizeSM", "sizeMD", "sizeLG"];
+	
+	private ElasticsearchView view;
+	
+	public ElasticsearchPortletview(ElasticsearchView view){
+		this.view = view;
+	}
 	
 	@Override
 	public String add(Portlet data) 

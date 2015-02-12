@@ -20,6 +20,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
+import org.json.simple.JSONArray
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
@@ -48,7 +49,8 @@ public class ElasticsearchUserview extends UserView {
 		"pw",
 		"apiKey",
 		"inGroups",
-		"usesPortlets",
+		"usesPortlets.ID",
+		"usesPortlets.settings",
 		"sessionID",
 		"isActive"
 	];
@@ -59,7 +61,7 @@ public class ElasticsearchUserview extends UserView {
 
 	@Override
 	public String add(User data) {
-		
+
 		//FIXME: sicherstellen das jeder username nur einmal vergeben werden kann
 		JSONObject jsonUser = new JSONObject();
 
@@ -84,9 +86,15 @@ public class ElasticsearchUserview extends UserView {
 				.toJSONString());
 		// FIXME pr�fen ob IDs g�ltig sind -> erst m�glich wenn Portlet und
 		// Group Views laufen
+		JSONArray portlets = new JSONArray();
+		for(Map<String,String> map : data.getPortlets()){
+			JSONObject obj = new JSONObject();
+			obj.put("ID", map.get("ID"));
+			obj.put("settings", map.get("settings"));
+			portlets.add(obj);
+		}
 		jsonUser.put("usesPortlets",
-				ElasticsearchHelper.vectorToJSONArray(data.getPortlets())
-				.toJSONString());
+				(portlets.isEmpty())?null:portlets.toJSONString());
 		jsonUser.put("isActive", data.isActive());
 
 		return ElasticsearchHelper.add(view, "system", "user", jsonUser.toJSONString());
@@ -98,7 +106,7 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public User edit(User data) 
+	public User edit(User data)
 	{
 		User old = this.get(data.getId());
 		if (old == null)
@@ -122,7 +130,15 @@ public class ElasticsearchUserview extends UserView {
 		jsonUser.put("pw", data.getPw());
 		jsonUser.put("apiKey", data.getApikey());
 		jsonUser.put("inGroups",ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString());
-		jsonUser.put("usesPortlets", ElasticsearchHelper.vectorToJSONArray(data.getPortlets()).toJSONString());
+		JSONArray portlets = new JSONArray();
+		for(Map<String,String> map : data.getPortlets()){
+			JSONObject obj = new JSONObject();
+			obj.put("ID", map.get("ID"));
+			obj.put("settings", map.get("settings"));
+			portlets.add(obj);
+		}
+		jsonUser.put("usesPortlets",
+				(portlets.isEmpty())?null:portlets.toJSONString());
 		jsonUser.put("sessionId", data.getSessionId());
 		jsonUser.put("isActive", data.isActive());
 
@@ -130,14 +146,14 @@ public class ElasticsearchUserview extends UserView {
 	}
 
 	@Override
-	public User get(String id) 
+	public User get(String id)
 	{
 		GetResponse response = this.view.getESClient()
-				.prepareGet("system", "user", id).setFields(fieldList)
+				.prepareGet("system","user", id).setFields(fieldList)
 				.execute()
 				.actionGet();
-		
-		if (response.isExists()) 
+
+		if (response.isExists())
 		{
 			return responseToUser(response.getId(), response.getVersion(), response.getFields());
 		} else
@@ -148,7 +164,7 @@ public class ElasticsearchUserview extends UserView {
 	public String login(String username, String password) {
 		// Passwort in klartext
 		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system", "user")
+				.prepareSearch("system").setTypes("user").addFields(fieldList)
 				.setQuery(
 				QueryBuilders.boolQuery()
 				.must(QueryBuilders.matchQuery("userName", username))
@@ -159,7 +175,7 @@ public class ElasticsearchUserview extends UserView {
 
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
-			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getSource());
+			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
 			if(u != null)
 				return u;
 		}
@@ -177,8 +193,8 @@ public class ElasticsearchUserview extends UserView {
 	public Vector<User> getAll() {
 		Vector<User> users = new Vector<User>();
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "user", fieldList)) {
-			if(hit.getSource() != null){
-				User u = this.responseToUser(hit.getId(), hit.getVersion(), hit.getSource());
+			if(hit.getFields() != null){
+				User u = this.responseToUser(hit.getId(), hit.getVersion(), hit.getFields());
 				if(u != null)
 					users.add(u);
 			}
@@ -189,26 +205,26 @@ public class ElasticsearchUserview extends UserView {
 	@Override
 	public User getUserByApikey(String apikey) {
 		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system", "user")
+				.prepareSearch("system").setTypes("user").addFields(fieldList)
 				.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("apiKey", apikey)) )
 				.execute()
 				.actionGet();
 
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
-			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getSource());
+			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
 			if(u != null)
 				return u;
 		}
 		return null;
 
 	}
-	
+
 	//INFO: auf wunsch von Denise nachger�stet
 	public User getUserByUserName(String username)
 	{
 		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system","user")
+				.prepareSearch("system").setTypes("user").addFields(fieldList)
 				.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("userName", username)) )
 				.execute()
 				.actionGet();
@@ -217,7 +233,7 @@ public class ElasticsearchUserview extends UserView {
 		if(hits.length == 1 )
 		{
 			System.out.println("getUserByUserName() hat einen user mit dem Username " +username +" gefunden ");
-			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getSource());
+			User user = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
 			if(user != null)
 			{
 				return user;
@@ -227,9 +243,9 @@ public class ElasticsearchUserview extends UserView {
 				System.out.println("ResponseToUser() ging schief!");
 			}
 		}
-			System.out.println("getUserByUserName() konnte keinen user mit dem namen " +username +" finden");
-			return null;
-		}
+		System.out.println("getUserByUserName() konnte keinen user mit dem namen " +username +" finden");
+		return null;
+	}
 
 	private User responseToUser(id,version, fields) {
 		try {
@@ -238,12 +254,18 @@ public class ElasticsearchUserview extends UserView {
 			User user = new User(id, version);
 			for (String key : fields.keySet()) {
 				def field = fields.get(key);
+				System.out.println("DEBUG Key:"+key+" Field:"+field);
 				switch (key) {
 					case "userName":
-						user.setUsername(field.getValue() == null ? "" : field
-						.getValue().toString());
+						if(field instanceof String){
+							user.setUsername(field);
+						}else{
+							user.setUsername(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
 						break;
 					case "firstName":
+
 						user.setFirstname(field.getValue() == null ? "" : field
 						.getValue().toString());
 						break;
@@ -282,14 +304,18 @@ public class ElasticsearchUserview extends UserView {
 						user.setMembership(groups);
 						break;
 					case "usesPortlets":
-						Vector<String> portlets = new Vector<String>();
-						if (field.getValues() != null) {
-							List<Object> values = field.getValues();
-							for (Object o : values) {
-								portlets.add(o.toString());
-							}
-						}
-						user.setPortlets(portlets);
+						System.out.println("BLUB: "+field);
+					/*
+					 Vector<Map<String,String>> portlets = new Vector<Map<String,String>>();
+					 if (field.getValues() != null) {
+					 List<Object> values = field.getValues();
+					 for (Object o : values) {
+					 System.out.println(o);
+					 portlets.add(o.toString());
+					 }
+					 }
+					 user.setPortlets(portlets);
+					 */
 						break;
 				}
 			}

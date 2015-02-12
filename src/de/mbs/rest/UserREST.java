@@ -1,5 +1,7 @@
 package de.mbs.rest;
 
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.function.Consumer;
@@ -122,7 +124,9 @@ public class UserREST {
 		Portlet p = ServiceHandler.getDatabaseView().getPortletView()
 				.get(portletid);
 		if (p != null && u != null) {
-			u.addPortlet(portletid);
+			Map<String, String> map = new TreeMap<String,String>();
+			map.put("ID", portletid);
+			u.addPortlet(map);
 			if (ServiceHandler.getDatabaseView().getUserView().edit(u) != null)
 				return Response.ok().build();
 			else
@@ -163,7 +167,7 @@ public class UserREST {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("User ID fehlerhaft").build();
 
-		Vector<String> portletIDs = new Vector<String>();
+		Vector<Map<String,String>> portletIDs = new Vector<Map<String,String>>();
 		for (String portledid : portletids.split(",")) {
 			Portlet p = ServiceHandler.getDatabaseView().getPortletView()
 					.get(portledid);
@@ -172,7 +176,9 @@ public class UserREST {
 						.entity("Portlet ID (" + portledid + ") fehlerhaft")
 						.build();
 			} else {
-				portletIDs.add(p.getId());
+				Map<String, String> map = new TreeMap<String,String>();
+				map.put("ID", p.getId());
+				portletIDs.add(map);
 			}
 		}
 		u.setPortlets(portletIDs);

@@ -1,5 +1,6 @@
 package de.mbs.abstracts.db.objects;
 
+import java.util.Map;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;
@@ -11,7 +12,7 @@ public class User extends DatabaseObject implements Cloneable{
 	private String username, firstname, lastname, email, pw, apikey, sessionId;
 
 	private Vector<String> membership = new Vector<String>();
-	private Vector<String> portlets = new Vector<String>();
+	private Vector<Map<String,String>> portlets = new Vector<Map<String,String>>();
 
 	private boolean active = false;
 	
@@ -79,7 +80,7 @@ public class User extends DatabaseObject implements Cloneable{
 		this.membership = membership;
 	}
 
-	public Vector<String> getPortlets() {
+	public Vector<Map<String,String>> getPortlets() {
 		return portlets;
 	}
 	
@@ -91,16 +92,21 @@ public class User extends DatabaseObject implements Cloneable{
 		this.membership.remove(groupId);
 	}
 
-	public void setPortlets(Vector<String> portlets) {
+	public void setPortlets(Vector<Map<String,String>> portlets) {
 		this.portlets = portlets;
 	}
 
-	public void addPortlet(String id){
-		this.portlets.add(id);
+	public void addPortlet(Map<String,String> map){
+		this.portlets.add(map);
 	}
 	
 	public void removePortlet(String id){
-		this.portlets.remove(id);
+		for(Map<String,String> map : this.portlets){
+			if(map.containsValue(id)){
+				this.portlets.remove(map);
+				return;
+			}
+		}
 	}
 
 	public boolean isActive() {

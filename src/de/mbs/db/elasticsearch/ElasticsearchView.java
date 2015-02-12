@@ -1,7 +1,5 @@
 package de.mbs.db.elasticsearch;
 
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,12 +26,12 @@ import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.indices.IndexAlreadyExistsException;
-import org.elasticsearch.node.Node;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.DatabaseView;
+import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.utils.Pair;
 import de.mbs.abstracts.db.utils.SearchResult;
@@ -92,7 +90,41 @@ public class ElasticsearchView extends DatabaseView {
 			System.out.println("ES: nicht installiert");
 			if (this.install()) {
 				this.groupview = new ElasticsearchGroupview(this);
-				this.portletview = new ElasticsearchPortletview();
+				this.portletview = new ElasticsearchPortletview(this);
+				
+				Portlet p = new Portlet(null);
+				p.setName("Festplattenauslastung");
+				p.setPath("admin/hdd.groovy");
+				p.setDescription("Test Portlet No. 1");
+				p.setSizeXS(12);
+				p.setSizeSM(6);
+				p.setSizeMD(3);
+				p.setSizeLG(2);
+				p.addUseableGroup(this.getGroupView().getAdminGroupId());
+				portletview.add(p);
+				
+				Portlet p2 = new Portlet(null);
+				p2.setName("RAM-Auslastung");
+				p2.setPath("admin/ram.groovy");
+				p2.setDescription("Test Portlet No. 2");
+				p2.addUseableGroup(this.getGroupView().getAdminGroupId());
+				p2.setSizeXS(12);
+				p2.setSizeSM(6);
+				p2.setSizeMD(3);
+				p2.setSizeLG(2);
+				portletview.add(p2);
+				
+				Portlet p4 = new Portlet(null);
+				p4.setName("Angemeldete Nutzer");
+				p4.setPath("admin/loginuser.groovy");
+				p4.setDescription("Test Portlet No. 2");
+				p4.addUseableGroup(this.getGroupView().getAdminGroupId());
+				p4.setSizeXS(12);
+				p4.setSizeSM(6);
+				p4.setSizeMD(3);
+				p4.setSizeLG(2);
+				portletview.add(p4);
+				
 				this.userview = new ElasticsearchUserview(this);
 				this.messageview = new ElasticsearchMessageview(this);
 				this.settingview = new ElasticsearchSettingsview(this);
@@ -134,7 +166,7 @@ public class ElasticsearchView extends DatabaseView {
 			}
 		} else {
 			this.groupview = new ElasticsearchGroupview(this);
-			this.portletview = new ElasticsearchPortletview();
+			this.portletview = new ElasticsearchPortletview(this);
 			this.userview = new ElasticsearchUserview(this);
 			this.messageview = new ElasticsearchMessageview(this);
 			this.settingview = new ElasticsearchSettingsview(this);
@@ -289,8 +321,14 @@ public class ElasticsearchView extends DatabaseView {
 		String indexName = "system";
 		CreateIndexRequest request = new CreateIndexRequest(indexName);
 		Map<String, JSONObject> map = this.getMapping("system");
+		
 		for (String key : map.keySet()) {
+			try{
 			request.mapping(key, map.get(key).toJSONString());
+
+			}catch(Exception MapperParsingException){
+				System.err.println("Fehler beim Parsen des Mappings für ES von "+key);
+			}
 		}
 		try {
 			client.admin().indices().create(request).actionGet();

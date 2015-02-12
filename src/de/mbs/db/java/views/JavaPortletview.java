@@ -21,7 +21,7 @@ public class JavaPortletview extends PortletView {
 		p.setName("Festplattenauslastung");
 		p.setPath("admin/hdd.groovy");
 		p.setDescription("Test Portlet No. 1");
-		p.setSizeXS(6);
+		p.setSizeXS(12);
 		p.setSizeSM(6);
 		p.setSizeMD(3);
 		p.setSizeLG(2);
@@ -33,7 +33,7 @@ public class JavaPortletview extends PortletView {
 		p2.setPath("admin/ram.groovy");
 		p2.setDescription("Test Portlet No. 2");
 		p2.addUseableGroup(this.view.getGroupView().getAdminGroupId());
-		p2.setSizeXS(6);
+		p2.setSizeXS(12);
 		p2.setSizeSM(6);
 		p2.setSizeMD(3);
 		p2.setSizeLG(2);
@@ -44,22 +44,11 @@ public class JavaPortletview extends PortletView {
 		p4.setPath("admin/loginuser.groovy");
 		p4.setDescription("Test Portlet No. 2");
 		p4.addUseableGroup(this.view.getGroupView().getAdminGroupId());
-		p4.setSizeXS(6);
+		p4.setSizeXS(12);
 		p4.setSizeSM(6);
 		p4.setSizeMD(3);
 		p4.setSizeLG(2);
 		this.add(p4);
-		
-		Portlet p3 = new Portlet(null);
-		p3.setName("Portlet 3");
-		p3.setPath("portlet3.groovy");
-		p3.setDescription("Test Portlet No. 3");
-		p3.setSizeXS(12);
-		p3.setSizeSM(12);
-		p3.setSizeMD(6);
-		p3.setSizeLG(8);
-		p3.addUseableGroup(this.view.getGroupView().getUserGroupId());
-		this.add(p3);
 	}
 
 	@Override
