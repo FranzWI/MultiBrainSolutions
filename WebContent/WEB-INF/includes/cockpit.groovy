@@ -37,7 +37,7 @@ html.div {
 	}
 	div('class':"draggable-portlets"){
 		div('class':"row sorted"){
-			Vector<String> userPortlets = user.getPortlets();
+			Vector<Map<String,String>> userPortlets = user.getPortlets();
 			if(!userPortlets || userPortlets.size() == 0){
 				div('class':"col-xs-12"){
 					div('class':"alert alert-info"){
@@ -46,8 +46,8 @@ html.div {
 				}
 			}else{
 				//TODO Portlets laden
-				for(String pId: userPortlets){
-					Portlet p = portletView.get(pId);
+				for(Map<String,String> map: userPortlets){
+					Portlet p = portletView.get(map.get("ID"));
 					if(p){
 						String size = "";
 						if(p.getSizeXS()>0)

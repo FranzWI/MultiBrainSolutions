@@ -59,6 +59,7 @@ html.html('lang':"de"){
 		link(rel:"stylesheet", href:"assets/css/neon-forms.css")
 		link(rel:"stylesheet", href:"assets/css/custom.css")
 		link(rel:"stylesheet", href:"assets/css/toastr.min.css")
+		link(rel:"stylesheet", href:"assets/js/vertical-timeline/css/component.css")
 		script(src:"assets/js/jquery-1.11.0.min.js")
 
 	}
@@ -74,6 +75,7 @@ html.html('lang':"de"){
 
 	link(rel:"stylesheet", href:"assets/js/select2/select2-bootstrap.css")
 	link(rel:"stylesheet", href:"assets/js/select2/select2.css")
+	
 	
 	script(src:"assets/js/gsap/main-gsap.js")
 	script(src:"assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js")

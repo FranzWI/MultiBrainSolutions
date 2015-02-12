@@ -1,5 +1,6 @@
 package de.mbs.db.java.views;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -83,7 +84,13 @@ public class JavaPortletview extends PortletView {
 				Vector<String> portletGroups = portlet.getUsedByGroups();
 				for (String groupId : portletGroups) {
 					if (userGroups.contains(groupId)) {
-						if (!user.getPortlets().contains(portlet.getId())) {
+						boolean add = true;
+						for(Map<String, String> map: user.getPortlets()){
+							if(map.containsValue(portlet.getId())){
+								add = false;
+							}
+						}
+						if (add) {
 							result.add(portlet);
 							break;
 						}
