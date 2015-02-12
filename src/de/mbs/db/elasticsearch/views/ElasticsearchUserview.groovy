@@ -163,6 +163,7 @@ public class ElasticsearchUserview extends UserView {
 	@Override
 	public String login(String username, String password) {
 		// Passwort in klartext
+		// FIXME: @Franz: pruefen ob user active ist beim einloggen
 		SearchResponse response = this.view.getESClient()
 				.prepareSearch("system").setTypes("user").addFields(fieldList)
 				.setQuery(

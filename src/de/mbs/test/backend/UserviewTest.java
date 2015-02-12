@@ -28,7 +28,7 @@ import de.mbs.test.TestExecuter;
 public class UserviewTest {
 	private String testUserNameAlt;
 	private String testUserNameNeu;
-	private String testUserId;
+	private static String testUserId;
 
 	public UserviewTest() {
 		testUserNameAlt = "alterName";
@@ -57,14 +57,14 @@ public class UserviewTest {
 		// die anderen Felder füllen
 		// ..
 		// Nutzer in Datenbank schreiben lassen
-		testUserId = userView.add(testUser);
-		System.out.println("Debug testUserId " + testUserId);
+		this.testUserId = userView.add(testUser);
+		System.out.println("Debug testUserId " + this.testUserId);
 		// wenn die ID nicht null ist
-		assertNotNull("Nutzer wurde nicht angelegt", testUserId);
+		assertNotNull("Nutzer wurde nicht angelegt", this.testUserId);
 
 		// okey scheinbar wurde der Nutzer angelegt
 		// prüfen ob die Datengleich sind
-		User newUser = userView.get(testUserId);
+		User newUser = userView.get(this.testUserId);
 
 		assertNotNull("Neuer Nutzer wurde nicht gefunden!", newUser);
 
@@ -89,7 +89,8 @@ public class UserviewTest {
 	@Test
 	public void test2get() {
 		UserView userView = TestExecuter.getView().getUserView();
-		assertNotNull("Kein User mit der ID " + testUserId + "wurde gefunden",
+		System.out.println("UserId: " + this.testUserId);
+		assertNotNull("Kein User mit der ID " + this.testUserId + " wurde gefunden",
 				userView.get(this.testUserId));
 	}
 
@@ -130,11 +131,12 @@ public class UserviewTest {
 		String suchString = "mini";
 		UserView userView = TestExecuter.getView().getUserView();
 		Vector<Pair<SearchResult, String>> vec = userView.search(suchString,
-				userView.get(testUserId));
+				userView.getUserByUserName("Admin"));
 		assertNotNull("Vektor ist Null", vec);
 		assertTrue("Vektor ist leer", vec.size() > 0);
 	}
 
+	
 	@Test
 	public void test9Remove() {
 		UserView userView = TestExecuter.getView().getUserView();
