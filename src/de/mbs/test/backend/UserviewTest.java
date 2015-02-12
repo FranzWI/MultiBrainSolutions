@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.UUID;
 import java.util.Vector;
@@ -37,13 +38,28 @@ public class UserviewTest {
 	}
 
 	@Test
-	public void test1IsUserViewImplemented() {
+	public void test0IsUserViewImplemented() {
 		UserView userView = TestExecuter.getView().getUserView();
 		assertNotNull("Userview nicht implementiert", userView);
 	}
 
+	/**
+	 * Test method for {@link de.mbs.db.java.views.JavaUserview#getAll()}.
+	 */
 	@Test
-	public void test2AddUser() {
+	public final void test1GetAll() {
+		UserView userView = TestExecuter.getView().getUserView();
+		Vector<User> vec = userView.getAll();
+		assertNotNull("", userView.getAll());
+		assertTrue("UserVektor ist leer", vec.size() > 0);
+	}
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#add(de.mbs.abstracts.db.objects.User)}
+	 * .
+	 */
+	@Test
+	public final void test2Add() {
 		UserView userView = TestExecuter.getView().getUserView();
 		// Daten des neuen Nutzers anlegen
 		User testUser = new User(null);
@@ -85,17 +101,44 @@ public class UserviewTest {
 		assertTrue("testUser nicht aktiv", testUser.isActive());
 
 	}
-
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#get(java.lang.String)}.
+	 */
 	@Test
-	public void test2get() {
+	public final void test2Get() {
 		UserView userView = TestExecuter.getView().getUserView();
 		System.out.println("UserId: " + this.testUserId);
-		assertNotNull("Kein User mit der ID " + this.testUserId + " wurde gefunden",
-				userView.get(this.testUserId));
+		assertNotNull("Kein User mit der ID " + this.testUserId
+				+ " wurde gefunden", userView.get(this.testUserId));
 	}
-
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#getUserByUserName(java.lang.String)}
+	 * .
+	 */
 	@Test
-	public void test3EditUserName() {
+	public final void test2GetUserByUserName() {
+		try{
+		UserView userView = TestExecuter.getView().getUserView();
+		User admin =userView.getUserByUserName("Admin");
+		assertNotNull("Admin ID ist Null",admin.getId());
+		User testUser = userView.getUserByUserName(testUserNameAlt);
+		assertNotNull("testUser ID ist Null",testUser.getId());
+		assertEquals("ID's des TestUser stimmen nicht ueberein",testUser.getId(),testUserId);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#edit(de.mbs.abstracts.db.objects.User)}
+	 * .
+	 */
+	@Test
+	public final void test3Edit() {
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
@@ -111,6 +154,11 @@ public class UserviewTest {
 		// for(User u:userView.getAll()){System.out.println(u.getUsername());}
 	}
 
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#login(java.lang.String, java.lang.String)}
+	 * .
+	 */
 	@Test
 	public void test4Login() {
 		UserView userView = TestExecuter.getView().getUserView();
@@ -125,9 +173,13 @@ public class UserviewTest {
 					userView.login(testUserNameNeu, "passwort"));
 		}
 	}
-
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#search(java.lang.String, de.mbs.abstracts.db.objects.User)}
+	 * .
+	 */
 	@Test
-	public void test4Search() {
+	public final void test4Search() {
 		String suchString = "mini";
 		UserView userView = TestExecuter.getView().getUserView();
 		Vector<Pair<SearchResult, String>> vec = userView.search(suchString,
@@ -135,12 +187,54 @@ public class UserviewTest {
 		assertNotNull("Vektor ist Null", vec);
 		assertTrue("Vektor ist leer", vec.size() > 0);
 	}
-
-	
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#remove(java.lang.String)}.
+	 */
 	@Test
-	public void test9Remove() {
+	public final void test9Remove() {
 		UserView userView = TestExecuter.getView().getUserView();
 		assertTrue("User loeschen lief schief", userView.remove(testUserId));
 
 	}
+/*
+
+	*//**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#getUserByApikey(java.lang.String)}
+	 * .
+	 *//*
+	@Test
+	public final void testGetUserByApikey() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	*//**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaUserview#JavaUserview(de.mbs.db.java.JavaView)}
+	 * .
+	 *//*
+	@Test
+	public final void testJavaUserview() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	*//**
+	 * Test method for
+	 * {@link de.mbs.abstracts.db.views.UserView#update(java.util.Observable, java.lang.Object)}
+	 * .
+	 *//*
+	@Test
+	public final void testUpdate() {
+		fail("Not yet implemented"); // TODO
+	}
+
+	*//**
+	 * Test method for {@link de.mbs.abstracts.db.views.UserView#getTabName()}.
+	 *//*
+	@Test
+	public final void testGetTabName() {
+		fail("Not yet implemented"); // TODO
+	}
+*/
 }
