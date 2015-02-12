@@ -59,7 +59,6 @@ html.html('lang':"de"){
 		link(rel:"stylesheet", href:"assets/css/neon-forms.css")
 		link(rel:"stylesheet", href:"assets/css/custom.css")
 		link(rel:"stylesheet", href:"assets/css/toastr.min.css")
-		link(rel:"stylesheet", href:"assets/js/vertical-timeline/css/component.css")
 		script(src:"assets/js/jquery-1.11.0.min.js")
 
 	}
