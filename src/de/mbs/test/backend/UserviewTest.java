@@ -37,6 +37,9 @@ public class UserviewTest {
 
 	}
 
+	/**
+	 * Test method for {@link de.mbs.abstracts.db.DatabaseView#getUserView()}.
+	 */
 	@Test
 	public void test0IsUserViewImplemented() {
 		UserView userView = TestExecuter.getView().getUserView();
