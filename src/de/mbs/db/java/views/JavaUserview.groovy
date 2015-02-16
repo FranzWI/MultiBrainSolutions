@@ -96,8 +96,9 @@ public class JavaUserview extends UserView {
 	@Override
 	public Vector<Pair<SearchResult,String>> search(String search,User u) {
 		Vector<Pair<SearchResult,String>> result = new Vector<Pair<SearchResult,String>>();
+		search = search.toLowerCase();
 		for(User user : this.getAll()){
-			if(user.getFirstname().contains(search) || user.getLastname().contains(search) || user.getEmail().contains(search)){
+			if((user.getFirstname() && user.getFirstname().toLowerCase().contains(search)) || (user.getLastname() && user.getLastname().toLowerCase().contains(search)) || (user.getEmail() && user.getEmail().toLowerCase().contains(search))){
 				SearchResult data = new SearchResult();
 				data.setHeading("Nutzer: "+user.getFirstname()+" "+user.getLastname());
 				data.setContent(user.getFirstname()+" "+user.getLastname()+"<br> <a href=\"#\">"+user.getEmail()+"</a>");
