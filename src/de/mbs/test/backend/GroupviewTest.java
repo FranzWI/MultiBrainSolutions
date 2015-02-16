@@ -24,7 +24,8 @@ import de.mbs.test.TestExecuter;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 public class GroupviewTest {
-
+	
+	private static String groupID;
 	
 	/**
 	 * Test method for {@link de.mbs.abstracts.db.DatabaseView#getGroupView()}.
@@ -48,23 +49,34 @@ public class GroupviewTest {
 	 */
 	@Test
 	public final void testAdd() {
-		String groupID;
 		
 		GroupView groupView = TestExecuter.getView().getGroupView();
 		Group group = new Group(null);
 		group.setName("TestGroup");
 		groupID = groupView.add(group);
 		assertNotNull("Group wurde nicht angelegt", groupID);
-		System.out.println("GroupID = "+groupID);
+		System.out.println("Original GroupID = "+groupID);
+		System.out.println("Original GroupName = "+group.getName());
+		
 	}
 
 	/**
 	 * Test method for {@link de.mbs.db.java.views.JavaGroupview#edit(de.mbs.abstracts.db.objects.Group)}.
 	 */
-/*	@Test
+	@Test
 	public final void testEdit() {
-		fail("Not yet implemented"); // TODO
-	}*/
+		
+		GroupView groupView = TestExecuter.getView().getGroupView();
+		Group group = groupView.get(groupID);
+		group.setName("Edit");
+		group.setDescription("Edited group");
+		
+		groupView.edit(group);
+		assertNotNull("EditGroup ist Null", groupID);
+		assertTrue("Neuer Name ist nicht Edit", group.getName() == "Edit");
+		System.out.println("New GroupName = "+ group.getName());
+		System.out.println("New GroupDescription = "+ group.getDescription());;
+	}
 
 	/**
 	 * Test method for {@link de.mbs.db.java.views.JavaGroupview#get(java.lang.String)}.
