@@ -255,7 +255,6 @@ public class ElasticsearchUserview extends UserView {
 			User user = new User(id, version);
 			for (String key : fields.keySet()) {
 				def field = fields.get(key);
-				System.out.println("DEBUG Key:"+key+" Field:"+field);
 				switch (key) {
 					case "userName":
 						if(field instanceof String){
