@@ -65,7 +65,7 @@ public class GroupviewTest {
 	 */
 	@Test
 	public final void testEdit() {
-		
+		try {
 		GroupView groupView = TestExecuter.getView().getGroupView();
 		Group group = groupView.get(groupID);
 		group.setName("Edit");
@@ -75,7 +75,11 @@ public class GroupviewTest {
 		assertNotNull("EditGroup ist Null", groupID);
 		assertTrue("Neuer Name ist nicht Edit", group.getName() == "Edit");
 		System.out.println("New GroupName = "+ group.getName());
-		System.out.println("New GroupDescription = "+ group.getDescription());;
+		System.out.println("New GroupDescription = "+ group.getDescription());
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -99,6 +103,7 @@ public class GroupviewTest {
 	 */
 	@Test
 	public final void testGetAll() {
+		try {
 		GroupView groupView = TestExecuter.getView().getGroupView();
 		Vector<Group> vec = groupView.getAll();
 		for (Group g:groupView.getAll())
@@ -107,7 +112,12 @@ public class GroupviewTest {
 			}
 		assertNotNull("GroupVector ist Null", vec);
 		assertTrue("GroupVector ist leer", vec.size() > 0);
-		
+		}
+
+		catch(Exception e){
+			e.printStackTrace();
+	
+		}
 	}
 
 	/**

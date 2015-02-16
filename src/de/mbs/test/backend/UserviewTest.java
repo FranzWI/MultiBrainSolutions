@@ -77,7 +77,6 @@ public class UserviewTest {
 		// ..
 		// Nutzer in Datenbank schreiben lassen
 		this.testUserId = userView.add(testUser);
-		System.out.println("Debug testUserId " + this.testUserId);
 		// wenn die ID nicht null ist
 		assertNotNull("Nutzer wurde nicht angelegt", this.testUserId);
 
@@ -111,7 +110,6 @@ public class UserviewTest {
 	@Test
 	public final void test2Get() {
 		UserView userView = TestExecuter.getView().getUserView();
-		System.out.println("UserId: " + this.testUserId);
 		assertNotNull("Kein User mit der ID " + this.testUserId
 				+ " wurde gefunden", userView.get(this.testUserId));
 	}
