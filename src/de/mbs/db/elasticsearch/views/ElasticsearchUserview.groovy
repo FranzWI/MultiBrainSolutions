@@ -186,9 +186,59 @@ public class ElasticsearchUserview extends UserView {
 
 	// Achtung diese suche ist für das Frontend gedacht
 	@Override
-	public Vector<Pair<SearchResult, String>> search(String search, User u) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector<Pair<SearchResult, String>> search(String search, User u) 
+	{
+		//Firstname, Lastname, Email are my search parameters
+	
+		Vector<Pair<SearchResult, String>> mySearchResults = new Vector<Pair<SearchResult, String>>();
+		
+		Vector<user> foundedUsers = new Vecotor<User>();
+		
+		QueryBuilder qb = QueryBuilders.boolQuery()
+			.must(multiMatchQuery(search,"firstName","lastName","email"))
+
+		SearchResponse response = this.view.getESClient()
+			.prepareSearch("system")
+			.setTypes("user")
+			.addFields(fieldList)
+			.setQuery(qb)
+			.execute()
+			.actionGet();
+
+		SearchHit[] hits = response.getHits().getHits();
+		
+		for(int i = 0; i++; i<= hits.length())
+		{
+			User user = this.responseToUser(hits[i].getId(), hits[i].getVersion(), hits[i].getSource());
+			if(user != null)
+				foundedUsers.add(user);
+		}
+		
+		if(foundedUsers==null)
+			return null;
+		else
+		{
+			for(User user : foundedUsers)
+			{
+				SearchResult res = new SearchResult();
+					
+					res.setClassName("User");
+					res.setHeading(user.getFirstname() + " " + user.getLastname()); //Vorname Nachname
+					res.setContent(user.getEmail()); //Vorname Nachname Email
+					res.setLink("");
+					
+				Pair<SearchResult, String> sResult = new Pair<SearchResult, String>(res, null);
+					
+				if(sResult != null)
+				{
+					mySearchResults.add(sResult);
+				}
+				
+			}
+			
+			return mySearchResults;
+		}
+
 	}
 
 	@Override
