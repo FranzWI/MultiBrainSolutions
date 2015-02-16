@@ -124,7 +124,7 @@ public class UserviewTest {
 	public final void test2GetUserByUserName() {
 		try{
 		UserView userView = TestExecuter.getView().getUserView();
-		User admin =userView.getUserByUserName("Admin");
+		User admin =userView.getUserByUserName("admin");
 		assertNotNull("Admin ID ist Null",admin.getId());
 		User testUser = userView.getUserByUserName(testUserNameAlt);
 		assertNotNull("testUser ID ist Null",testUser.getId());
