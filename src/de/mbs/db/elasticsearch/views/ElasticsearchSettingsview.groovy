@@ -44,7 +44,7 @@ public class ElasticsearchSettingsview extends SettingsView
 	{
 		GetResponse response = this.view.getESClient().prepareGet("system", "settings", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getSource());
+			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -57,9 +57,9 @@ public class ElasticsearchSettingsview extends SettingsView
 		
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "settings", fieldList)) 
 		{
-			if(hit.getSource() != null)
+			if(hit.getFields() != null)
 			{
-				Settings set = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getSource());
+				Settings set = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
 				if(set != null)
 					settings.add(set);
 			}

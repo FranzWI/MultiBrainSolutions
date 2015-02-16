@@ -82,7 +82,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 	{
 		GetResponse response = this.view.getESClient().prepareGet("news", "notification", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getSource());
+			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -94,8 +94,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "news", "notification", fieldList)) 
 		{
-			if(hit.getSource() != null){
-				Notification not = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getSource());
+			if(hit.getFields() != null){
+				Notification not = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
 				if(not != null)
 					notification.add(not);
 			}
