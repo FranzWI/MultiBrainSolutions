@@ -22,6 +22,10 @@ public class Portlet extends DatabaseObject implements Cloneable {
 	public Portlet(String id) {
 		super(id);
 	}
+	
+	public Portlet(String id, long version) {
+		super(id, version);
+	}
 
 	public String getName() {
 		return name;
