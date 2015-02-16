@@ -23,24 +23,32 @@ public class ElasticsearchGroupview extends GroupView {
 	public ElasticsearchGroupview(ElasticsearchView view){
 		this.view = view;
 
-		String adminId = this.checkIfGroupExists("Admin"), userId = this.checkIfGroupExists("Nutzer");
-		if( adminId!=null && userId!=null){
+		String adminId = this.checkIfGroupExists("Admin")
+		String userId = this.checkIfGroupExists("Nutzer");
+		
+		if( adminId!=null && userId!=null)
+		{
 			this.adminGroupId = adminId;
 			this.userGroupId = userId;
-		}else{
-			if(adminId == null){
+		}
+		else
+		{
+			if(adminId == null)
+			{
 				Group admins = new Group(null);
 				admins.setName("Admin");
 				admins.setDescription("Administratoren")
 				this.adminGroupId = this.add(admins);
 			}
-			if(userId == null){
+			if(userId == null)
+			{
 				Group users = new Group(null);
 				users.setName("Nutzer");
 				users.setDescription("Nutzer")
 				this.userGroupId = this.add(users);
 			}
-			if(this.adminGroupId==null || this.userGroupId == null){
+			if(this.adminGroupId==null || this.userGroupId == null)
+			{
 				System.err.println("ES: GV Gruppen Admin und / oder Nutzer sind nicht angelegt");
 				System.exit(1);
 			}
@@ -119,21 +127,25 @@ public class ElasticsearchGroupview extends GroupView {
 	private Group responseToGroup(id,version, fields) {
 		
 		Group group = new Group(id, version);
-		for (String key : fields.keySet()) {
+		
+		for (String key : fields.keySet()) 
+		{
 			def field = fields.get(key);
-			switch (key) {
+			
+			switch (key) 
+			{
 				case "name":
-					group.setName(field.getValue() == null ? "" : field
-					.getValue().toString());
+					group.setName(field.getValue() == null ? "" : field.getValue().toString());
 					break;
 				case "description":
-					group.setDescription(field.getValue() == null ? "" : field
-					.getValue().toString());
+					group.setDescription(field.getValue() == null ? "" : field.getValue().toString());
 					break;
 			}
 		}
+		
 		if(group!=null)
 			return group;
+			
 		return null;
 		
 	}
