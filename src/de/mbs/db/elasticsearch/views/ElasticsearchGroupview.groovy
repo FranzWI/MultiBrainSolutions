@@ -114,13 +114,17 @@ public class ElasticsearchGroupview extends GroupView {
 	@Override
 	public Vector<Group> getAll() {
 		Vector<Group> users = new Vector<Group>();
-		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "group", fieldList)) {
-			if(hit.getSource() != null){
+		
+		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "group", fieldList))
+		{
+			if(hit.getFields() != null)
+			{
 				Group u = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
 				if(u != null)
 					users.add(u);
 			}
 		}
+		
 		return users;
 	}
 
