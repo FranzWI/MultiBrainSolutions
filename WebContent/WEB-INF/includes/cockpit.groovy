@@ -35,40 +35,38 @@ html.div {
 			}
 		}
 	}
-	div('class':"draggable-portlets"){
-		div('class':"row sorted"){
-			Vector<Map<String,String>> userPortlets = user.getPortlets();
-			if(!userPortlets || userPortlets.size() == 0){
-				div('class':"col-xs-12"){
-					div('class':"alert alert-info"){
-						p("keine Portlets auf dem Dashboard")
+	div('id':"draggable-portlets", 'class':"row"){
+		Vector<Map<String,String>> userPortlets = user.getPortlets();
+		if(!userPortlets || userPortlets.size() == 0){
+			div('class':"col-xs-12"){
+				div('class':"alert alert-info"){ p("keine Portlets auf dem Dashboard") }
+			}
+		}else{
+			//TODO Portlets laden
+			for(Map<String,String> map: userPortlets){
+				Portlet p = portletView.get(map.get("ID"));
+				if(p){
+					String size = "";
+					if(p.getSizeXS()>0)
+						size+=" col-xs-"+p.getSizeXS();
+					if(p.getSizeSM()>0)
+						size+=" col-sm-"+p.getSizeSM();
+					if(p.getSizeMD()>0)
+						size+=" col-md-"+p.getSizeMD();
+					if(p.getSizeLG()>0)
+						size+=" col-lg-"+p.getSizeLG();
+					div('class':size+" mbs-portlet",'data-portlet-id':p.getId()){
+						i('style':"display:none")
+						include('/WEB-INF/includes/portlets/'+p.getPath())
 					}
+				}else{
+					//TODO Fehler Portlet ID ungültig
 				}
-			}else{
-				//TODO Portlets laden
-				for(Map<String,String> map: userPortlets){
-					Portlet p = portletView.get(map.get("ID"));
-					if(p){
-						String size = "";
-						if(p.getSizeXS()>0)
-							size+=" col-xs-"+p.getSizeXS();
-						if(p.getSizeSM()>0)
-							size+=" col-sm-"+p.getSizeSM();
-						if(p.getSizeMD()>0)
-							size+=" col-md-"+p.getSizeMD();
-						if(p.getSizeLG()>0)
-							size+=" col-lg-"+p.getSizeLG();
-						div('class':size,'data-portlet-id':p.getId(),"style":"float:left"){
-							i('style':"display:none")
-							include('/WEB-INF/includes/portlets/'+p.getPath())
-						}
-					}else{
-						//TODO Fehler Portlet ID ungültig
-					}
-				}
-			}	
+			}
 		}
 	}
+	script(src:"assets/js/draggabilly.pkgd.min.js")
+	script(src:"assets/js/packery.pkgd.min.js")
 	script(src:"assets/js/context.js")
 	script(src:"assets/js/cockpit.js")
 }
