@@ -5,7 +5,6 @@ $(document).ready(function() {
 	
 	$container = $('#draggable-portlets');
 	
-	
 	context.init({
 	    fadeSpeed: 100,
 	    filter: function ($obj){},
@@ -34,8 +33,7 @@ $(document).ready(function() {
 	
 	$container.packery({
 		 itemSelector: '.mbs-portlet',
-		  layout: 'meticulous',
-		  gutter: 10
+		  layout: 'meticulous'
 	});
 	
 	$container.find('.mbs-portlet').each( function( i, itemElem ) {
