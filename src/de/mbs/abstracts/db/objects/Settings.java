@@ -19,6 +19,14 @@ public class Settings extends DatabaseObject implements Cloneable{
 		this.dbProperties = new Properties();
 		this.proxyProperties = new Properties();
 	}
+	
+	public Settings(String id, long version) {
+		super(id,version);
+		this.mailProperties = new Properties();
+		this.dbProperties = new Properties();
+		this.proxyProperties = new Properties();
+	}
+	
 
 	public Properties getMailProperties() {
 		return mailProperties;

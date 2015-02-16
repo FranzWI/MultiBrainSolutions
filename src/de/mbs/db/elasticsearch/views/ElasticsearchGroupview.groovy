@@ -67,7 +67,7 @@ public class ElasticsearchGroupview extends GroupView {
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 )
 		{
-			Group myGroup = this.responseToGroup(hits[0].getId(),hits[0].getVersion(), hits[0].getSource());
+			Group myGroup = this.responseToGroup(hits[0].getId(),hits[0].getVersion(), hits[0].getFields());
 			if(myGroup != null)
 				return myGroup.getId();
 		}
@@ -100,7 +100,7 @@ public class ElasticsearchGroupview extends GroupView {
 				.prepareGet("system", "group", id).setFields(fieldList)
 				.execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getSource());
+			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -116,7 +116,7 @@ public class ElasticsearchGroupview extends GroupView {
 		Vector<Group> users = new Vector<Group>();
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "group", fieldList)) {
 			if(hit.getSource() != null){
-				Group u = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getSource());
+				Group u = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
 				if(u != null)
 					users.add(u);
 			}
@@ -125,7 +125,7 @@ public class ElasticsearchGroupview extends GroupView {
 	}
 
 	private Group responseToGroup(id,version, fields) {
-		
+
 		Group group = new Group(id, version);
 		
 		for (String key : fields.keySet()) 

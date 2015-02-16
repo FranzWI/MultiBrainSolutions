@@ -112,7 +112,7 @@ public class ElasticsearchMessageview extends MessageView {
 	{
 		GetResponse response = this.view.getESClient().prepareGet("system", "messages", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getSource());
+			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -122,8 +122,8 @@ public class ElasticsearchMessageview extends MessageView {
 	{
 		Vector<Message> messages = new Vector<Message>();
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "messages", fieldList)) {
-			if(hit.getSource() != null){
-				Message mess = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getSource());
+			if(hit.getFields() != null){
+				Message mess = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
 				if(mess != null)
 					messages.add(mess);
 			}
