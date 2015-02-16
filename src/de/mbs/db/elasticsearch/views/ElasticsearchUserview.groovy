@@ -170,7 +170,7 @@ public class ElasticsearchUserview extends UserView {
 				QueryBuilders.boolQuery()
 				.must(QueryBuilders.matchQuery("userName", username))
 				.must(QueryBuilders.matchQuery("pw", Crypt.getCryptedPassword(password))))
-				.must(QueryBuilders.matchQery("isActive", true))
+				.must(QueryBuilders.matchQery("isActive", "true"))
 				.execute()
 				.actionGet();
 
