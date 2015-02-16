@@ -1,4 +1,10 @@
+
+var $container;
+// init
 $(document).ready(function() {
+	
+	$container = $('#draggable-portlets');
+	
 	context.init({
 	    fadeSpeed: 100,
 	    filter: function ($obj){},
@@ -20,12 +26,41 @@ $(document).ready(function() {
 				}).done(function() {
 					$par.slideUp();
 				}).fail(function(jqXHR, textStatus ) {
-				    alert( "error "+textStatus );
+					toastr.error( "error: "+textStatus );
 				});
 		}
 	}]);
 	
+	$container.packery({
+		 itemSelector: '.mbs-portlet',
+		  layout: 'meticulous'
+	});
+	
+	$container.find('.mbs-portlet').each( function( i, itemElem ) {
+		  var draggie = new Draggabilly( itemElem );
+		  $container.packery( 'bindDraggabillyEvents', draggie );
+	});
+	
+	// show item order after layout
+	function orderItems() {
+	  var itemElems = $container.packery('getItemElements');
+	  var portletIds = "";
+	  $( itemElems ).each( function( i, itemElem ) {
+		  portletIds = portletIds+$(this).data('portlet-id')+",";
+	  });
+	  $.ajax({
+		  type: "POST",
+		  url: "rest/user/setPortlets/"+portletIds
+	  }).fail(function(jqXHR, textStatus ) {
+			toastr.error( "error: "+textStatus );
+	  });
+	}
+
+	$container.packery( 'on', 'layoutComplete', orderItems );
+	$container.packery( 'on', 'dragItemPositioned', orderItems );
+	
 	$(function() {
+		/*
 		$(".draggable-portlets .sorted").sortable({
 			connectWith : ".draggable-portlets, .sorted",
 			handle : '.tile-stats, .panel-heading ',
@@ -40,10 +75,11 @@ $(document).ready(function() {
 					  url: "rest/user/setPortlets/"+portletIds
 					}).done(function() {
 					}).fail(function(jqXHR, textStatus ) {
-					    alert( "error "+textStatus );
+						toastr.error( "error: "+textStatus );
 					});
 			}
 		}).disableSelection();
+		*/
 		
 		$('.portlet > .panel-heading > .panel-options > a[data-rel="close"]').click(function() {
 			var $par = $(this).closest('div[data-portlet-id]');
@@ -54,7 +90,7 @@ $(document).ready(function() {
 				}).done(function() {
 					location.reload();
 				}).fail(function(jqXHR, textStatus ) {
-				    alert( "error"+textStatus );
+					toastr.error( "error: "+textStatus );
 				});
 		});
 		
@@ -66,7 +102,7 @@ $(document).ready(function() {
 				}).done(function() {
 					location.reload();
 				}).fail(function(jqXHR, textStatus ) {
-				    alert( "error"+textStatus );
+				    toastr.error( "error: "+textStatus );
 				});
 		});
 		
