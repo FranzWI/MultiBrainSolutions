@@ -31,7 +31,10 @@ public abstract class UserView extends Observable implements AddableView<User>,
 	public abstract User getUserByApikey(String apikey);
 	public abstract User getUserByUserName(String userName);
 	
-	public void update(Observable o, Object arg) {}
+	public void update(Observable o, Object arg) {
+		//nicht implementiert
+		// soll kaskadieren ermoeglichen (was in ES nicht implementiert ist)
+	}
 	
 	public String getTabName(){
 		return "Nutzer";

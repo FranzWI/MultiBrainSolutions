@@ -10,7 +10,7 @@ public interface SearchableView {
 
 
 	public String getTabName();
-	
+	//get Reiter name
 
 	/**
 	 * @param search - Suchanfrage
