@@ -194,7 +194,7 @@ public class ElasticsearchUserview extends UserView {
 		
 		Vector<User> foundedUsers = new Vector<User>();
 		
-		QueryBuilder qb = QueryBuilders.boolQuery()
+		QueryBuilders qb = QueryBuilders.boolQuery()
 			.must(multiMatchQuery(search,"firstName","lastName","email"))
 
 		SearchResponse response = this.view.getESClient()
