@@ -136,7 +136,7 @@ public class GroupviewTest {
 		String userGroupID;
 		
 		GroupView groupView = TestExecuter.getView().getGroupView();
-		userGroupID = groupView.getAdminGroupId();
+		userGroupID = groupView.getUserGroupId();
 		System.out.println("ID der UserGroup = "+ userGroupID);
 		assertNotNull("AdminGroupID ist null", userGroupID);
 	}
