@@ -143,7 +143,7 @@ public class ElasticsearchView extends DatabaseView {
 				 * for (Group group : this.getGroupView().getAll()) { //
 				 * admin.addMembership(group.getId()); // }
 				 *///
-				System.out.println("ES: DEBUG ID Admin "
+				System.out.println("ES: DEBUG ID User Admini Strator "
 						+ this.getUserView().add(admin));
 
 				// Nutzer anlegen
@@ -159,7 +159,7 @@ public class ElasticsearchView extends DatabaseView {
 				 * (group.getName().equals("Nutzer")) //
 				 * user.addMembership(group.getId()); // }
 				 *///
-				System.out.println("ES: DEBUG ID User "
+				System.out.println("ES: DEBUG ID User Max Mustermann "
 						+ this.getUserView().add(user));
 			} else {
 				System.out.println("ES: installation fehlgeschlagen");
