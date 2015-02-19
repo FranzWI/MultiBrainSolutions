@@ -170,10 +170,11 @@ public class ElasticsearchUserview extends UserView {
 				QueryBuilders.boolQuery()
 				.must(QueryBuilders.matchQuery("userName", username))
 				.must(QueryBuilders.matchQuery("pw", Crypt.getCryptedPassword(password))))
-				.must(QueryBuilders.matchQery("isActive", "true"))
+				.must(QueryBuilders.matchQery("isActive", true))
 				.execute()
 				.actionGet();
-
+			//The boolean type also supports passing the value as a number or 
+			//a string (in this case 0, an empty string, false, off and no are false, all other values are true).
 
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
