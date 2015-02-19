@@ -19,7 +19,7 @@ public class Group extends DatabaseObject implements Cloneable {
 	
 	public Group(String id, long version)
 	{
-		super(id, version);
+		super(id, version);  
 	}
 
 	public String getName() {

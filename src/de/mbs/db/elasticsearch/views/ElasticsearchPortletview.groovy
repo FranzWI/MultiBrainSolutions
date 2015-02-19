@@ -65,7 +65,7 @@ public class ElasticsearchPortletview extends PortletView {
 		GetResponse response = this.view.getESClient().prepareGet("system", "portlet", id).setFields(fieldList).execute().actionGet();
 		
 		if(response.isExists())
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToPortlet(response.getId(), response.getVersion(), response.getFields());
 		else
 			return null;
 	}
@@ -130,9 +130,9 @@ public class ElasticsearchPortletview extends PortletView {
 		{
 			if(hit.getFields()!=null)
 			{
-				Portlet port = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				Portlet port = this.responseToPortlet(hit.getId(), hit.getVersion(), hit.getFields());
 				if(port != null)
-					users.add(u);
+					portlets.add(port);
 			}
 		}
 		return portlets;

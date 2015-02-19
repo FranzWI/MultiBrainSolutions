@@ -96,7 +96,7 @@ public class User extends DatabaseObject implements Cloneable{
 		this.portlets = portlets;
 	}
 
-	public void addPortlet(Map<String,String> map){
+	public void addPortlet(Map<String,String> map){ 
 		this.portlets.add(map);
 	}
 	

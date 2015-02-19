@@ -42,7 +42,7 @@ public class GroupviewTest {
 	 */
 	@Test
 	public final void test2Add() {
-		
+		  
 		GroupView groupView = TestExecuter.getView().getGroupView();
 		group = new Group(null);
 		group.setName("TestGroup");

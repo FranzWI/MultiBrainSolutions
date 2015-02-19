@@ -16,7 +16,7 @@ import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
 
 public class ElasticsearchGroupview extends GroupView {
 
-	private ElasticsearchView view;
+	private ElasticsearchView view; 
 
 	private String[] fieldList = ["name", "description"];
 

@@ -185,7 +185,7 @@ public class UserviewTest {
 		String suchString = "mini";
 		UserView userView = TestExecuter.getView().getUserView();
 		Vector<Pair<SearchResult, String>> vec = userView.search(suchString,
-				userView.getUserByUserName("Admin"));
+				userView.getUserByUserName("admin"));
 		assertNotNull("Vektor ist Null", vec);
 		assertTrue("Vektor ist leer", vec.size() > 0);
 	}
