@@ -132,7 +132,7 @@ public class GroupviewTest {
 	 * Test method for {@link de.mbs.abstracts.db.views.GroupView#getUserGroupId()}.
 	 */
 	@Test
-	public final void testGetUserGroupId() {
+	 public final void testGetUserGroupId() {
 		String userGroupID;
 		
 		GroupView groupView = TestExecuter.getView().getGroupView();
