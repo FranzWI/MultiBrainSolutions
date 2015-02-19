@@ -137,28 +137,21 @@ public class ElasticsearchView extends DatabaseView {
 				admin.setLastname("Strator");
 				admin.setUsername("admin");
 				admin.setEmail("ich@michaelkuerbis.de");
+				admin.setActive(true);
 				admin.setPw("admin");
-				// TODO kommentare entfernen wenn groupview geht
-				/*
-				 * for (Group group : this.getGroupView().getAll()) { //
-				 * admin.addMembership(group.getId()); // }
-				 *///
+				admin.addMembership(this.groupview.getAdminGroupId());
 				System.out.println("ES: DEBUG ID User Admini Strator "
 						+ this.getUserView().add(admin));
 
 				// Nutzer anlegen
 				User user = new User(null);
 				user.setFirstname("Default");
-				user.setLastname("'User");
+				user.setLastname("User");
 				user.setUsername("user");
 				user.setEmail("ich@michaelkuerbis.de");
+				user.setActive(true);
+				user.addMembership(this.groupview.getUserGroupId());
 				user.setPw("user");
-				// TODO kommentare entfernen wenn groupview geht
-				/*
-				 * for (Group group : this.getGroupView().getAll()) { // if
-				 * (group.getName().equals("Nutzer")) //
-				 * user.addMembership(group.getId()); // }
-				 *///
 				System.out.println("ES: DEBUG ID User Max Mustermann "
 						+ this.getUserView().add(user));
 			} else {

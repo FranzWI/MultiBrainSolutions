@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.TermQuery
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -168,13 +170,13 @@ public class ElasticsearchUserview extends UserView {
 				.prepareSearch("system").setTypes("user").addFields(fieldList)
 				.setQuery(
 				QueryBuilders.boolQuery()
-				.must(QueryBuilders.matchQuery("userName", username))
-				.must(QueryBuilders.matchQuery("pw", Crypt.getCryptedPassword(password))))
-				.must(QueryBuilders.matchQuery("isActive", "1"))
+				.must(QueryBuilders.termQuery("userName", username))
+				.must(QueryBuilders.termQuery("pw", Crypt.getCryptedPassword(password)))
+				.must(QueryBuilders.termQuery("isActive", true)))
 				.execute()
 				.actionGet();
-			//The boolean type also supports passing the value as a number or 
-			//a string (in this case 0, an empty string, false, off and no are false, all other values are true).
+		//The boolean type also supports passing the value as a number or
+		//a string (in this case 0, an empty string, false, off and no are false, all other values are true).
 
 		SearchHit[] hits = response.getHits().getHits();
 		if(hits.length == 1 ){
@@ -187,34 +189,31 @@ public class ElasticsearchUserview extends UserView {
 
 	// Achtung diese suche ist für das Frontend gedacht
 	@Override
-	public Vector<Pair<SearchResult, String>> search(String search, User u) 
+	public Vector<Pair<SearchResult, String>> search(String search, User u)
 	{
 		//Firstname, Lastname, Email are my search parameters
-	
+
 		Vector<Pair<SearchResult, String>> mySearchResults = new Vector<Pair<SearchResult, String>>();
-		
+
 		Vector<User> foundedUsers = new Vector<User>();
-		
-		QueryBuilders qb = QueryBuilders.boolQuery()
-			.must(multiMatchQuery(search,"firstName","lastName","email"))
 
 		SearchResponse response = this.view.getESClient()
-			.prepareSearch("system")
-			.setTypes("user")
-			.addFields(fieldList)
-			.setQuery(qb)
-			.execute()
-			.actionGet();
+				.prepareSearch("system")
+				.setTypes("user")
+				.addFields(fieldList)
+				.setQuery(QueryBuilders.multiMatchQuery(search,"firstName","lastName","email"))
+				.execute()
+				.actionGet();
 
 		SearchHit[] hits = response.getHits().getHits();
-		
+
 		for(int i = 0; i++; i<= hits.length())
 		{
 			User user = this.responseToUser(hits[i].getId(), hits[i].getVersion(), hits[i].getSource());
 			if(user != null)
 				foundedUsers.add(user);
 		}
-		
+
 		if(foundedUsers==null)
 			return null;
 		else
@@ -222,21 +221,21 @@ public class ElasticsearchUserview extends UserView {
 			for(User user : foundedUsers)
 			{
 				SearchResult res = new SearchResult();
-					
-					res.setClassName("User");
-					res.setHeading(user.getFirstname() + " " + user.getLastname()); //Vorname Nachname
-					res.setContent(user.getEmail()); //Vorname Nachname Email
-					res.setLink("");
-					
+
+				res.setClassName("User");
+				res.setHeading(user.getFirstname() + " " + user.getLastname()); //Vorname Nachname
+				res.setContent(user.getEmail()); //Vorname Nachname Email
+				res.setLink("");
+
 				Pair<SearchResult, String> sResult = new Pair<SearchResult, String>(res, null);
-					
+
 				if(sResult != null)
 				{
 					mySearchResults.add(sResult);
 				}
-				
+
 			}
-			
+
 			return mySearchResults;
 		}
 
