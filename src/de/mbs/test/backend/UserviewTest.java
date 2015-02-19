@@ -151,6 +151,7 @@ public class UserviewTest {
 		assertNotNull("User konnte nicht geändert werden", editedUser);
 		assertEquals("Username nicht identisch", testUser.getUsername(),
 				editedUser.getUsername());
+		assertTrue("testUser nicht aktiv", testUser.isActive());
 		// Ausgabe aller Benutzernamen
 		// for(User u:userView.getAll()){System.out.println(u.getUsername());}
 	}

@@ -21,7 +21,7 @@ public class ElasticsearchPortletview extends PortletView {
 	private ElasticsearchView view;
 	
 	public ElasticsearchPortletview(ElasticsearchView view){
-		this.view = view;
+		this.view = view; 
 	}
 	
 	@Override
