@@ -197,48 +197,33 @@ public class ElasticsearchUserview extends UserView {
 
 		Vector<User> foundedUsers = new Vector<User>();
 
+		QueryBuilders.moreLikeThisQuery("firstName","lastName","email").likeText(search)
+
 		SearchResponse response = this.view.getESClient()
 				.prepareSearch("system")
 				.setTypes("user")
 				.addFields(fieldList)
-				.setQuery(QueryBuilders.multiMatchQuery(search,"firstName","lastName","email"))
+				.setQuery(QueryBuilders.fuzzyLikeThisQuery("firstName","lastName","email").likeText(search))
 				.execute()
 				.actionGet();
-
-		SearchHit[] hits = response.getHits().getHits();
-
-		for(int i = 0; i++; i<= hits.length())
-		{
-			User user = this.responseToUser(hits[i].getId(), hits[i].getVersion(), hits[i].getSource());
+		for(SearchHit hit: response.getHits().getHits()){
+			User user = this.responseToUser(hit.getId(), hit.getVersion(), hit.getFields());
 			if(user != null)
 				foundedUsers.add(user);
 		}
 
-		if(foundedUsers==null)
-			return null;
-		else
-		{
-			for(User user : foundedUsers)
-			{
-				SearchResult res = new SearchResult();
+		for(User user : foundedUsers){
+			SearchResult res = new SearchResult();
 
-				res.setClassName("User");
-				res.setHeading(user.getFirstname() + " " + user.getLastname()); //Vorname Nachname
-				res.setContent(user.getEmail()); //Vorname Nachname Email
-				res.setLink("");
+			res.setClassName("User");
+			res.setHeading(user.getFirstname() + " " + user.getLastname()); //Vorname Nachname
+			res.setContent(user.getEmail()); // Email
+			res.setLink("");
 
-				Pair<SearchResult, String> sResult = new Pair<SearchResult, String>(res, null);
-
-				if(sResult != null)
-				{
-					mySearchResults.add(sResult);
-				}
-
-			}
-
-			return mySearchResults;
+			Pair<SearchResult, String> sResult = new Pair<SearchResult, String>(res, null);
+			mySearchResults.add(sResult);
 		}
-
+		return mySearchResults;
 	}
 
 	@Override
