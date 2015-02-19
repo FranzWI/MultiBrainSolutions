@@ -7,7 +7,9 @@ import java.util.Vector;
 import org.junit.Test;
 
 import de.mbs.abstracts.db.objects.Portlet;
+import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.PortletView;
+import de.mbs.abstracts.db.views.UserView;
 import de.mbs.test.TestExecuter;
 
 public class PortletviewTest {
@@ -21,12 +23,14 @@ public class PortletviewTest {
 		for (Portlet p:vec){System.out.println(p.getName());}
 		assertNotNull("",vec);
 	}
-	
-/*	@Test
+/*	
+@Test
 	public final void testGetPossiblePortletsForUser() {
-		fail("Not yet implemented"); // TODO
+	PortletView portletView = TestExecuter.getView().getPortletView();
+	portletView.getPossiblePortletsForUser(UserviewTest.testUserId);
 	}
-
+	*/
+/*
 	@Test
 	public final void testJavaPortletview() {
 		fail("Not yet implemented"); // TODO

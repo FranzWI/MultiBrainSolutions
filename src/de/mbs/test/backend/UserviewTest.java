@@ -29,7 +29,7 @@ import de.mbs.test.TestExecuter;
 public class UserviewTest {
 	private String testUserNameAlt;
 	private String testUserNameNeu;
-	private static String testUserId;
+	public static String testUserId;
 
 	public UserviewTest() {
 		testUserNameAlt = "alterName";
@@ -71,6 +71,7 @@ public class UserviewTest {
 		testUser.setUsername(this.testUserNameAlt);
 		testUser.setPw("passwort");
 		testUser.setActive(true);
+		testUser.addMembership(TestExecuter.getView().getGroupView().getAdminGroupId());
 
 		// ..
 		// die anderen Felder füllen
@@ -101,7 +102,9 @@ public class UserviewTest {
 				"Ungültigen APIKey übergeben und dennoch einen Nutzer erhalten!!",
 				userView.getUserByApikey(UUID.randomUUID().toString()));
 		assertTrue("testUser nicht aktiv", testUser.isActive());
-
+		assertNotNull("testUser ist keiner Gruppe zugehoerig",testUser.getMembership());
+		assertTrue("testUser ist nicht genau einer Gruppe zugehoerig",testUser.getMembership().size()==1);
+		assertEquals("IDs nicht gleich",TestExecuter.getView().getGroupView().getAdminGroupId(),testUser.getMembership().get(0));
 	}
 	/**
 	 * Test method for
