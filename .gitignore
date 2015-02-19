@@ -1,6 +1,6 @@
 /1.pdf
 /test.sh
-/build/*
+/build/**
 /build/
 *.class
 .classpath
