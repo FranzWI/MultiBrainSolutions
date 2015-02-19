@@ -1,5 +1,6 @@
 package de.mbs.db.elasticsearch.views;
 
+import java.util.Map;
 import java.util.Vector;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -32,7 +33,7 @@ public class ElasticsearchPortletview extends PortletView {
 		portlet.put("name", data.getName());
 		portlet.put("path", data.getPath());
 		portlet.put("description", data.getDescription());
-		portlet.put("usedByGroups", data.getUsedByGroups());
+		portlet.put("usedByGroups", ElasticsearchHelper.vectorToJSONArray(data.getUsedByGroups()).toJSONString());
 		portlet.put("sizeXS", data.getSizeXS());
 		portlet.put("sizeSM", data.getSizeSM());
 		portlet.put("sizeMD", data.getSizeMD());
@@ -50,7 +51,7 @@ public class ElasticsearchPortletview extends PortletView {
 		portlet.put("name", data.getName());
 		portlet.put("path", data.getPath());
 		portlet.put("description", data.getDescription());
-		portlet.put("usedByGroups", data.getUsedByGroups());
+		portlet.put("usedByGroups", ElasticsearchHelper.vectorToJSONArray(data.getUsedByGroups()).toJSONString());
 		portlet.put("sizeXS", data.getSizeXS());
 		portlet.put("sizeSM", data.getSizeSM());
 		portlet.put("sizeMD", data.getSizeMD());
@@ -62,6 +63,9 @@ public class ElasticsearchPortletview extends PortletView {
 	@Override
 	public Portlet get(String id) 
 	{
+		if(id == null)
+			return null;
+		System.out.println("DEBUG "+id);
 		GetResponse response = this.view.getESClient().prepareGet("system", "portlet", id).setFields(fieldList).execute().actionGet();
 		
 		if(response.isExists())
@@ -79,48 +83,30 @@ public class ElasticsearchPortletview extends PortletView {
 	@Override
 	public Vector<Portlet> getPossiblePortletsForUser(String id) 
 	{
-		//FIXME: Ich glaube ich habe wieder zu kompliziert gedacht, ich werde einfach sp�ter nochmal dr�ber schauen
-		
-		// TODO Hier muss jetzt die Auswahl pro user selektiert werden:
-		// �bergebene ID entspricht user ID
-		// 1. Checke welcher Benutzergruppe user zugewiesen ist
-		// 2. Lese mithilfe von Gruppe die m�glichen Portlets aus
-		// 3. Werfe die passenden Portlets zur�ck
-		
-		Vector<Portlet> myPortlets = new Vector<Portlet>();
-		Vector<Portlet> allPortlets = this.getAll();
-		
-		User user = new ElasticsearchUserview(view).get(id);
-		
-		for(String memberOf : user.getMembership())
-		{
-			for(Portlet portle : allPortlets)
-			{
-				Vector<String> usedBy = portle.getUsedByGroups();
-				for(String usedByG : usedBy)
-				{
-					if(usedByG == memberOf)
-					{
-						//Jetzt muss noch sichergestellt werden, das es dieses Portlet noch nicht in diesem Vector gibt
-						for(Portlet exPortl : myPortlets)
-						{
-							if(exPortl != portle)
-								myPortlets.add(portle);
+		User user = this.view.getUserView().get(id);
+		if (user != null) {
+			Vector<String> userGroups = user.getMembership();
+			Vector<Portlet> result = new Vector<Portlet>();
+			for (Portlet portlet : this.getAll()) {
+				Vector<String> portletGroups = portlet.getUsedByGroups();
+				for (String groupId : portletGroups) {
+					if (userGroups.contains(groupId)) {
+						boolean add = true;
+						for(Map<String, String> map: user.getPortlets()){
+							if(map.containsValue(portlet.getId())){
+								add = false;
+							}
+						}
+						if (add) {
+							result.add(portlet);
+							break;
 						}
 					}
 				}
 			}
-			
+			return result;
 		}
-		
-		//-----------------
-		myPortlets.add(this.get())
-		ElasticsearchGroupview groupview = new ElasticsearchGroupview(view).get(id);
-		Group userGroup = groupview.get(id);
-		userGroup
-		//--------------------------------
-		
-		return myPortlets;
+		return null;
 	}
 
 	@Override

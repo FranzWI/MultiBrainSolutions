@@ -84,8 +84,7 @@ public class ElasticsearchUserview extends UserView {
 		// FIXME pr�fen ob IDs g�ltig sind -> erst m�glich wenn Portlet und
 		// Group Views laufen
 		jsonUser.put("inGroups",
-				ElasticsearchHelper.vectorToJSONArray(data.getMembership())
-				.toJSONString());
+				ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString());
 		// FIXME pr�fen ob IDs g�ltig sind -> erst m�glich wenn Portlet und
 		// Group Views laufen
 		JSONArray portlets = new JSONArray();
@@ -96,7 +95,7 @@ public class ElasticsearchUserview extends UserView {
 			portlets.add(obj);
 		}
 		jsonUser.put("usesPortlets",
-				(portlets.isEmpty())?null:portlets.toJSONString());
+				(portlets.isEmpty())?null:portlets);
 		jsonUser.put("isActive", data.isActive());
 
 		return ElasticsearchHelper.add(view, "system", "user", jsonUser.toJSONString());
@@ -131,7 +130,7 @@ public class ElasticsearchUserview extends UserView {
 		jsonUser.put("email", data.getEmail());
 		jsonUser.put("pw", data.getPw());
 		jsonUser.put("apiKey", data.getApikey());
-		jsonUser.put("inGroups",ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString());
+		jsonUser.put("inGroups",ElasticsearchHelper.vectorToJSONArray(data.getMembership()));
 		JSONArray portlets = new JSONArray();
 		for(Map<String,String> map : data.getPortlets()){
 			JSONObject obj = new JSONObject();
@@ -140,7 +139,7 @@ public class ElasticsearchUserview extends UserView {
 			portlets.add(obj);
 		}
 		jsonUser.put("usesPortlets",
-				(portlets.isEmpty())?null:portlets.toJSONString());
+				(portlets.isEmpty())?null:portlets);
 		jsonUser.put("sessionId", data.getSessionId());
 		jsonUser.put("isActive", data.isActive());
 
