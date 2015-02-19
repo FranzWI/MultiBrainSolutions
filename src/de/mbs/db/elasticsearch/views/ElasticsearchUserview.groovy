@@ -341,8 +341,7 @@ public class ElasticsearchUserview extends UserView {
 						.getValue().toString());
 						break;
 					case "isActive":
-						user.setActive(field.getValue() == null ? false : Boolean
-						.getBoolean(field.getValue().toString()));
+						user.setActive(field.getValue() == null ? false : ((Boolean)field.getValue()));
 						break;
 					case "inGroups":
 						Vector<String> groups = new Vector<String>();
