@@ -1,6 +1,5 @@
 package de.mbs.abstracts.db.objects;
 
-import java.io.Serializable;
 import java.util.Vector;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;

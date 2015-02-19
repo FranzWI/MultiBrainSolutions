@@ -138,4 +138,48 @@ public class ElasticsearchPortletview extends PortletView {
 		return portlets;
 	}
 
+	private Portlet responseToPortlet(id,version, fields) {
+		Portlet p = new Portlet(id, version);
+		if(fields == null)
+			return null;
+		for(String key : fields.keySet()){
+			def field = fields.get(key);
+			switch(key){
+				case "name":
+					p.setName(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "path":
+					p.setPath(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "description":
+					p.setDescription(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "usedByGroups":
+					Vector<String> groups = new Vector<String>();
+					if (field.getValues() != null) {
+						List<Object> values = field.getValues();
+						for (Object o : values) {
+							groups.add(o.toString());
+						}
+					}
+					p.setUsedByGroups(groups);
+					break;
+				case "sizeXS":
+					p.setSizeXS(field.getValue() == null ? 1 : (field.getValue()));
+					break;
+				case "sizeSM":
+					p.setSizeSM(field.getValue() == null ? 1 : (field.getValue()));
+					break;
+				case "sizeMD":
+					p.setSizeMD(field.getValue() == null ? 1 : (field.getValue()));
+					break;
+				case "sizeLG":
+					p.setSizeLG(field.getValue() == null ? 1 : (field.getValue()));
+					break;
+			}
+		}
+		
+		return p;
+	}
+	
 }
