@@ -99,6 +99,8 @@ public class ElasticsearchHelper {
 		} 
 		else 
 		{
+			System.err.println("ES: Data: "+json);
+			System.err.println("ES: Fehler beim ändern eines Datensatzes :"+response.buildFailureMessage());
 			return null;
 		}
 	}
