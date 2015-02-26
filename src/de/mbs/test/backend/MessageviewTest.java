@@ -7,6 +7,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import de.mbs.abstracts.db.views.MessageView;
+import de.mbs.abstracts.db.views.UserView;
+import de.mbs.test.TestExecuter;
+
 /**
  * @author master
  *
@@ -34,7 +38,8 @@ public class MessageviewTest {
 	 */
 	@Test
 	public final void testJavaMessageview() {
-		fail("Not yet implemented"); // TODO
+		MessageView messageView = TestExecuter.getView().getMessageView();
+		assertNotNull("Userview nicht implementiert", messageView);
 	}
 
 	/**

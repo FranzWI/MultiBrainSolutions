@@ -24,15 +24,17 @@ public class PortletviewTest {
 		}
 		assertNotNull("", vec);
 	}
-	/*
-	 * @Test public final void testGetPossiblePortletsForUser() { PortletView
-	 * portletView = TestExecuter.getView().getPortletView();
-	 * portletView.getPossiblePortletsForUser(UserviewTest.testUserId); }
-	 */
-	/*
-	 * @Test public final void testJavaPortletview() {
-	 * fail("Not yet implemented"); // TODO }
-	 * 
+	
+	 @Test public final void testGetPossiblePortletsForUser() { PortletView
+	 portletView = TestExecuter.getView().getPortletView();
+	 portletView.getPossiblePortletsForUser(UserviewTest.testUserId); }
+	 
+	
+	@Test public final void testJavaPortletview() {
+			PortletView portletView = TestExecuter.getView().getPortletView();
+			assertNotNull("Portletview nicht implementiert", portletView);
+	}
+	 /* 
 	 * @Test public final void testAdd() { fail("Not yet implemented"); // TODO
 	 * }
 	 * 
