@@ -13,6 +13,9 @@ import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.json.simple.JSONArray;
@@ -25,6 +28,11 @@ import de.mbs.db.elasticsearch.ElasticsearchView;
 
 public class ElasticsearchHelper {
 
+	public final static Settings CONNECTIONSETTINGS = ImmutableSettings.settingsBuilder()
+			.put("cluster.name", "MBS Management Cockpit Cluster").build();
+	
+	public final static InetSocketTransportAddress CONNECTIONADRESS = new InetSocketTransportAddress("127.0.0.1", 9300);
+	
 	/**
 	 * 
 	 * @param f - DAtei welche Base 64 encodiert werden soll

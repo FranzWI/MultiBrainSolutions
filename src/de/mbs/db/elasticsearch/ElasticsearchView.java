@@ -42,6 +42,7 @@ import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.abstracts.db.views.definition.SearchableView;
+import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
 import de.mbs.db.elasticsearch.views.ElasticsearchGroupview;
 import de.mbs.db.elasticsearch.views.ElasticsearchMessageview;
 import de.mbs.db.elasticsearch.views.ElasticsearchNotificationview;
@@ -79,9 +80,7 @@ public class ElasticsearchView extends DatabaseView {
 	}
 
 	private void connect() {
-		Settings settings = ImmutableSettings.settingsBuilder()
-				.put("cluster.name", "MBS Management Cockpit Cluster").build();
-		client = new TransportClient(settings).addTransportAddress(new InetSocketTransportAddress("127.0.0.1", 9300));
+		client = new TransportClient(ElasticsearchHelper.CONNECTIONSETTINGS).addTransportAddress(ElasticsearchHelper.CONNECTIONADRESS);
 		System.out.println("ES: initialisiert, verbunden");
 	}
 
