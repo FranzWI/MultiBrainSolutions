@@ -50,7 +50,7 @@ html.div{
 									div('class':"form-group"){
 										label('for':"groups",'class':"col-sm-1 control-label", "Mehrfach")
 										div('class':"col-sm-6"){
-											input(type:"checkbox", name:"multiple",'class':"pull-left form-control portlet-add")
+											input(id:'portlet-add-multiple', type:"checkbox", name:"multiple",'class':"pull-left form-control portlet-add")
 										}
 									}
 									div('class':"form-group"){

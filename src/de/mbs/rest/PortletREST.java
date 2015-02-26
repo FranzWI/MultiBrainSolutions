@@ -156,7 +156,6 @@ public class PortletREST {
 			switch (key) {
 			case "id":
 				break;
-			
 			case "name":
 				p.setName(value);
 				break;
@@ -195,7 +194,9 @@ public class PortletREST {
 				p.setSizeLG(Integer.parseInt((value.isEmpty()?"0":value)));
 				break;
 			case "multiple":
+				System.out.println("DEBUG: "+value);
 				p.setMultiple(Boolean.valueOf(value));
+				System.out.println("DEBUG: "+p.isMultiple());
 				break;
 			default:
 				return Response
