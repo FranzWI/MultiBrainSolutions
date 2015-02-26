@@ -17,19 +17,28 @@ import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
 
 public class ElasticsearchPortletview extends PortletView {
 
-	private String[] fieldList = ["name", "path", "description", "usedByGroups", "sizeXS", "sizeSM", "sizeMD", "sizeLG"];
-	
+	private String[] fieldList = [
+		"name",
+		"path",
+		"description",
+		"usedByGroups",
+		"sizeXS",
+		"sizeSM",
+		"sizeMD",
+		"sizeLG",
+		"isMultiple"
+	];
+
 	private ElasticsearchView view;
-	
+
 	public ElasticsearchPortletview(ElasticsearchView view){
-		this.view = view; 
+		this.view = view;
 	}
-	
+
 	@Override
-	public String add(Portlet data) 
-	{
+	public String add(Portlet data) {
 		JSONObject portlet = new JSONObject();
-		
+
 		portlet.put("name", data.getName());
 		portlet.put("path", data.getPath());
 		portlet.put("description", data.getDescription());
@@ -38,16 +47,16 @@ public class ElasticsearchPortletview extends PortletView {
 		portlet.put("sizeSM", data.getSizeSM());
 		portlet.put("sizeMD", data.getSizeMD());
 		portlet.put("sizeLG", data.getSizeLG());
+		portlet.put("isMultiple", data.isMultiple());
 
 		return ElasticsearchHelper.add(view, "system", "portlet", portlet.toJSONString());
 	}
 
 	@Override
-	public Portlet edit(Portlet data) 
-	{
-		
+	public Portlet edit(Portlet data) {
+
 		JSONObject portlet = new JSONObject();
-		
+
 		portlet.put("name", data.getName());
 		portlet.put("path", data.getPath());
 		portlet.put("description", data.getDescription());
@@ -56,18 +65,18 @@ public class ElasticsearchPortletview extends PortletView {
 		portlet.put("sizeSM", data.getSizeSM());
 		portlet.put("sizeMD", data.getSizeMD());
 		portlet.put("sizeLG", data.getSizeLG());
-		
-		return ElasticSearchHelper.edit(view, "system", "group", portlet.toJSONString(), data);
+		portlet.put("isMultiple", data.isMultiple());
+
+		return ElasticSearchHelper.edit(view, "system", "portlet", portlet.toJSONString(), data);
 	}
 
 	@Override
-	public Portlet get(String id) 
-	{
+	public Portlet get(String id) {
 		if(id == null)
 			return null;
 		System.out.println("DEBUG "+id);
 		GetResponse response = this.view.getESClient().prepareGet("system", "portlet", id).setFields(fieldList).execute().actionGet();
-		
+
 		if(response.isExists())
 			return responseToPortlet(response.getId(), response.getVersion(), response.getFields());
 		else
@@ -76,13 +85,12 @@ public class ElasticsearchPortletview extends PortletView {
 
 	@Override
 	public boolean remove(String id) {
-		// TODO aktualisierung erforderlich? 
+		// TODO aktualisierung erforderlich?
 		return ElasticseachHelper.remove(view, "system", "portlet", id);
 	}
 
 	@Override
-	public Vector<Portlet> getPossiblePortletsForUser(String id) 
-	{
+	public Vector<Portlet> getPossiblePortletsForUser(String id) {
 		User user = this.view.getUserView().get(id);
 		if (user != null) {
 			Vector<String> userGroups = user.getMembership();
@@ -92,9 +100,11 @@ public class ElasticsearchPortletview extends PortletView {
 				for (String groupId : portletGroups) {
 					if (userGroups.contains(groupId)) {
 						boolean add = true;
-						for(Map<String, String> map: user.getPortlets()){
-							if(map.containsValue(portlet.getId())){
-								add = false;
+						if(!portlet.isMultiple()){
+							for(Map<String, String> map: user.getPortlets()){
+								if(map.containsValue(portlet.getId())){
+									add = false;
+								}
 							}
 						}
 						if (add) {
@@ -112,10 +122,8 @@ public class ElasticsearchPortletview extends PortletView {
 	@Override
 	public Vector<Portlet> getAll() {
 		Vector<Portlet> portlets = new Vector<Portlet>();
-		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "portlet", fieldList))
-		{
-			if(hit.getFields()!=null)
-			{
+		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "portlet", fieldList)) {
+			if(hit.getFields()!=null) {
 				Portlet port = this.responseToPortlet(hit.getId(), hit.getVersion(), hit.getFields());
 				if(port != null)
 					portlets.add(port);
@@ -162,10 +170,12 @@ public class ElasticsearchPortletview extends PortletView {
 				case "sizeLG":
 					p.setSizeLG(field.getValue() == null ? 1 : (field.getValue()));
 					break;
+				case "isMultiple":
+					p.setMultiple(field.getValue() == null ? false : (field.getValue()));
+					break;
 			}
 		}
-		
+
 		return p;
 	}
-	
 }

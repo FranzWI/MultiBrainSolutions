@@ -29,6 +29,7 @@ function refreshPortlets() {
 		$('#portlet-edit-name').val('');
 		$('#portlet-edit-desc').val('');
 		$('#portlet-edit-path').val('');
+		$('#portlet-edit-multiple').prop('checked', false);
 		// TODO Groups
 		$('#portlet-edit-xs').val('');
 		$('#portlet-edit-sm').val('');
@@ -45,6 +46,7 @@ function refreshPortlets() {
 				$('#portlet-edit-name').val(data.name);
 				$('#portlet-edit-desc').val(data.description);
 				$('#portlet-edit-path').val(data.path);
+				$('#portlet-edit-multiple').prop('checked', data.multiple);
 				//refreshGroups();
 				
 				$('#portlet-edit-groups option').each(function(){
@@ -106,6 +108,7 @@ $(document).ready(
 						$('.portlet-add').each(function() {
 							json[$(this).attr('name')] = $(this).val();
 						});
+						json['multiple'] = $('#portlet-add-multiple').prop('checked');
 						json[$('select.portlet-add-select').attr('name')] = $(
 								'select.portlet-add-select').val();
 						$.ajax(
@@ -121,8 +124,10 @@ $(document).ready(
 						}).fail(function(jqXHR, textStatus) {
 							toastr.error("Hinzufügen fehlgeschlagen.");
 							$('.portlet-add').val('');
+							$('#portlet-add-multiple').prop('checked', false);
 						}).always(function(){
 							refreshPortlets();
+							$('#portlet-add-multiple').prop('checked', false);
 							$('#portlet-add-groups option').each(function(){
 								$(this).removeAttr("selected");
 							});
@@ -141,6 +146,7 @@ $(document).ready(
 							$('.portlet-edit').each(function() {
 								json[$(this).attr('name')] = $(this).val();
 							});
+							json['multiple'] = $('#portlet-edit-multiple').prop('checked');
 							json[$('select.portlet-edit-select').attr('name')] = $(
 									'select.portlet-edit-select').val();
 							$.ajax(
@@ -156,8 +162,10 @@ $(document).ready(
 							}).fail(function(jqXHR, textStatus) {
 								toastr.error("ändern fehlgeschlagen.");
 								$('.portlet-edit').val('');
+								$('#portlet-edit-multiple').prop('checked', false);
 							}).always(function(){
 								refreshPortlets();
+								$('#portlet-edit-multiple').prop('checked', false);
 								$('#portlet-edit-groups option').each(function(){
 									$(this).removeAttr("selected");
 								});

@@ -48,6 +48,12 @@ html.div{
 										}
 									}
 									div('class':"form-group"){
+										label('for':"groups",'class':"col-sm-1 control-label", "Mehrfach")
+										div('class':"col-sm-6"){
+											input(id:'portlet-add-multiple', type:"checkbox", name:"multiple",'class':"pull-left form-control portlet-add")
+										}
+									}
+									div('class':"form-group"){
 										label('for':"xs",'class':"col-sm-1 control-label", "XS")
 										div('class':"col-sm-6"){
 											input(type:"number",name:'xs','class':"form-control portlet-add", 'placeholder':"XS")
@@ -112,6 +118,12 @@ html.div{
 										label('for':"groups",'class':"col-sm-1 control-label", "Gruppen")
 										div('class':"col-sm-6"){
 											select(id:'portlet-edit-groups',name:"groups",'class':"form-control portlet-group",'multiple':""){ option('') }
+										}
+									}
+									div('class':"form-group"){
+										label('for':"groups",'class':"col-sm-1 control-label", "Mehrfach")
+										div('class':"col-sm-6"){
+											input(id:'portlet-edit-multiple', type:"checkbox", name:"multiple",'class':"pull-left form-control portlet-edit")
 										}
 									}
 									div('class':"form-group"){
