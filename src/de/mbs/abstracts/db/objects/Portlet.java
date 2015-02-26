@@ -18,6 +18,8 @@ public class Portlet extends DatabaseObject implements Cloneable {
 	 */
 	private int sizeXS, sizeSM, sizeMD, sizeLG;
 	
+	private boolean multiple = false;
+	
 	public Portlet(String id) {
 		super(id);
 	}
@@ -92,6 +94,14 @@ public class Portlet extends DatabaseObject implements Cloneable {
 
 	public void setSizeLG(int sizeLG) {
 		this.sizeLG = sizeLG;
+	}
+
+	public boolean isMultiple() {
+		return multiple;
+	}
+
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
 	}
 
 }

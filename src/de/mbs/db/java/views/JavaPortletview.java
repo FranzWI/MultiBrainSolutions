@@ -80,14 +80,16 @@ public class JavaPortletview extends PortletView {
 		if (user != null) {
 			Vector<String> userGroups = user.getMembership();
 			Vector<Portlet> result = new Vector<Portlet>();
-			for (Portlet portlet : this.portlets) {
+			for (Portlet portlet : this.getAll()) {
 				Vector<String> portletGroups = portlet.getUsedByGroups();
 				for (String groupId : portletGroups) {
 					if (userGroups.contains(groupId)) {
 						boolean add = true;
-						for(Map<String, String> map: user.getPortlets()){
-							if(map.containsValue(portlet.getId())){
-								add = false;
+						if(!portlet.isMultiple()){
+							for(Map<String, String> map: user.getPortlets()){
+								if(map.containsValue(portlet.getId())){
+									add = false;
+								}
 							}
 						}
 						if (add) {

@@ -14,6 +14,9 @@
             "usedByGroups":{
                 "type":"string"
             },
+            "isMultiple":{
+                "type":"boolean"
+            },
             "size":{
                 "type":"object",
                 "properties":{
@@ -29,7 +32,6 @@
                     "lg":{
                         "type":"byte"
                     }
-                    
                 }
             }
         }
