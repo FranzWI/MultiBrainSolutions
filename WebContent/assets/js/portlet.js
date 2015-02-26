@@ -29,6 +29,7 @@ function refreshPortlets() {
 		$('#portlet-edit-name').val('');
 		$('#portlet-edit-desc').val('');
 		$('#portlet-edit-path').val('');
+		$('#portlet-edit-multiple').val('');
 		// TODO Groups
 		$('#portlet-edit-xs').val('');
 		$('#portlet-edit-sm').val('');
@@ -45,6 +46,7 @@ function refreshPortlets() {
 				$('#portlet-edit-name').val(data.name);
 				$('#portlet-edit-desc').val(data.description);
 				$('#portlet-edit-path').val(data.path);
+				$('#portlet-edit-multiple').val(data.multiple);
 				//refreshGroups();
 				
 				$('#portlet-edit-groups option').each(function(){

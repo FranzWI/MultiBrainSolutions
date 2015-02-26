@@ -39,6 +39,7 @@ public class PortletREST {
 			obj.put("name", p.getName());
 			obj.put("description", p.getDescription());
 			obj.put("path", p.getPath());
+			obj.put("multiple", p.isMultiple());
 			// Gruppe auslesen
 			obj.put("groups", RESTHelper.groupsToJSONArray(p.getUsedByGroups()));
 			obj.put("xs", p.getSizeXS());
@@ -61,6 +62,7 @@ public class PortletREST {
 			obj.put("name", p.getName());
 			obj.put("description", p.getDescription());
 			obj.put("path", p.getPath());
+			obj.put("multiple", p.isMultiple());
 			// Gruppe auslesen
 			JSONArray groups = new JSONArray();
 			for (String groupId : p.getUsedByGroups()) {
@@ -190,7 +192,10 @@ public class PortletREST {
 				p.setSizeMD(Integer.parseInt((value.isEmpty()?"0":value)));
 				break;
 			case "lg":
-				p.setSizeMD(Integer.parseInt((value.isEmpty()?"0":value)));
+				p.setSizeLG(Integer.parseInt((value.isEmpty()?"0":value)));
+				break;
+			case "multiple":
+				p.setMultiple(Boolean.valueOf(value));
 				break;
 			default:
 				return Response
