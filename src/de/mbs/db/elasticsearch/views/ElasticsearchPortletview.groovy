@@ -159,16 +159,16 @@ public class ElasticsearchPortletview extends PortletView {
 					p.setUsedByGroups(groups);
 					break;
 				case "sizeXS":
-					p.setSizeXS(field.getValue() == null ? 1 : (field.getValue()));
+					p.setSizeXS(field.getValue() == null ? 1 : ((int) field.getValue()));
 					break;
 				case "sizeSM":
-					p.setSizeSM(field.getValue() == null ? 1 : (field.getValue()));
+					p.setSizeSM(field.getValue() == null ? 1 : ((int) field.getValue()));
 					break;
 				case "sizeMD":
-					p.setSizeMD(field.getValue() == null ? 1 : (field.getValue()));
+					p.setSizeMD(field.getValue() == null ? 1 : ((int) field.getValue()));
 					break;
 				case "sizeLG":
-					p.setSizeLG(field.getValue() == null ? 1 : (field.getValue()));
+					p.setSizeLG(field.getValue() == null ? 1 : ((int)  field.getValue()));
 					break;
 				case "isMultiple":
 					p.setMultiple(field.getValue() == null ? false : (field.getValue()));
