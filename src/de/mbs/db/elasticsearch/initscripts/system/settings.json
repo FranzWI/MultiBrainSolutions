@@ -15,23 +15,7 @@
                         "type":"string",
                         "index":"not_analyzed"
                     }
-                    
                 }
-                
-            },
-            "db":{
-                "type":"object",
-                "properties":{
-                    "user":{
-                        "type":"string"
-                    },
-                    "pw":{
-                        "type":"string",
-                        "index":"not_analyzed"
-                    }
-                    
-                }
-                
             },
             "proxy":{
                 "type":"string",
