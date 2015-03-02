@@ -29,12 +29,8 @@ public class Message extends DatabaseObject implements Cloneable {
 		super(id);
 	}
 
-	public Message(String id, int version) {
+	public Message(String id, long version) {
 		super(id, version);
-	}
-
-	public Message(String id, long timestamp) {
-		super(id, timestamp);
 	}
 
 	public Date getSendDate() {

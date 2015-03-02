@@ -65,35 +65,35 @@ public class Portlet extends DatabaseObject implements Cloneable {
 	}
 
 	public int getSizeXS() {
-		return sizeXS;
+		return (int) sizeXS;
 	}
 
 	public void setSizeXS(int sizeXS) {
-		this.sizeXS = sizeXS;
+		this.sizeXS = (int) sizeXS;
 	}
 
 	public int getSizeSM() {
-		return sizeSM;
+		return (int) sizeSM;
 	}
 
 	public void setSizeSM(int sizeSM) {
-		this.sizeSM = sizeSM;
+		this.sizeSM = (int) sizeSM;
 	}
 
 	public int getSizeMD() {
-		return sizeMD;
+		return (int) sizeMD;
 	}
 
 	public void setSizeMD(int sizeMD) {
-		this.sizeMD = sizeMD;
+		this.sizeMD = (int) sizeMD;
 	}
 
 	public int getSizeLG() {
-		return sizeLG;
+		return (int) sizeLG;
 	}
 
 	public void setSizeLG(int sizeLG) {
-		this.sizeLG = sizeLG;
+		this.sizeLG = (int) sizeLG;
 	}
 
 	public boolean isMultiple() {

@@ -47,6 +47,7 @@ public class PortletviewTest {
 		portlet.setName("TestPortlet");
 		portlet.setPath("TestPfad");
 		portlet.setDescription("Das ist eine testweise angelegtes Portlet");
+		
 		portlet.setSizeXS(50);
 		portlet.setSizeSM(100);
 		portlet.setSizeMD(150);

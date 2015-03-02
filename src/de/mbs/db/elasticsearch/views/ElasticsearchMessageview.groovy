@@ -76,7 +76,7 @@ public class ElasticsearchMessageview extends MessageView {
 		JSONObject mess = new JSONObject();
 		
 		mess.put("subject", data.getTopic());
-		mess.put("timestamp", data.getTimestamp());
+		mess.put("timestamp", data.getVersion());
 		mess.put("from", data.getFromUser());
 		mess.put("toUser", data.getToUser());
 		mess.put("toGroup", data.getToGroup());
@@ -95,7 +95,7 @@ public class ElasticsearchMessageview extends MessageView {
 		JSONObject mess = new JSONObject();
 
 		mess.put("subject", data.getTopic());
-		mess.put("timestamp", data.getTimestamp());
+		mess.put("timestamp", data.getVersion());
 		mess.put("from", data.getFromUser());
 		mess.put("toUser", data.getToUser());
 		mess.put("toGroup", data.getToGroup());

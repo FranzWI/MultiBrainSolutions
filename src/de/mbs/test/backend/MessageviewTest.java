@@ -47,15 +47,18 @@ public class MessageviewTest {
 	public final void test1AddMessage() {
 		MessageView messageView = TestExecuter.getView().getMessageView();
 		Message testMessage = new Message(null);
+		
 		testMessage.setTopic("TestMessage");
 		testMessage.setContent("MessageContent");
 		testMessage.setFromUser(TestExecuter.getView().getUserView()
 				.getUserByUserName("admin").getId());
 		testMessage.addToUser(TestExecuter.getView().getUserView()
 				.getUserByUserName("user").getId());
+		
 		messageId = messageView.add(testMessage);
 		System.out.println("_____test1AddMessage");
 		System.out.println("testMessage ID = " + messageId);
+		
 		assertNotNull("testMessage wurde nicht hinzugefuegt", messageId);
 		assertEquals("Betreff nicht richtig hinzugefuegt",
 				testMessage.getTopic(), "TestMessage");
