@@ -48,16 +48,21 @@ public class MessageviewTest {
 		try {
 			MessageView messageView = TestExecuter.getView().getMessageView();
 			Message testMessage = new Message(null);
+			
 			testMessage.setTopic("TestMessage");
 			testMessage.setContent("MessageContent");
 			testMessage.setFromUser(TestExecuter.getView().getUserView()
 					.getUserByUserName("admin").getId());
 			testMessage.addToUser(TestExecuter.getView().getUserView()
 					.getUserByUserName("user").getId());
+			
 			messageId = messageView.add(testMessage);
+			
 			System.out.println("_____test1AddMessage");
 			System.out.println("testMessage ID = " + messageId);
+			
 			assertNotNull("testMessage wurde nicht hinzugefuegt", messageId);
+			
 			assertEquals("Betreff nicht richtig hinzugefuegt",
 					testMessage.getTopic(), "TestMessage");
 			assertEquals("Inhalt nicht richtig hinzugefuegt",
@@ -65,7 +70,10 @@ public class MessageviewTest {
 			assertEquals("Absender nicht richtig hinzugefuegt",
 					testMessage.getFromUser(), TestExecuter.getView()
 							.getUserView().getUserByUserName("admin").getId());
-		} catch (Exception e) {
+			
+		} 
+		catch (Exception e) 
+		{
 			System.out.println("---stacktrace test1AddMessage---");
 			e.printStackTrace();
 		}

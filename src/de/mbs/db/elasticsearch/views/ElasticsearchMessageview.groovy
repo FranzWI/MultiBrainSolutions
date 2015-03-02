@@ -19,7 +19,8 @@ import de.mbs.db.elasticsearch.ElasticsearchView;
 
 public class ElasticsearchMessageview extends MessageView {
 	
-	private String[] fieldList = ["subject", "timestamp","from", "toUser", "toGroup", "content","file","prevMessage", "read"];
+	//Not Implemented yet field file: "file",
+	private String[] fieldList = ["subject", "timestamp","from", "toUser", "toGroup", "content", "prevMessage", "read"];
 	
 	private ElasticsearchView view; 
 	
@@ -81,7 +82,8 @@ public class ElasticsearchMessageview extends MessageView {
 		mess.put("toUser", data.getToUser());
 		mess.put("toGroup", data.getToGroup());
 		mess.put("content", data.getContent());
-		mess.put("file", data.getFile());
+		//Not Implemented yet:
+		//mess.put("file", data.getFile());
 		mess.put("prevMessage", data.getPreviousMessgage());
 		mess.put("read", data.isRead());
 		
@@ -100,7 +102,8 @@ public class ElasticsearchMessageview extends MessageView {
 		mess.put("toUser", data.getToUser());
 		mess.put("toGroup", data.getToGroup());
 		mess.put("content", data.getContent());
-		mess.put("file", data.getFile());
+		//Not Implemented yet:
+		//mess.put("file", data.getFile());
 		mess.put("prevMessage", data.getPreviousMessgage());
 		mess.put("read", data.isRead());
 
