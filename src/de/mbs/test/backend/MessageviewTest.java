@@ -48,21 +48,21 @@ public class MessageviewTest {
 		try {
 			MessageView messageView = TestExecuter.getView().getMessageView();
 			Message testMessage = new Message(null);
-			
+
 			testMessage.setTopic("TestMessage");
 			testMessage.setContent("MessageContent");
 			testMessage.setFromUser(TestExecuter.getView().getUserView()
 					.getUserByUserName("admin").getId());
 			testMessage.addToUser(TestExecuter.getView().getUserView()
 					.getUserByUserName("user").getId());
-			
+
 			messageId = messageView.add(testMessage);
-			
+
 			System.out.println("_____test1AddMessage");
 			System.out.println("testMessage ID = " + messageId);
-			
+
 			assertNotNull("testMessage wurde nicht hinzugefuegt", messageId);
-			
+
 			assertEquals("Betreff nicht richtig hinzugefuegt",
 					testMessage.getTopic(), "TestMessage");
 			assertEquals("Inhalt nicht richtig hinzugefuegt",
@@ -70,11 +70,11 @@ public class MessageviewTest {
 			assertEquals("Absender nicht richtig hinzugefuegt",
 					testMessage.getFromUser(), TestExecuter.getView()
 							.getUserView().getUserByUserName("admin").getId());
-			
-		} 
-		catch (Exception e) 
-		{
-			System.out.println("---stacktrace test1AddMessage---");
+
+		} catch (Exception e) {
+			class Local {};
+			String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
 		}
 	}
@@ -92,7 +92,9 @@ public class MessageviewTest {
 			assertEquals("Betreff der gefundenen Nachricht ist nicht richtig",
 					testMessage.getTopic(), "TestMessage");
 		} catch (Exception e) {
-			System.out.println("---stacktrace test1GetMessage---");
+			class Local {};
+			String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
 		}
 	}
@@ -103,14 +105,21 @@ public class MessageviewTest {
 	 * .
 	 */
 	@Test
-	public final void test2Edit() {
-		MessageView messageView = TestExecuter.getView().getMessageView();
-		Message testMessage = messageView.get(messageId);
-		testMessage.setTopic("edited subject");
-		assertNotNull("testMessage wurde nicht geaendert",
-				messageView.edit(testMessage));
-		assertEquals("geaenderter Betreff ist falsch", testMessage.getTopic(),
-				"edited subject");
+	public final void test2EditMessage() {
+		try {
+			MessageView messageView = TestExecuter.getView().getMessageView();
+			Message testMessage = messageView.get(messageId);
+			testMessage.setTopic("edited subject");
+			assertNotNull("testMessage wurde nicht geaendert",
+					messageView.edit(testMessage));
+			assertEquals("geaenderter Betreff ist falsch",
+					testMessage.getTopic(), "edited subject");
+		} catch (Exception e) {
+			class Local {};
+			String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName + "---");
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -152,7 +161,7 @@ public class MessageviewTest {
 	 * .
 	 */
 	@Test
-	public final void test4Search() {
+	public final void test4SearchMessage() {
 		fail("Not yet implemented"); // TODO
 	}
 
@@ -170,9 +179,10 @@ public class MessageviewTest {
 			}
 			assertNotNull("Message Vektor ist Null", vec);
 			assertTrue("Message Vektor hat eie Laenge von 0", vec.size() > 0);
-		}
-		catch (Exception e){
-			System.out.println("---stacktrace test1GetAllMessages---" );
+		} catch (Exception e) {
+			class Local {};
+			String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
 		}
 	}
@@ -182,7 +192,7 @@ public class MessageviewTest {
 	 * {@link de.mbs.db.java.views.JavaMessageview#remove(java.lang.String)}.
 	 */
 	@Test
-	public final void test5Remove() {
+	public final void test5RemoveMessage() {
 		fail("Not yet implemented"); // TODO
 	}
 

@@ -29,7 +29,7 @@ public class PortletviewTest {
 	}
 
 	@Test
-	public final void test2GetAll() {
+	public final void test2GetAllPortlets() {
 		PortletView portletView = TestExecuter.getView().getPortletView();
 		Vector<Portlet> vec = portletView.getAll();
 		for (Portlet p : vec) {
@@ -39,7 +39,7 @@ public class PortletviewTest {
 	}
 
 	@Test
-	public final void test3Add() {
+	public final void test3AddPortlet() {
 		System.out.println("------ testAdd ------");
 		PortletView portletView = TestExecuter.getView().getPortletView();
 		Vector<String> groups = new Vector<String>();
@@ -47,7 +47,7 @@ public class PortletviewTest {
 		portlet.setName("TestPortlet");
 		portlet.setPath("TestPfad");
 		portlet.setDescription("Das ist eine testweise angelegtes Portlet");
-		
+
 		portlet.setSizeXS(50);
 		portlet.setSizeSM(100);
 		portlet.setSizeMD(150);
@@ -59,37 +59,53 @@ public class PortletviewTest {
 	}
 
 	@Test
-	public final void test4Get() {
-		PortletView portletView = TestExecuter.getView().getPortletView();
-		portlet = portletView.get(portletID);
+	public final void test4GetPortlet() {
+		try {
+			PortletView portletView = TestExecuter.getView().getPortletView();
+			portlet = portletView.get(portletID);
 
-		System.out.println("------ testGet ------");
-		System.out.println("Name: " + portlet.getName());
-		System.out.println("Description: " + portlet.getDescription());
-		System.out.println("Path: " + portlet.getPath());
-		System.out.println("SizeXS: " + portlet.getSizeXS());
-		System.out.println("SizeSM: " + portlet.getSizeSM());
-		System.out.println("SizeMD: " + portlet.getSizeMD());
-		System.out.println("SizeLG: " + portlet.getSizeLG());
-		System.out.println("UsedByGroups: " + portlet.getUsedByGroups());
+			System.out.println("------ testGet ------");
+			System.out.println("Name: " + portlet.getName());
+			System.out.println("Description: " + portlet.getDescription());
+			System.out.println("Path: " + portlet.getPath());
+			System.out.println("SizeXS: " + portlet.getSizeXS());
+			System.out.println("SizeSM: " + portlet.getSizeSM());
+			System.out.println("SizeMD: " + portlet.getSizeMD());
+			System.out.println("SizeLG: " + portlet.getSizeLG());
+			System.out.println("UsedByGroups: " + portlet.getUsedByGroups());
 
-		assertNotNull("Portlet ist null", portlet);
+			assertNotNull("Portlet ist null", portlet);
+		} catch (Exception e) {
+			class Local {};
+		    String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName +"---"); 
+			e.printStackTrace();
+		}
 	}
 
 	@Test
-	public final void test5Edit() {
-		PortletView portletView = TestExecuter.getView().getPortletView();
-		portlet = portletView.get(portletID);
-		portlet.setName("Edited Name");
-		portlet = portletView.edit(portlet);
+	public final void test5EditPortlet() {
+		try {
+			PortletView portletView = TestExecuter.getView().getPortletView();
+			portlet = portletView.get(portletID);
+			portlet.setName("Edited Name");
+			portlet = portletView.edit(portlet);
 
-		System.out.println("----- testEdit -----");
-		test4Get();
-		assertNotNull("Editierung fehlgeschlagen", portlet);
+			System.out.println("----- testEdit -----");
+			test4GetPortlet();
+			assertNotNull("Editierung fehlgeschlagen", portlet);
+		} catch (Exception e) {
+			class Local {};
+		    String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName +"---"); 
+			e.printStackTrace();
+		}
+
 	}
 
 	@Test
-	public final void test6Remove() {
+	public final void test6RemovePortlet() {
+		try {
 		PortletView portletView = TestExecuter.getView().getPortletView();
 		boolean deleted = false;
 		deleted = portletView.remove(portletID);
@@ -97,13 +113,22 @@ public class PortletviewTest {
 		System.out.println("Portlet gelöscht: "+deleted);
 		System.out.println("PortledID nach löschen: "+portletView.get(portletID));
 		assertTrue("Remove konnte nicht durchgeführt werden", deleted == true);
+		}catch (Exception e){
+			class Local {};
+		    String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName +"---"); 
+			e.printStackTrace();
+		}
 	}
-	
+
 	@Test
 	public final void test7GetPossiblePortletsForUser() {
 		PortletView portletView = TestExecuter.getView().getPortletView();
-		Vector<Portlet> vec = portletView.getPossiblePortletsForUser(TestExecuter.getView().getUserView().getUserByUserName("admin").getId());
-		System.out.println("----- Possible portlets for user \" admin \" ------");
+		Vector<Portlet> vec = portletView
+				.getPossiblePortletsForUser(TestExecuter.getView()
+						.getUserView().getUserByUserName("admin").getId());
+		System.out
+				.println("----- Possible portlets for user \" admin \" ------");
 		for (Portlet p : vec) {
 			System.out.println("Portlet: " + p.getName());
 		}
