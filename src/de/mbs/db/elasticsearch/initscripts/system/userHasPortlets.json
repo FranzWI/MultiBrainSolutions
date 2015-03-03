@@ -1,0 +1,20 @@
+{
+    "userHasPortlets":{
+        "properties":{
+            "userID":{
+                "type":"string",
+                "index":"not_analyzed"
+            },
+            "portletID":{
+                "type":"string",
+                "index":"not_analyzed"
+            }
+            "settings":{
+                "type":"string",
+                "index":"not_analyzed"
+            }
+            
+        }
+        
+    }
+}
