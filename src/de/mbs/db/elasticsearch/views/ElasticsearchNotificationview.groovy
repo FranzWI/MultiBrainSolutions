@@ -106,7 +106,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 		return ElasticsearchHelper.remove(view, "news", "notification", id);
 	}
 	
-	public Notification responseToNotification(id,version, fields)
+	public Notification responseToNotification(id, version, fields)
 	{
 			if(fields == null)
 				return null;
@@ -120,81 +120,43 @@ public class ElasticsearchNotificationview extends NotificationView {
 				switch (key) 
 				{
 					case "subject":
-						if(field instanceof String)
-						{
-							notification.setSubject(field);
-						}
-						else
-						{
-							notification.setSubject(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
+						notification.setSubject(field.getValue() == null ? "" : field.getValue().toString());
 						break;
 					case "icon":
-						if(field instanceof String)
-						{
-							notification.setIcon(field);
-						}
-						else
-						{
-							notification.setIcon(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
+						notification.setIcon(field.getValue() == null ? "" : field.getValue().toString());
 						break;
 					case "link":
-						if(field instanceof String)
-						{
-							notification.setLink(field);
-						}
-						else
-						{
-							notification.setLink(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
+						notification.setLink(field.getValue() == null ? "" : field.getValue().toString());
 						break;
 					case "creation":
-						if(field instanceof String)
-						{
-							notification.setCreation(field);
-						}
-						else
-						{
-							notification.setCreation(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
+						notification.setCreation(field.getValue() == null ? "" : field.getValue().toString());
 						break;
 					case "release":
-						if(field instanceof String)
-						{
-							notification.setRelease(field);
-						}
-						else
-						{
-							notification.setRelease(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
+						notification.setRelease(field.getValue() == null ? "" : field.getValue().toString());
 						break;
-					case "toUser":
-						if(field instanceof String)
+					case "toUser": //Vector
+						Vector<String> users = new Vector<String>();
+						if (field.getValues() != null) 
 						{
-							notification.setToUser(field);
+							Vector<Object> values = field.getValues();
+							for (Object o : values) 
+							{
+								users.add(o.toString());
+							}
 						}
-						else
-						{
-							notification.setToUser(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
+						p.setUsedByGroups(users);
 						break;
-					case "toGroup":
-						if(field instanceof String)
+					case "toGroup": //Vector
+						Vector<String> groups = new Vector<String>();
+						if (field.getValues() != null) 
 						{
-							notification.setToGroup(field);
+							Vector<Object> values = field.getValues();
+							for (Object o : values) 
+							{
+								groups.add(o.toString());
+							}
 						}
-						else
-						{
-							notification.setToGroup(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
+						notification.setUsedByGroups(groups);
 						break;
 				}
 			}
