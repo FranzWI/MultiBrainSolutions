@@ -82,38 +82,16 @@ public class ElasticsearchSettingsview extends SettingsView
 				switch (key) 
 				{
 					case "mailProperties":
-						if(field instanceof String)
-						{
-							settings.setMailProperties(field);
-						}
-						else
-						{
-							settings.setMailProperties(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
-						break;
+					settings.setMailProperties(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+					
 					case "dbProperties":
-						if(field instanceof String)
-						{
-							settings.setDbProperties(field);
-						}
-						else
-						{
-							settings.setDbProperties(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
-						break;
+					settings.setDbProperties(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+					
 					case "proxyProperties":
-						if(field instanceof String)
-						{
-							settings.setProxyProperties(field);
-						}
-						else
-						{
-							settings.setProxyProperties(field.getValue() == null ? "" : field
-									.getValue().toString());
-						}
-						break;
+					settings.setProxyProperties(field.getValue() == null ? "" : field.getValue().toString());
+					break;
 				}
 			}
 			if(settings==null)
