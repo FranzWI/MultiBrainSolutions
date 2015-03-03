@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.objects.UserPortlet;
 import de.mbs.abstracts.db.utils.Pair;
 import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.UserView;
@@ -157,15 +158,15 @@ public class UserviewTest {
 		assertNotNull("keine Portlets für den TestUser (Gruppe Admin) gefunden",TestExecuter.getView().getPortletView().getPossiblePortletsForUser(testUserId));
 		assertTrue("keine Portlets für die Admingruppe definiert",TestExecuter.getView().getPortletView().getPossiblePortletsForUser(testUserId).size()>0);
 		
-		Map<String, String> portlet = new TreeMap<String,String>();
+		UserPortlet portlet = new UserPortlet(null);
 		String portletId = TestExecuter.getView().getPortletView().getPossiblePortletsForUser(testUserId).get(0).getId();
 		String portletSetting = "foobar";
-		portlet.put("ID", portletId);
-		portlet.put("settings", portletSetting);
-		testUser.addPortlet(portlet);
+		portlet.setPortletId(portletId);
+		portlet.setOwnerId(testUser.getId());
+		portlet.setSettings(portletSetting);
 		
 		// Nutzer ändern
-		assertNotNull("ändern des Nutzers fehlgeschlagen", userView.edit(testUser));
+		assertNotNull("ändern des Nutzers fehlgeschlagen", TestExecuter.getView().getUserPortletView().add(portlet));
 		
 		// Nutzer frisch aus der DAtenbank abholen und prüfen
 		User editedUser = userView.get(testUserId);
@@ -173,10 +174,10 @@ public class UserviewTest {
 		assertEquals("Username nicht identisch", testUser.getUsername(),
 				editedUser.getUsername());
 		assertTrue("testUser nicht aktiv", testUser.isActive());
-		assertNotNull("abfrage der Portlets fehlerhaft", testUser.getPortlets());
-		assertTrue("kein Portlet für den TestUser hinterlegt", testUser.getPortlets().size()>0);
-		assertTrue("falsche Portlet ID hinterlegt", testUser.getPortlets().get(0).get("ID").equals(portletId));
-		assertTrue("falsche Portlet Settings hinterlegt", testUser.getPortlets().get(0).get("settings").equals(portletSetting));
+		assertNotNull("abfrage der Portlets fehlerhaft", TestExecuter.getView().getUserPortletView().byOwner(testUserId));
+		assertTrue("kein Portlet für den TestUser hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUserId).size()>0);
+		assertTrue("falsche Portlet ID hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUserId).get(0).getPortletId().equals(portletId));
+		assertTrue("falsche Portlet Settings hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUserId).get(0).getSettings().equals(portletSetting));
 		// Ausgabe aller Benutzernamen
 		// for(User u:userView.getAll()){System.out.println(u.getUsername());}
 	}

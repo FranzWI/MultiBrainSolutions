@@ -22,6 +22,7 @@ import org.json.simple.parser.ParseException;
 import de.mbs.abstracts.db.objects.Group;
 import de.mbs.abstracts.db.objects.Notification;
 import de.mbs.abstracts.db.objects.Portlet;
+import de.mbs.abstracts.db.objects.UserPortlet;
 import de.mbs.abstracts.mail.MailView;
 import de.mbs.abstracts.mail.definition.Mail;
 import de.mbs.crypt.Crypt;
@@ -124,10 +125,11 @@ public class UserREST {
 		Portlet p = ServiceHandler.getDatabaseView().getPortletView()
 				.get(portletid);
 		if (p != null && u != null) {
-			Map<String, String> map = new TreeMap<String,String>();
-			map.put("ID", portletid);
-			u.addPortlet(map);
-			if (ServiceHandler.getDatabaseView().getUserView().edit(u) != null)
+			UserPortlet up = new UserPortlet(null);
+			up.setOwnerId(u.getId());
+			up.setPortletId(p.getId());
+			up.setOrder(ServiceHandler.getDatabaseView().getUserPortletView().byOwner(u.getId()).size());
+			if (ServiceHandler.getDatabaseView().getUserPortletView().add(up) != null)
 				return Response.ok().build();
 			else
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -143,15 +145,13 @@ public class UserREST {
 	public Response removePortlet(@PathParam("portletId") String portletid) {
 		de.mbs.abstracts.db.objects.User u = (de.mbs.abstracts.db.objects.User) webRequest
 				.getAttribute("user");
-		Portlet p = ServiceHandler.getDatabaseView().getPortletView()
-				.get(portletid);
+		UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView().get(portletid);
 		if (p != null && u != null) {
-			u.removePortlet(portletid);
-			if (ServiceHandler.getDatabaseView().getUserView().edit(u) != null)
+			if (ServiceHandler.getDatabaseView().getUserPortletView().remove(portletid))
 				return Response.ok().build();
 			else
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-						.entity("Fehler beim speichern des Users").build();
+						.entity("Fehler beim entfernen des Portlets").build();
 		}
 		return Response.status(Response.Status.BAD_REQUEST)
 				.entity("User oder Portlet ID fehlerhaft").build();
@@ -167,22 +167,20 @@ public class UserREST {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("User ID fehlerhaft").build();
 
-		Vector<Map<String,String>> portletIDs = new Vector<Map<String,String>>();
+		Vector<UserPortlet> portlets = new Vector<UserPortlet>();
 		for (String portledid : portletids.split(",")) {
-			Portlet p = ServiceHandler.getDatabaseView().getPortletView()
+			UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView()
 					.get(portledid);
 			if (p == null) {
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("Portlet ID (" + portledid + ") fehlerhaft")
 						.build();
 			} else {
-				Map<String, String> map = new TreeMap<String,String>();
-				map.put("ID", p.getId());
-				portletIDs.add(map);
+				portlets.add(p);
 			}
 		}
-		u.setPortlets(portletIDs);
-		if (ServiceHandler.getDatabaseView().getUserView().edit(u) != null)
+
+		if (ServiceHandler.getDatabaseView().getUserPortletView().setPortlets(portlets, u.getId()))
 			return Response.ok().build();
 		else
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

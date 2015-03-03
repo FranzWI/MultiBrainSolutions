@@ -12,7 +12,6 @@ public class User extends DatabaseObject implements Cloneable{
 	private String username, firstname, lastname, email, pw, apikey, sessionId;
 
 	private Vector<String> membership = new Vector<String>();
-	private Vector<Map<String,String>> portlets = new Vector<Map<String,String>>();
 
 	private boolean active = false;
 	
@@ -79,10 +78,6 @@ public class User extends DatabaseObject implements Cloneable{
 	public void setMembership(Vector<String> membership) {
 		this.membership = membership;
 	}
-
-	public Vector<Map<String,String>> getPortlets() {
-		return portlets;
-	}
 	
 	public void addMembership(String groupId) {
 		this.membership.add(groupId);
@@ -90,23 +85,6 @@ public class User extends DatabaseObject implements Cloneable{
 	
 	public void removeMembership(String groupId){
 		this.membership.remove(groupId);
-	}
-
-	public void setPortlets(Vector<Map<String,String>> portlets) {
-		this.portlets = portlets;
-	}
-
-	public void addPortlet(Map<String,String> map){ 
-		this.portlets.add(map);
-	}
-	
-	public void removePortlet(String id){
-		for(Map<String,String> map : this.portlets){
-			if(map.containsValue(id)){
-				this.portlets.remove(map);
-				return;
-			}
-		}
 	}
 
 	public boolean isActive() {

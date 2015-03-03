@@ -15,6 +15,7 @@ import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
+import de.mbs.abstracts.db.views.UserPortletView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.abstracts.db.views.definition.SearchableView;
 import de.mbs.abstracts.mail.MailView;
@@ -146,6 +147,8 @@ public abstract class DatabaseView {
 	public abstract SettingsView getSettingsView();
 	
 	public abstract NotificationView getNotificationView();
+	
+	public abstract UserPortletView getUserPortletView();
 	
 	public ModulContainer getModulContainer(){
 		return ModulContainer.initialise();
