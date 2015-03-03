@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ GroupviewTest.class,  UserviewTest.class, PortletviewTest.class}) //hier alle zu testenden views einfügen
+@SuiteClasses({ SettingsviewTest.class}) //hier alle zu testenden views einfügen
 //@SuiteClasses({ UserviewTest.class, PortletviewTest.class, GroupviewTest.class })
 public class AllBackendTests {
 }

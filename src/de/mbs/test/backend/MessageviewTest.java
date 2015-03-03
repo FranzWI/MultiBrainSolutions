@@ -14,6 +14,8 @@ import org.junit.runners.MethodSorters;
 import de.mbs.abstracts.db.objects.Message;
 import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.utils.Pair;
+import de.mbs.abstracts.db.utils.SearchResult;
 import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.test.TestExecuter;
@@ -35,7 +37,7 @@ public class MessageviewTest {
 	@Test
 	public final void test0JavaMessageview() {
 		MessageView messageView = TestExecuter.getView().getMessageView();
-		assertNotNull("Userview nicht implementiert", messageView);
+		assertNotNull("Messageview nicht implementiert", messageView);
 	}
 
 	/**
@@ -72,7 +74,9 @@ public class MessageviewTest {
 							.getUserView().getUserByUserName("admin").getId());
 
 		} catch (Exception e) {
-			class Local {};
+			class Local {
+			}
+			;
 			String methodName = Local.class.getEnclosingMethod().getName();
 			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
@@ -92,7 +96,9 @@ public class MessageviewTest {
 			assertEquals("Betreff der gefundenen Nachricht ist nicht richtig",
 					testMessage.getTopic(), "TestMessage");
 		} catch (Exception e) {
-			class Local {};
+			class Local {
+			}
+			;
 			String methodName = Local.class.getEnclosingMethod().getName();
 			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
@@ -115,7 +121,9 @@ public class MessageviewTest {
 			assertEquals("geaenderter Betreff ist falsch",
 					testMessage.getTopic(), "edited subject");
 		} catch (Exception e) {
-			class Local {};
+			class Local {
+			}
+			;
 			String methodName = Local.class.getEnclosingMethod().getName();
 			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
@@ -162,7 +170,20 @@ public class MessageviewTest {
 	 */
 	@Test
 	public final void test4SearchMessage() {
-		fail("Not yet implemented"); // TODO
+		try {
+			String suchString = "Message";
+			MessageView messageView = TestExecuter.getView().getMessageView();
+			Vector<Pair<SearchResult, String>> vec = messageView.search(
+					suchString, TestExecuter.getView().getUserView()
+							.getUserByUserName("user"));
+			assertNotNull("Suchvektor ist NULL", vec);
+			assertTrue("Groesse des Suchvektors ist 0", vec.size() > 0);
+		} catch (Exception e) {
+			class Local {}			;
+			String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName + "---");
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -180,7 +201,9 @@ public class MessageviewTest {
 			assertNotNull("Message Vektor ist Null", vec);
 			assertTrue("Message Vektor hat eie Laenge von 0", vec.size() > 0);
 		} catch (Exception e) {
-			class Local {};
+			class Local {
+			}
+			;
 			String methodName = Local.class.getEnclosingMethod().getName();
 			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
@@ -193,7 +216,22 @@ public class MessageviewTest {
 	 */
 	@Test
 	public final void test5RemoveMessage() {
-		fail("Not yet implemented"); // TODO
+		try {
+			MessageView messageView = TestExecuter.getView().getMessageView();
+			assertTrue("Message wurde nicht geloescht",
+					messageView.remove(messageId));
+			assertNull(
+					"geloeschte Message konnte immer noch aufgerufen werden",
+					messageView.get(messageId));
+
+		} catch (Exception e) {
+			class Local {
+			}
+			;
+			String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName + "---");
+			e.printStackTrace();
+		}
 	}
 
 }
