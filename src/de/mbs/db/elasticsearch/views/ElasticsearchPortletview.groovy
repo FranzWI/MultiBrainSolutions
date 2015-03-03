@@ -152,7 +152,7 @@ public class ElasticsearchPortletview extends PortletView {
 					Vector<String> groups = new Vector<String>();
 					if (field.getValues() != null) 
 					{
-						List<Object> values = field.getValues();
+						Vector<Object> values = field.getValues();
 						for (Object o : values) 
 						{
 							groups.add(o.toString());

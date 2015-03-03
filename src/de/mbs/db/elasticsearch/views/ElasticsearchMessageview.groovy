@@ -83,7 +83,7 @@ public class ElasticsearchMessageview extends MessageView {
 		mess.put("prevMessage", data.getPreviousMessgage());
 		mess.put("read", data.isRead());
 		
-		return ElasticsearchHelper.add(view, "system", "messages", mess.toJSONString());
+		return ElasticsearchHelper.add(view, "system", "message", mess.toJSONString());
 		
 	}
 
@@ -103,13 +103,13 @@ public class ElasticsearchMessageview extends MessageView {
 		mess.put("prevMessage", data.getPreviousMessgage());
 		mess.put("read", data.isRead());
 
-		return ElasticsearchHelper.edit(view,"system","messages",mess.toJSONString(), data);
+		return ElasticsearchHelper.edit(view,"system","message",mess.toJSONString(), data);
 	}
 
 	@Override
 	public Message get(String id) 
 	{
-		GetResponse response = this.view.getESClient().prepareGet("system", "messages", id).setFields(fieldList).execute().actionGet();
+		GetResponse response = this.view.getESClient().prepareGet("system", "message", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
 			return responseToMessage(response.getId(), response.getVersion(), response.getFields());
 		} else
@@ -120,7 +120,7 @@ public class ElasticsearchMessageview extends MessageView {
 	public Vector<Message> getAll() 
 	{
 		Vector<Message> messages = new Vector<Message>();
-		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "messages", fieldList)) {
+		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "message", fieldList)) {
 			if(hit.getFields() != null){
 				Message mess = this.responseToMessage(hit.getId(), hit.getVersion(), hit.getFields());
 				if(mess != null)
