@@ -44,7 +44,7 @@ public class ElasticsearchSettingsview extends SettingsView
 	{
 		GetResponse response = this.view.getESClient().prepareGet("system", "settings", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToSettings(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -59,7 +59,7 @@ public class ElasticsearchSettingsview extends SettingsView
 		{
 			if(hit.getFields() != null)
 			{
-				Settings set = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				Settings set = this.responseToSettings(hit.getId(), hit.getVersion(), hit.getFields());
 				if(set != null)
 					settings.add(set);
 			}
@@ -67,11 +67,58 @@ public class ElasticsearchSettingsview extends SettingsView
 		return settings;
 	}
 	
-	private Settings responseToSettings(GetResponse response)
+	//FIXME: Da bin ich mir mit den Properties noch nicht ganz sicher ob das überhaupt funktioniert.
+	private Settings responseToSettings(id,version, fields)
 	{
-		Settings settings = new Settings(response.getId());
-		
-		return settings;
+		if(fields == null)
+				return null;
+				
+			Settings  settings = new Settings(id, version);
+			
+			for (String key : fields.keySet()) 
+			{
+				def field = fields.get(key);
+				
+				switch (key) 
+				{
+					case "mailProperties":
+						if(field instanceof String)
+						{
+							settings.setMailProperties(field);
+						}
+						else
+						{
+							settings.setMailProperties(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "dbProperties":
+						if(field instanceof String)
+						{
+							settings.setDbProperties(field);
+						}
+						else
+						{
+							settings.setDbProperties(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "proxyProperties":
+						if(field instanceof String)
+						{
+							settings.setProxyProperties(field);
+						}
+						else
+						{
+							settings.setProxyProperties(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+				}
+			}
+			if(settings==null)
+				return null;
+			return settings;
 	}
 
 }

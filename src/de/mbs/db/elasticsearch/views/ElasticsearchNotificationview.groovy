@@ -22,8 +22,6 @@ public class ElasticsearchNotificationview extends NotificationView {
 	}
 	
 	//FIXME: Hier müssen noch die Anpassung umgezogen werden, da die Entrs im falschen Sub sysstem sind
-	
-	
 	//FIXME: Funktionstest.
 	
 	@Override
@@ -107,5 +105,102 @@ public class ElasticsearchNotificationview extends NotificationView {
 	public boolean remove(String id) {
 		return ElasticsearchHelper.remove(view, "news", "notification", id);
 	}
+	
+	public Notification responseToNotification(id,version, fields)
+	{
+			if(fields == null)
+				return null;
+				
+			Notification  notification = new Notification(id, version);
+			
+			for (String key : fields.keySet()) 
+			{
+				def field = fields.get(key);
+				
+				switch (key) 
+				{
+					case "subject":
+						if(field instanceof String)
+						{
+							notification.setSubject(field);
+						}
+						else
+						{
+							notification.setSubject(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "icon":
+						if(field instanceof String)
+						{
+							notification.setIcon(field);
+						}
+						else
+						{
+							notification.setIcon(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "link":
+						if(field instanceof String)
+						{
+							notification.setLink(field);
+						}
+						else
+						{
+							notification.setLink(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "creation":
+						if(field instanceof String)
+						{
+							notification.setCreation(field);
+						}
+						else
+						{
+							notification.setCreation(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "release":
+						if(field instanceof String)
+						{
+							notification.setRelease(field);
+						}
+						else
+						{
+							notification.setRelease(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "toUser":
+						if(field instanceof String)
+						{
+							notification.setToUser(field);
+						}
+						else
+						{
+							notification.setToUser(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+					case "toGroup":
+						if(field instanceof String)
+						{
+							notification.setToGroup(field);
+						}
+						else
+						{
+							notification.setToGroup(field.getValue() == null ? "" : field
+									.getValue().toString());
+						}
+						break;
+				}
+			}
+			if(notification==null)
+				return null;
+			return notification;
+	} 
 
-}
+}				

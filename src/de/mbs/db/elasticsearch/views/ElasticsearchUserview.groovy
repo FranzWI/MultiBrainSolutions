@@ -337,6 +337,7 @@ public class ElasticsearchUserview extends UserView {
 						}
 						user.setMembership(groups);
 						break;
+						
 					case "usesPortlets":
 						System.out.println("BLUB: "+field);
 					/*

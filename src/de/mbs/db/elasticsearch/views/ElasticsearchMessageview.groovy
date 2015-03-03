@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.validation.metadata.ReturnValueDescriptor;
 
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.json.JSONObject;
 
@@ -32,15 +33,10 @@ public class ElasticsearchMessageview extends MessageView {
 	@Override
 	public Vector<Pair<SearchResult, String>> search(String search, User u) 
 	{
-		// TODO Auto-generated method stub
+		//not implemented yet
 		return null;
 	}
 	
-	//FIXME: Hier müssen noch die Anpassung umgezogen werden, da die Entrs im falschen Sub sysstem sind
-	
-	
-	//################################DONE############################################
-	//INFO: Soll ich die get MessagesForUser und getUnreadMessagesForUser eigentlich nochmal umstellen in elasticsearch? 
 	@Override
 	public Vector<Message> getMessagesForUser(String id) 
 	{
@@ -115,7 +111,7 @@ public class ElasticsearchMessageview extends MessageView {
 	{
 		GetResponse response = this.view.getESClient().prepareGet("system", "messages", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToMessage(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -126,7 +122,7 @@ public class ElasticsearchMessageview extends MessageView {
 		Vector<Message> messages = new Vector<Message>();
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "messages", fieldList)) {
 			if(hit.getFields() != null){
-				Message mess = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				Message mess = this.responseToMessage(hit.getId(), hit.getVersion(), hit.getFields());
 				if(mess != null)
 					messages.add(mess);
 			}
@@ -139,6 +135,68 @@ public class ElasticsearchMessageview extends MessageView {
 		return ElasticsearchHelper.remove(view, "system", "messages", id);
 	}
 
+	public Message responseToMessage(id, version, fields) 
+	{
+		Message message = new Message(id, version);
+		
+		if(fields == null)
+			return null;
+			
+		for(String key : fields.keySet())
+		{
+			def field = fields.get(key);
+			switch(key)
+			{
+				case "subject":
+					message.setSubject(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "timestamp":
+					message.setVersion(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "from":
+					message.setFrom(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "toUser": 
+					Vector<String> user = new Vector<String>();
+					if (field.getValues() != null)
+					{
+						Vector<Object> values = field.getValues();
+						for (Object o : values)
+						{
+							user.add(o.toString());
+						}
+					}
+					message.setToUser(user);
+					break;
+				case "toGroup": 					
+					Vector<String> groups = new Vector<String>();
+					if (field.getValues() != null)
+					{
+						Vector<Object> values = field.getValues();
+						for (Object o : values)
+						{
+							groups.add(o.toString());
+						}
+					}
+					message.setToGroup(groups);
+					break;
+				case "content":
+					message.setToContent(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "prevMessage":
+					message.setPrevMessage(field.getValue() == null ? "" : field.getValue().toString());
+					break;
+				case "read":
+					message.setRead(field.getValue() == null ? false : (field.getValue()));
+					break;
+			}
+		}
+		
+		if(message==null)
+			return null;
+		return message;
+		
+	}
 
 
 }

@@ -150,9 +150,11 @@ public class ElasticsearchPortletview extends PortletView {
 					break;
 				case "usedByGroups":
 					Vector<String> groups = new Vector<String>();
-					if (field.getValues() != null) {
+					if (field.getValues() != null) 
+					{
 						List<Object> values = field.getValues();
-						for (Object o : values) {
+						for (Object o : values) 
+						{
 							groups.add(o.toString());
 						}
 					}
