@@ -11,6 +11,7 @@ import org.json.simple.JSONObject
 import de.mbs.abstracts.db.objects.Group;
 import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.db.objects.User;
+import de.mbs.abstracts.db.objects.UserPortlet;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.db.elasticsearch.ElasticsearchView
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
@@ -99,15 +100,15 @@ public class ElasticsearchPortletview extends PortletView {
 				Vector<String> portletGroups = portlet.getUsedByGroups();
 				for (String groupId : portletGroups) {
 					if (userGroups.contains(groupId)) {
-						boolean add = true;
+						boolean addable = true;
 						if(!portlet.isMultiple()){
-							for(Map<String, String> map: user.getPortlets()){
-								if(map.containsValue(portlet.getId())){
-									add = false;
+							for(UserPortlet map: view.getUserPortletView().byOwner(user.getId())){
+								if(map.getId().equals((portlet.getId()))){
+									addable = false;
 								}
 							}
 						}
-						if (add) {
+						if (addable) {
 							result.add(portlet);
 							break;
 						}

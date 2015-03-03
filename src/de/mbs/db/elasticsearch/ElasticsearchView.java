@@ -40,6 +40,7 @@ import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
+import de.mbs.abstracts.db.views.UserPortletView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.abstracts.db.views.definition.SearchableView;
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
@@ -48,6 +49,7 @@ import de.mbs.db.elasticsearch.views.ElasticsearchMessageview;
 import de.mbs.db.elasticsearch.views.ElasticsearchNotificationview;
 import de.mbs.db.elasticsearch.views.ElasticsearchPortletview;
 import de.mbs.db.elasticsearch.views.ElasticsearchSettingsview;
+import de.mbs.db.elasticsearch.views.ElasticsearchUserPortletview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
 
 public class ElasticsearchView extends DatabaseView {
@@ -60,6 +62,7 @@ public class ElasticsearchView extends DatabaseView {
 	private ElasticsearchSettingsview settingview;
 	private ElasticsearchMessageview messageview;
 	private ElasticsearchNotificationview notificationview;
+	private ElasticsearchUserPortletview userportletview;
 
 	public ElasticsearchView() {
 		this.connect();
@@ -383,5 +386,10 @@ public class ElasticsearchView extends DatabaseView {
 	@Override
 	public NotificationView getNotificationView() {
 		return this.notificationview;
+	}
+
+	@Override
+	public UserPortletView getUserPortletView(){
+		return this.userportletview;
 	}
 }

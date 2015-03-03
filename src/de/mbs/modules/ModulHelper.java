@@ -17,6 +17,7 @@ public class ModulHelper {
 
 	public final static String MODUL_LIB_PATH = "/WEB-INF/lib/modules/";
 	public final static String MODUL_FRONTEND_PATH = "/WEB-INF/includes/modules/";
+	public final static String PORTLET_FRONTEND_PATH = "/WEB-INF/includes/portlets/";
 
 	private static String serlvetContextPath = "";
 
