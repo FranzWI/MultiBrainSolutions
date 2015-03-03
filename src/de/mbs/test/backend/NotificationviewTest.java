@@ -9,6 +9,10 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import de.mbs.abstracts.db.views.NotificationView;
+import de.mbs.abstracts.db.views.SettingsView;
+import de.mbs.test.TestExecuter;
+
 /**
  * @author master
  *
@@ -25,6 +29,7 @@ public class NotificationviewTest {
 	@Test
 	public final void testGetNotificationsForUser() {
 		try{
+			
 		}catch (Exception e) {
 			class Local {};
 			String methodName = Local.class.getEnclosingMethod().getName();
@@ -40,7 +45,8 @@ public class NotificationviewTest {
 	 */
 	@Test
 	public final void test0JavaNotificationview() {
-		fail("Not yet implemented"); // TODO
+		NotificationView notificationView = TestExecuter.getView().getNotificationView();
+		assertNotNull("Notificationview nicht implementiert", notificationView);
 	}
 
 	/**

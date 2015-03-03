@@ -41,7 +41,7 @@ public class SettingsviewTest {
 	 * .
 	 */
 	@Test
-	public final void testEdit() {
+	public final void testEditSettings() {
 		try {
 			SettingsView settingsView = TestExecuter.getView().getSettingsView();
 			Settings s = new Settings(null);
@@ -61,7 +61,7 @@ public class SettingsviewTest {
 	 * {@link de.mbs.db.java.views.JavaSettingsview#get(java.lang.String)}.
 	 */
 	@Test
-	public final void test2Get() {
+	public final void test2GetSettings() {
 		try{
 			SettingsView settingsView = TestExecuter.getView().getSettingsView();
 			assertNotNull("settingsId ist NULL",settingsId);
@@ -78,7 +78,7 @@ public class SettingsviewTest {
 	 * Test method for {@link de.mbs.db.java.views.JavaSettingsview#getAll()}.
 	 */
 	@Test
-	public final void test1GetAll() {
+	public final void test1GetAllSettings() {
 		try {
 			SettingsView settingsView = TestExecuter.getView()
 					.getSettingsView();
