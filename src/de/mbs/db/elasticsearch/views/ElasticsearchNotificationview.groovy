@@ -4,15 +4,16 @@ import java.util.Vector;
 
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.search.SearchHit;
-import org.json.JSONObject;
+import org.json.simple.JSONObject
 
 import de.mbs.abstracts.db.objects.Notification;
 import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
+import de.mbs.db.elasticsearch.utils.ElasticsearchHelper
 
 public class ElasticsearchNotificationview extends NotificationView {
 
-	private String[] fieldList = ["subject", "icon","link", "creation", "release", "toUser","toGroup"];
+	private String[] fieldList = ["subject", "icon","link", "creation", "release", "to.User","to.Group"];
 	
 	private ElasticsearchView view;
 	
@@ -46,15 +47,19 @@ public class ElasticsearchNotificationview extends NotificationView {
 	public String add(Notification data) 
 	{
 		JSONObject not = new JSONObject();
+		System.out.println("huhhu");
 		
 		//FIXME: Hier heit es .getSubject() bei den Messages hei�t die gleiche funktion .getTopic() wollen wir das noch vereinheitlich?
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
-		not.put("creation", data.getCreateTimestamp());
-		not.put("release", data.getReleaseTimestamp());
-		not.put("toUser", data.getToUser());
-		not.put("toGroup", data.getToGroup());
+		not.put("creation", data.getCreateTimestamp().getTime());
+		not.put("release", data.getReleaseTimestamp().getTime());
+		JSONObject to = new JSONObject();
+		to.put("User", data.getToUser());
+		to.put("Group", data.getToGroup());
+		not.put("to", to);
+		System.out.println("Huhu --> "+not.toJSONString());
 		
 		return ElasticsearchHelper.add(view, "system", "notification", not.toJSONString());
 	}
@@ -67,10 +72,12 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
-		not.put("creation", data.getCreateTimestamp());
-		not.put("release", data.getReleaseTimestamp());
-		not.put("toUser", data.getToUser());
-		not.put("toGroup", data.getToGroup());
+		not.put("creation", data.getCreateTimestamp().getTime());
+		not.put("release", data.getReleaseTimestamp().getTime());
+		JSONObject to = new JSONObject();
+		to.put("User", data.getToUser());
+		to.put("Group", data.getToGroup());
+		not.put("to", to);
 		
 		return ElasticsearchHelper.edit(view,"system","notification",not.toJSONString(), data);
 	}
@@ -129,24 +136,23 @@ public class ElasticsearchNotificationview extends NotificationView {
 						notification.setLink(field.getValue() == null ? "" : field.getValue().toString());
 						break;
 					case "creation":
-						notification.setCreation(field.getValue() == null ? "" : field.getValue().toString());
+						notification.setCreateTimestamp(field.getValue() == null ? 0 : field.getValue());
 						break;
 					case "release":
-						notification.setRelease(field.getValue() == null ? "" : field.getValue().toString());
+						notification.setReleaseTimestamp((field.getValue() == null ? 0 : field.getValue()));
 						break;
-					case "toUser": //Vector
+					case "to.User":
 						Vector<String> users = new Vector<String>();
 						if (field.getValues() != null) 
 						{
 							Vector<Object> values = field.getValues();
-							for (Object o : values) 
-							{
+							for(Object o : values) {
 								users.add(o.toString());
 							}
 						}
-						p.setUsedByGroups(users);
+						notification.setToUser(users);
 						break;
-					case "toGroup": //Vector
+					case "to.Group": //Vector
 						Vector<String> groups = new Vector<String>();
 						if (field.getValues() != null) 
 						{
@@ -156,7 +162,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 								groups.add(o.toString());
 							}
 						}
-						notification.setUsedByGroups(groups);
+						notification.setToGroup(groups);
 						break;
 				}
 			}
