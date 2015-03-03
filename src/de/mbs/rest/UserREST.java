@@ -128,7 +128,8 @@ public class UserREST {
 			UserPortlet up = new UserPortlet(null);
 			up.setOwnerId(u.getId());
 			up.setPortletId(p.getId());
-			up.setOrder(ServiceHandler.getDatabaseView().getUserPortletView().byOwner(u.getId()).size());
+			up.setOrder(ServiceHandler.getDatabaseView().getUserPortletView()
+					.byOwner(u.getId()).size());
 			if (ServiceHandler.getDatabaseView().getUserPortletView().add(up) != null)
 				return Response.ok().build();
 			else
@@ -145,9 +146,11 @@ public class UserREST {
 	public Response removePortlet(@PathParam("portletId") String portletid) {
 		de.mbs.abstracts.db.objects.User u = (de.mbs.abstracts.db.objects.User) webRequest
 				.getAttribute("user");
-		UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView().get(portletid);
+		UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView()
+				.get(portletid);
 		if (p != null && u != null) {
-			if (ServiceHandler.getDatabaseView().getUserPortletView().remove(portletid))
+			if (ServiceHandler.getDatabaseView().getUserPortletView()
+					.remove(portletid))
 				return Response.ok().build();
 			else
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -168,14 +171,11 @@ public class UserREST {
 					.entity("User ID fehlerhaft").build();
 
 		Vector<UserPortlet> portlets = new Vector<UserPortlet>();
-		for(UserPortlet foo : ServiceHandler.getDatabaseView().getUserPortletView().getAll()){
-			System.out.println("foor :"+foo.getId());
-		}
 		for (String portledid : portletids.split(",")) {
-			System.out.println("Ba: "+portledid);
-			UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView().get(portledid);
+			UserPortlet p = ServiceHandler.getDatabaseView()
+					.getUserPortletView().get(portledid);
 			if (p == null) {
-				
+
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("Portlet ID (" + portledid + ") fehlerhaft")
 						.build();
@@ -184,11 +184,41 @@ public class UserREST {
 			}
 		}
 
-		if (ServiceHandler.getDatabaseView().getUserPortletView().setPortlets(portlets, u.getId()))
+		if (ServiceHandler.getDatabaseView().getUserPortletView()
+				.setPortlets(portlets, u.getId()))
 			return Response.ok().build();
 		else
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity("Fehler beim speichern des Users").build();
+	}
+
+	@POST
+	@Path("/setPortlets/settings/{id}/{settings}")
+	@User
+	public Response setPortletSettings(@PathParam("id") String id,
+			@PathParam("settings") String settings) {
+		de.mbs.abstracts.db.objects.User u = (de.mbs.abstracts.db.objects.User) webRequest
+				.getAttribute("user");
+		if (u == null)
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("User ID fehlerhaft").build();
+		UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView()
+				.get(id);
+		if (p == null) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Portlet ID (" + id + ") fehlerhaft").build();
+		} else {
+			if (!p.getOwnerId().equals(u.getId())) {
+				return Response.status(Response.Status.BAD_REQUEST)
+						.entity("Sie sind nicht besizter des Portlets").build();
+			}
+			p.setSettings(settings);
+			if (ServiceHandler.getDatabaseView().getUserPortletView().edit(p) != null) {
+				return Response.ok().build();
+			}
+		}
+		return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+				.entity("Fehler beim Speichern").build();
 	}
 
 	@POST
@@ -332,10 +362,10 @@ public class UserREST {
 				user.setPw(pw);
 				if (ServiceHandler.getDatabaseView().getUserView().add(user) != null) {
 					// BEnachrichtigung für den Admin
-					if(!user.isActive()){
+					if (!user.isActive()) {
 						Notification not = new Notification(null);
-						not.setSubject(user.getFirstname() + " " + user.getLastname()
-								+ " freischalten");
+						not.setSubject(user.getFirstname() + " "
+								+ user.getLastname() + " freischalten");
 						not.setIcon("entypo-user-add");
 						not.addGroup(ServiceHandler.getDatabaseView()
 								.getGroupView().getAdminGroupId());
@@ -344,13 +374,21 @@ public class UserREST {
 								.add(not);
 					}
 					// Email an den neuen Nutzer
-					//TODO URL des Servers mitabfragen so das diese mit in die mail kann
-					Mail m = new Mail(user.getEmail(),
+					// TODO URL des Servers mitabfragen so das diese mit in die
+					// mail kann
+					Mail m = new Mail(
+							user.getEmail(),
 							"Registrierung am Multi Brain Cockpit",
 							MailView.SENDER,
 							"F&uuml;r Sie wurde ein Account angelegt<br/>"
-							+ "Anmeldename: "+user.getUsername()+"<br/>"
-									+ "Passwort: "+pw+"<br/><br/>"+(user.isActive()?"":"Sie m&uuml;ssen aber noch Ihre aktivierung abwarten."));
+									+ "Anmeldename: "
+									+ user.getUsername()
+									+ "<br/>"
+									+ "Passwort: "
+									+ pw
+									+ "<br/><br/>"
+									+ (user.isActive() ? ""
+											: "Sie m&uuml;ssen aber noch Ihre aktivierung abwarten."));
 					ServiceHandler.getDatabaseView().sendHtmlMail(m);
 					return Response.ok().build();
 				} else {
@@ -457,8 +495,7 @@ public class UserREST {
 		user.setPw(Crypt.getCryptedPassword(password));
 		if (ServiceHandler.getDatabaseView().getUserView().edit(user) != null) {
 			Mail mail = new Mail(user.getEmail(), "Passwort zurück gesetzt",
-					MailView.SENDER,
-					"Ihr neues Passwort lautet:\n" + password);
+					MailView.SENDER, "Ihr neues Passwort lautet:\n" + password);
 			ServiceHandler.getDatabaseView().sendMail(mail);
 			return Response.ok().build();
 		}

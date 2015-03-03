@@ -1,6 +1,7 @@
 package de.mbs.abstracts.db.views.definition;
 
 import java.util.List;
+import java.util.Vector;
 
 public interface FindableView<A> {
 
@@ -11,6 +12,6 @@ public interface FindableView<A> {
 	 */
 	public A get(String id);
 	
-	public List<A> getAll();
+	public Vector<A> getAll();
 	
 }

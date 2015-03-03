@@ -47,11 +47,7 @@ html.div {
 			}
 		}else{
 			//TODO Portlets laden
-			for(UserPortlet p: userportletView.getAll()){
-				System.out.println(p.getId());
-			}
 			for(UserPortlet map: userPortlets){
-				System.out.println(map.getId());
 				Portlet p = portletView.get(map.getPortletId());
 				if(p){
 					String size = "";
@@ -65,6 +61,10 @@ html.div {
 						size+=" col-lg-"+p.getSizeLG();
 					div('class':size+" mbs-portlet",'data-portlet-id':map.getId()){
 						i('style':"display:none")
+						request.setAttribute("id", map.getId());
+						request.setAttribute("owner", map.getOwnerId());
+						request.setAttribute("portlet", map.getPortletId());
+						request.setAttribute("settings", map.getSettings());
 						include('/WEB-INF/includes/portlets/'+p.getPath())
 					}
 				}else{
