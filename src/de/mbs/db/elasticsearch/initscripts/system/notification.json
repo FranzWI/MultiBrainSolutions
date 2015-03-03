@@ -1,0 +1,34 @@
+{
+    "notification":{
+        "properties":{
+            "subject":{
+                "type":"string"
+            },
+            "creation":{
+                "type":"date",
+                "format":"date_time_no_millis"
+            },
+            "release":{
+                "type":"date",
+                "format":"date_time_no_millis"
+            },
+            "to":{
+                "type":"object",
+                "properties":{
+                    "user":{
+                        "type":"string"
+                    },
+                    "group":{
+                        "type":"string"
+                    }
+                }
+            },
+            "icon":{
+                "type":"string"
+            },
+            "link":{
+                "type":"string"
+            }
+        }
+    }
+}
