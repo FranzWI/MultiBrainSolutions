@@ -11,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
@@ -193,10 +194,10 @@ public class UserREST {
 	}
 
 	@POST
-	@Path("/setPortlets/settings/{id}/{settings}")
+	@Path("/setPortlets/settings/{id}/")
 	@User
 	public Response setPortletSettings(@PathParam("id") String id,
-			@PathParam("settings") String settings) {
+			@QueryParam("setting") String settings) {
 		de.mbs.abstracts.db.objects.User u = (de.mbs.abstracts.db.objects.User) webRequest
 				.getAttribute("user");
 		if (u == null)
