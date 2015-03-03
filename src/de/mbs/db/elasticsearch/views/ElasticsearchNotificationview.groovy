@@ -21,7 +21,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 		this.view = view;
 	}
 	
-	//FIXME: Hier müssen noch die Anpassung umgezogen werden, da die Entrs im falschen Sub sysstem sind
+	//FIXME: Hier mï¿½ssen noch die Anpassung umgezogen werden, da die Entrs im falschen Sub sysstem sind
 	//FIXME: Funktionstest.
 	
 	@Override
@@ -56,7 +56,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("toUser", data.getToUser());
 		not.put("toGroup", data.getToGroup());
 		
-		return ElasticsearchHelper.add(view, "news", "notification", not.toJSONString());
+		return ElasticsearchHelper.add(view, "system", "notification", not.toJSONString());
 	}
 
 	@Override
@@ -72,13 +72,13 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("toUser", data.getToUser());
 		not.put("toGroup", data.getToGroup());
 		
-		return ElasticsearchHelper.edit(view,"news","notification",not.toJSONString(), data);
+		return ElasticsearchHelper.edit(view,"system","notification",not.toJSONString(), data);
 	}
 
 	@Override
 	public Notification get(String id) 
 	{
-		GetResponse response = this.view.getESClient().prepareGet("news", "notification", id).setFields(fieldList).execute().actionGet();
+		GetResponse response = this.view.getESClient().prepareGet("system", "notification", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
 			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
 		} else
@@ -90,7 +90,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 	{
 		Vector<Notification> notification = new Vector<Notification>();
 		
-		for (SearchHit hit : ElasticsearchHelper.getAll(view, "news", "notification", fieldList)) 
+		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "notification", fieldList)) 
 		{
 			if(hit.getFields() != null){
 				Notification not = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
@@ -103,7 +103,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 
 	@Override
 	public boolean remove(String id) {
-		return ElasticsearchHelper.remove(view, "news", "notification", id);
+		return ElasticsearchHelper.remove(view, "system", "notification", id);
 	}
 	
 	public Notification responseToNotification(id, version, fields)
