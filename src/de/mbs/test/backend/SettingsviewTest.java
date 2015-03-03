@@ -5,6 +5,7 @@ package de.mbs.test.backend;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.junit.FixMethodOrder;
@@ -82,7 +83,7 @@ public class SettingsviewTest {
 		try {
 			SettingsView settingsView = TestExecuter.getView()
 					.getSettingsView();
-			Vector<Settings> vec = settingsView.getAll();
+			List<Settings> vec = settingsView.getAll();
 			settingsId = vec.get(0).getId();
 			for (Settings s : vec) {
 				System.out.println("Settings: " + s.getId());

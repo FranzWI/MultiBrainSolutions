@@ -48,6 +48,7 @@ $(document).ready(function() {
 	  $( itemElems ).each( function( i, itemElem ) {
 		  portletIds = portletIds+$(this).data('portlet-id')+",";
 	  });
+	  //portletIds = portletIds.substring(0, (portletIds.length()-1));
 	  $.ajax({
 		  type: "POST",
 		  url: "rest/user/setPortlets/"+portletIds

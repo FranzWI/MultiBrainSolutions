@@ -5,6 +5,7 @@ package de.mbs.test.backend;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.junit.FixMethodOrder;
@@ -193,7 +194,7 @@ public class MessageviewTest {
 	public final void test2GetAllMessages() {
 		try {
 			MessageView messageView = TestExecuter.getView().getMessageView();
-			Vector<Message> vec = messageView.getAll();
+			List<Message> vec = messageView.getAll();
 			System.out.println("_______________testGetAllMessages");
 			for (Message m : vec) {
 				System.out.println("Message " + m.getTopic());

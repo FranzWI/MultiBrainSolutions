@@ -168,10 +168,14 @@ public class UserREST {
 					.entity("User ID fehlerhaft").build();
 
 		Vector<UserPortlet> portlets = new Vector<UserPortlet>();
+		for(UserPortlet foo : ServiceHandler.getDatabaseView().getUserPortletView().getAll()){
+			System.out.println("foor :"+foo.getId());
+		}
 		for (String portledid : portletids.split(",")) {
-			UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView()
-					.get(portledid);
+			System.out.println("Ba: "+portledid);
+			UserPortlet p = ServiceHandler.getDatabaseView().getUserPortletView().get(portledid);
 			if (p == null) {
+				
 				return Response.status(Response.Status.BAD_REQUEST)
 						.entity("Portlet ID (" + portledid + ") fehlerhaft")
 						.build();

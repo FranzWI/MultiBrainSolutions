@@ -3,6 +3,8 @@ import java.awt.GraphicsConfiguration.DefaultBufferCapabilities;
 import de.mbs.abstracts.db.DatabaseView
 import de.mbs.abstracts.db.views.UserView
 import de.mbs.abstracts.db.views.PortletView
+import de.mbs.abstracts.db.views.UserPortletView
+import de.mbs.abstracts.db.objects.UserPortlet
 import de.mbs.abstracts.db.objects.Portlet
 import de.mbs.abstracts.db.objects.User
 import de.mbs.handler.ServiceHandler
@@ -10,6 +12,7 @@ import de.mbs.handler.ServiceHandler
 def dbView = ServiceHandler.getDatabaseView();
 def userView = dbView.getUserView();
 def portletView = dbView.getPortletView();
+def userportletView = dbView.getUserPortletView();
 def user = userView.get(session.user);
 
 html.div {
@@ -36,15 +39,20 @@ html.div {
 		}
 	}
 	div('id':"draggable-portlets", 'class':"row"){
-		Vector<Map<String,String>> userPortlets = user.getPortlets();
+		Vector<UserPortlet> userPortlets = userportletView.byOwner(session.user);
+		//Vector<Map<String,String>> userPortlets = user.getPortlets();
 		if(!userPortlets || userPortlets.size() == 0){
 			div('class':"col-xs-12"){
 				div('class':"alert alert-info"){ p("keine Portlets auf dem Dashboard") }
 			}
 		}else{
 			//TODO Portlets laden
-			for(Map<String,String> map: userPortlets){
-				Portlet p = portletView.get(map.get("ID"));
+			for(UserPortlet p: userportletView.getAll()){
+				System.out.println(p.getId());
+			}
+			for(UserPortlet map: userPortlets){
+				System.out.println(map.getId());
+				Portlet p = portletView.get(map.getPortletId());
 				if(p){
 					String size = "";
 					if(p.getSizeXS()>0)
@@ -55,7 +63,7 @@ html.div {
 						size+=" col-md-"+p.getSizeMD();
 					if(p.getSizeLG()>0)
 						size+=" col-lg-"+p.getSizeLG();
-					div('class':size+" mbs-portlet",'data-portlet-id':p.getId()){
+					div('class':size+" mbs-portlet",'data-portlet-id':map.getId()){
 						i('style':"display:none")
 						include('/WEB-INF/includes/portlets/'+p.getPath())
 					}

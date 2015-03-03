@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -55,7 +56,7 @@ public class UserviewTest {
 	@Test
 	public final void test1GetAll() {
 		UserView userView = TestExecuter.getView().getUserView();
-		Vector<User> vec = userView.getAll();
+		List<User> vec = userView.getAll();
 		assertNotNull("", userView.getAll());
 		assertTrue("UserVektor ist leer", vec.size() > 0);
 	}

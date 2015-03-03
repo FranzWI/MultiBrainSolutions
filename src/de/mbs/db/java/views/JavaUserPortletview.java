@@ -1,5 +1,7 @@
 package de.mbs.db.java.views;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.UUID;
 import java.util.Vector;
@@ -10,7 +12,7 @@ import de.mbs.db.java.utils.JavaHelper;
 
 public class JavaUserPortletview extends UserPortletView {
 
-	private Vector<UserPortlet> data = new Vector<UserPortlet>();
+	private List<UserPortlet> data = new ArrayList<UserPortlet>();
 
 	@Override
 	public String add(UserPortlet data) {
@@ -31,11 +33,11 @@ public class JavaUserPortletview extends UserPortletView {
 
 	@Override
 	public UserPortlet get(String id) {
-		return JavaHelper.get(id, data);
+		return JavaHelper.get(id, this.data);
 	}
 
 	@Override
-	public Vector<UserPortlet> getAll() {
+	public List<UserPortlet> getAll() {
 		return data;
 	}
 
