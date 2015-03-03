@@ -51,8 +51,6 @@ public class ElasticsearchUserview extends UserView {
 		"pw",
 		"apiKey",
 		"inGroups",
-		"usesPortlets.ID",
-		"usesPortlets.settings",
 		"sessionID",
 		"isActive"
 	];
@@ -87,15 +85,6 @@ public class ElasticsearchUserview extends UserView {
 				ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString());
 		// FIXME pr�fen ob IDs g�ltig sind -> erst m�glich wenn Portlet und
 		// Group Views laufen
-		JSONArray portlets = new JSONArray();
-		for(Map<String,String> map : data.getPortlets()){
-			JSONObject obj = new JSONObject();
-			obj.put("ID", map.get("ID"));
-			obj.put("settings", map.get("settings"));
-			portlets.add(obj);
-		}
-		jsonUser.put("usesPortlets",
-				(portlets.isEmpty())?null:portlets);
 		jsonUser.put("isActive", data.isActive());
 
 		return ElasticsearchHelper.add(view, "system", "user", jsonUser.toJSONString());
@@ -131,15 +120,6 @@ public class ElasticsearchUserview extends UserView {
 		jsonUser.put("pw", data.getPw());
 		jsonUser.put("apiKey", data.getApikey());
 		jsonUser.put("inGroups",ElasticsearchHelper.vectorToJSONArray(data.getMembership()));
-		JSONArray portlets = new JSONArray();
-		for(Map<String,String> map : data.getPortlets()){
-			JSONObject obj = new JSONObject();
-			obj.put("ID", map.get("ID"));
-			obj.put("settings", map.get("settings"));
-			portlets.add(obj);
-		}
-		jsonUser.put("usesPortlets",
-				(portlets.isEmpty())?null:portlets);
 		jsonUser.put("sessionId", data.getSessionId());
 		jsonUser.put("isActive", data.isActive());
 
@@ -336,21 +316,6 @@ public class ElasticsearchUserview extends UserView {
 							}
 						}
 						user.setMembership(groups);
-						break;
-						
-					case "usesPortlets":
-						System.out.println("BLUB: "+field);
-					/*
-					 Vector<Map<String,String>> portlets = new Vector<Map<String,String>>();
-					 if (field.getValues() != null) {
-					 List<Object> values = field.getValues();
-					 for (Object o : values) {
-					 System.out.println(o);
-					 portlets.add(o.toString());
-					 }
-					 }
-					 user.setPortlets(portlets);
-					 */
 						break;
 				}
 			}

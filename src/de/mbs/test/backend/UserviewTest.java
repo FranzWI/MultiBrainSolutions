@@ -145,6 +145,7 @@ public class UserviewTest {
 	 */
 	@Test
 	public final void test3Edit() {
+		try{
 		// ähnlich addUser nur das wir uns einen Nutzerauswählen
 		// und diesen dann einfach editiren --> speichern --> prüfen
 		UserView userView = TestExecuter.getView().getUserView();
@@ -180,6 +181,9 @@ public class UserviewTest {
 		assertTrue("falsche Portlet Settings hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUserId).get(0).getSettings().equals(portletSetting));
 		// Ausgabe aller Benutzernamen
 		// for(User u:userView.getAll()){System.out.println(u.getUsername());}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 
 	/**

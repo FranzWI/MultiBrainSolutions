@@ -131,6 +131,7 @@ public class ElasticsearchView extends DatabaseView {
 				this.messageview = new ElasticsearchMessageview(this);
 				this.settingview = new ElasticsearchSettingsview(this);
 				this.notificationview = new ElasticsearchNotificationview(this);
+				this.userportletview = new ElasticsearchUserPortletview(this);
 				System.out.println("ES: erfolgreich installiert");
 
 				System.out.println("ES: initialisiere default Data");
@@ -166,10 +167,10 @@ public class ElasticsearchView extends DatabaseView {
 			this.messageview = new ElasticsearchMessageview(this);
 			this.settingview = new ElasticsearchSettingsview(this);
 			this.notificationview = new ElasticsearchNotificationview(this);
+			this.userportletview = new ElasticsearchUserPortletview(this);
 		}
 		this.addSearchableView(this.getUserView());
 		this.addSearchableView(this.getMessageView());
-		// this.printESStructure();
 	}
 
 	public Client getESClient() {
