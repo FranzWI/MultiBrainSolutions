@@ -2,6 +2,7 @@ package de.mbs.test.backend;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.junit.FixMethodOrder;
@@ -31,7 +32,7 @@ public class PortletviewTest {
 	@Test
 	public final void test2GetAllPortlets() {
 		PortletView portletView = TestExecuter.getView().getPortletView();
-		Vector<Portlet> vec = portletView.getAll();
+		List<Portlet> vec = portletView.getAll();
 		for (Portlet p : vec) {
 			System.out.println("Portlets: " + p.getName());
 		}

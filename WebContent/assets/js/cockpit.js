@@ -48,6 +48,7 @@ $(document).ready(function() {
 	  $( itemElems ).each( function( i, itemElem ) {
 		  portletIds = portletIds+$(this).data('portlet-id')+",";
 	  });
+	  //portletIds = portletIds.substring(0, (portletIds.length()-1));
 	  $.ajax({
 		  type: "POST",
 		  url: "rest/user/setPortlets/"+portletIds
@@ -56,31 +57,10 @@ $(document).ready(function() {
 	  });
 	}
 
-	$container.packery( 'on', 'layoutComplete', orderItems );
+	//$container.packery( 'on', 'layoutComplete', orderItems );
 	$container.packery( 'on', 'dragItemPositioned', orderItems );
 	
-	$(function() {
-		/*
-		$(".draggable-portlets .sorted").sortable({
-			connectWith : ".draggable-portlets, .sorted",
-			handle : '.tile-stats, .panel-heading ',
-			delay : 200,
-			stop: function(ev, ui){
-				var portletIds = "";
-				$(".portlet").each(function(index,obj) {
-					portletIds = portletIds+$(this).parent().data('portlet-id')+",";
-				});
-				$.ajax({
-					  type: "POST",
-					  url: "rest/user/setPortlets/"+portletIds
-					}).done(function() {
-					}).fail(function(jqXHR, textStatus ) {
-						toastr.error( "error: "+textStatus );
-					});
-			}
-		}).disableSelection();
-		*/
-		
+	$(function() {		
 		$('.portlet > .panel-heading > .panel-options > a[data-rel="close"]').click(function() {
 			var $par = $(this).closest('div[data-portlet-id]');
 			var portId = $par.attr("data-portlet-id");

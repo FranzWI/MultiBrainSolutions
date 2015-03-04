@@ -100,7 +100,7 @@ public class GroupviewTest {
 	public final void test6GetAll() {
 		try {
 		GroupView groupView = TestExecuter.getView().getGroupView();
-		Vector<Group> vec = groupView.getAll();
+		Vector<Group> vec = (Vector<Group>) groupView.getAll();
 //		for (Group g:groupView.getAll())
 //			{
 //				System.out.println("GroupVector = "+g.getName());

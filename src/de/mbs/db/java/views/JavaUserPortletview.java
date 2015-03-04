@@ -26,17 +26,17 @@ public class JavaUserPortletview extends UserPortletView {
 
 	@Override
 	public boolean remove(String id) {
-		return JavaHelper.remove(id, data);
+		return JavaHelper.remove(id, this.data);
 	}
 
 	@Override
 	public UserPortlet get(String id) {
-		return JavaHelper.get(id, data);
+		return JavaHelper.get(id, this.data);
 	}
 
 	@Override
 	public Vector<UserPortlet> getAll() {
-		return data;
+		return this.data;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class JavaUserPortletview extends UserPortletView {
 	@Override
 	public Vector<UserPortlet> byOwner(String userid) {
 		Vector<UserPortlet> portlets = new Vector<UserPortlet>();
-		for (UserPortlet portlet : data) {
+		for (UserPortlet portlet : this.data) {
 			if (portlet.getOwnerId().equals(userid)) {
 				portlets.add(portlet);
 			}
