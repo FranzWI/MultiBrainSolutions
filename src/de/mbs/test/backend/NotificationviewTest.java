@@ -15,8 +15,10 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import de.mbs.abstracts.db.objects.Notification;
+import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.db.views.GroupView;
 import de.mbs.abstracts.db.views.NotificationView;
+import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.test.TestExecuter;
 
@@ -26,15 +28,10 @@ import de.mbs.test.TestExecuter;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class NotificationviewTest {
-	private static String notificationId = null;
 	private static Notification noti = new Notification(null);
 	private static String notID = null;
 	private static GregorianCalendar now = new GregorianCalendar();
-	private static String userID = TestExecuter.getView().getUserView()
-			.getUserByUserName("user").getId();
-	private static String userGroup = TestExecuter.getView().getGroupView()
-			.getUserGroupId();
-	
+
 	//private static DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
 
 	/**
@@ -54,7 +51,7 @@ public class NotificationviewTest {
 	 * .
 	 */
 	@Test
-	public final void testAddNotification() {
+	public final void test1AddNotification() {
 		try{
 			NotificationView notificationView = TestExecuter.getView()
 					.getNotificationView();
@@ -65,7 +62,6 @@ public class NotificationviewTest {
 			
 			Vector<String> userVec = new Vector<String>();
 			userVec.add(adminID);
-			
 			Vector<String> groupVec = new Vector<String>();
 			groupVec.add(adminGroup);
 			
@@ -91,14 +87,26 @@ public class NotificationviewTest {
 	
 	/**
 	 * Test method for
-	 * {@link de.mbs.db.java.views.JavaNotificationview#getNotificationsForUser(java.lang.String)}
-	 * .
+	 * {@link de.mbs.db.java.views.JavaNotificationview#get(java.lang.String)}.
 	 */
-	@Ignore
 	@Test
-	public final void testGetNotificationsForUser() {
+	public final void test2GetNotification() {
 		try{
+			NotificationView notificationView = TestExecuter.getView()
+					.getNotificationView();
+			noti = notificationView.get(notID);
 			
+			System.out.println("------ testGet ------");
+			System.out.println("ID: "+noti.getId());
+			System.out.println("Subject: "+noti.getSubject());
+			System.out.println("Creation: "+noti.getCreateTimestamp());
+			System.out.println("Release: "+noti.getReleaseTimestamp());
+			System.out.println("toUser: "+noti.getToUser());
+			System.out.println("toGroup: "+noti.getToGroup());
+			System.out.println("Icon: "+noti.getIcon());
+			System.out.println("Link: "+noti.getLink());
+			
+			assertNotNull("Notificatin failed to get", noti);			
 		}catch (Exception e) {
 			class Local {};
 			String methodName = Local.class.getEnclosingMethod().getName();
@@ -107,34 +115,62 @@ public class NotificationviewTest {
 		}	
 	}
 
+	/**
+	 * Test method for
+	 * {@link de.mbs.db.java.views.JavaNotificationview#getNotificationsForUser(java.lang.String)}
+	 * .
+	 */
+	@Test
+	public final void test3GetNotificationsForUser() {
+		try{
+			NotificationView notificationView = TestExecuter.getView()
+					.getNotificationView();
+			Vector<Notification> vec = notificationView
+					.getNotificationsForUser(TestExecuter.getView()
+							.getUserView().getUserByUserName("admin").getId());
+			System.out
+					.println("----- Possible notifications for user \"admin\" ------");
+			for (Notification n : vec) {
+				System.out.println("Notification: " + n.getSubject());
+			}
+			assertNotNull("NotificationVector ist null", vec);
+		}catch (Exception e) {
+			class Local {};
+			String methodName = Local.class.getEnclosingMethod().getName();
+			System.out.println("---stacktrace " + methodName + "---");
+			e.printStackTrace();
+		}	
+	}
+	
 	/**
 	 * Test method for
 	 * {@link de.mbs.db.java.views.JavaNotificationview#edit(de.mbs.abstracts.db.objects.Notification)}
 	 * .
 	 */
-	@Ignore
 	@Test
-	public final void testEditNotification() {
+	public final void test4EditNotification() {
 		try{
-			//TODO
-		}catch (Exception e) {
-			class Local {};
-			String methodName = Local.class.getEnclosingMethod().getName();
-			System.out.println("---stacktrace " + methodName + "---");
-			e.printStackTrace();
-		}	
-	}
-
-	/**
-	 * Test method for
-	 * {@link de.mbs.db.java.views.JavaNotificationview#get(java.lang.String)}.
-	 */
-	@Ignore
-	@Test
-	public final void testGetNotification() {
-		try{
-			//TODO
+			NotificationView notificationView = TestExecuter.getView()
+					.getNotificationView();
+			String userID = TestExecuter.getView().getUserView()
+					.getUserByUserName("user").getId();
+			String userGroup = TestExecuter.getView().getGroupView()
+					.getUserGroupId();
 			
+			Vector<String> userVec = new Vector<String>();
+			userVec.add(userID);
+			Vector<String> groupVec = new Vector<String>();
+			userVec.add(userGroup);
+			
+			noti = notificationView.get(notID);
+			noti.setSubject("Updated Notification");
+			noti.setToUser(userVec);
+			noti.setToGroup(groupVec);
+			noti = notificationView.edit(noti);
+			
+			System.out.println("------ testEdit ------");
+			test2GetNotification();
+			assertNotNull("Editierung fehlgeschlagen", noti);
 		}catch (Exception e) {
 			class Local {};
 			String methodName = Local.class.getEnclosingMethod().getName();
@@ -142,16 +178,23 @@ public class NotificationviewTest {
 			e.printStackTrace();
 		}	
 	}
-
+	
 	/**
 	 * Test method for
 	 * {@link de.mbs.db.java.views.JavaNotificationview#getAll()}.
 	 */
-	@Ignore
 	@Test
-	public final void testGetAllNotifications() {
+	public final void test5GetAllNotifications() {
 		try{
-			//TODO
+			NotificationView notificationView = TestExecuter.getView()
+					.getNotificationView();
+			Vector<Notification> vec = notificationView.getAll();
+			
+			System.out.println("------ testGetAllNotifications ------");
+			for (Notification n : vec) {
+				System.out.println("Notifications: " + n.getSubject());
+			}
+			assertNotNull("NotificationVector ist null", vec);
 		}catch (Exception e) {
 			class Local {};
 			String methodName = Local.class.getEnclosingMethod().getName();
@@ -159,17 +202,23 @@ public class NotificationviewTest {
 			e.printStackTrace();
 		}	
 	}
-
+	
 	/**
 	 * Test method for
 	 * {@link de.mbs.db.java.views.JavaNotificationview#remove(java.lang.String)}
 	 * .
 	 */
-	@Ignore
 	@Test
-	public final void testRemoveNotification() {
+	public final void test6RemoveNotification() {
 		try{
-			//TODO
+			NotificationView notificationView = TestExecuter.getView()
+					.getNotificationView();
+			boolean deleted = false;
+			deleted = notificationView.remove(notID);
+			System.out.println("------ testRemove ------");
+			System.out.println("Notification gelöscht: "+deleted);
+			System.out.println("NotificationID nach löschen: "+notificationView.get(notID));
+			assertTrue("Remove konnte nicht durchgeführt werden", deleted == true);
 		}catch (Exception e) {
 			class Local {};
 			String methodName = Local.class.getEnclosingMethod().getName();
@@ -177,5 +226,4 @@ public class NotificationviewTest {
 			e.printStackTrace();
 		}
 	}
-
 }
