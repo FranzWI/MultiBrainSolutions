@@ -168,8 +168,8 @@ public class UserviewTest {
 		portlet.setSettings(portletSetting);
 		
 		// Nutzer ändern
-		assertNotNull("ändern des Nutzers fehlgeschlagen", TestExecuter.getView().getUserPortletView().add(portlet));
-		
+		assertNotNull("hinterlegen der Portlets fehlgeschlagen", TestExecuter.getView().getUserPortletView().add(portlet));
+		assertNotNull("ändern des Nutzers fehlgeschlafen", TestExecuter.getView().getUserView().edit(testUser));
 		// Nutzer frisch aus der DAtenbank abholen und prüfen
 		User editedUser = userView.get(testUserId);
 		assertNotNull("User konnte nicht geändert werden", editedUser);
