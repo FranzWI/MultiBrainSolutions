@@ -107,13 +107,13 @@ public class PortletviewTest {
 	@Test
 	public final void test6RemovePortlet() {
 		try {
-		PortletView portletView = TestExecuter.getView().getPortletView();
-		boolean deleted = false;
-		deleted = portletView.remove(portletID);
-		System.out.println("------ testRemove ------");
-		System.out.println("Portlet gelöscht: "+deleted);
-		System.out.println("PortledID nach löschen: "+portletView.get(portletID));
-		assertTrue("Remove konnte nicht durchgeführt werden", deleted == true);
+			PortletView portletView = TestExecuter.getView().getPortletView();
+			boolean deleted = false;
+			deleted = portletView.remove(portletID);
+			System.out.println("------ testRemove ------");
+			System.out.println("Portlet gelöscht: "+deleted);
+			System.out.println("PortledID nach löschen: "+portletView.get(portletID));
+			assertTrue("Remove konnte nicht durchgeführt werden", deleted == true);
 		}catch (Exception e){
 			class Local {};
 		    String methodName = Local.class.getEnclosingMethod().getName();
