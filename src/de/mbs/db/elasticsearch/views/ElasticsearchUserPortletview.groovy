@@ -106,8 +106,7 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 					portlets.add(u);
 			}
 		}
-		// TODO Auto-generated method stub
-		return null;
+		return portlets;
 	}
 
 	private UserPortlet responseToGroup(id,version, fields) {
