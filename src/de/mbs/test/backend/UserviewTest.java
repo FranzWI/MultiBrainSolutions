@@ -170,6 +170,7 @@ public class UserviewTest {
 		// Portlet hinterlegen
 		String id = TestExecuter.getView().getUserPortletView().add(portlet);
 		assertNotNull("hinterlegen der Portlets fehlgeschlagen", id);
+		assertNotNull("Userportlet abholen fehlgeschlagen", TestExecuter.getView().getUserPortletView().get(id));
 		// Nutzer ändern
 		assertNotNull("ändern des Nutzers fehlgeschlafen", TestExecuter.getView().getUserView().edit(testUser));
 		

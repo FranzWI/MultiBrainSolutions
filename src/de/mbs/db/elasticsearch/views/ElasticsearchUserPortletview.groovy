@@ -25,7 +25,6 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		"portletID",
 		"settings",
 		"order",
-		"size",
 		"size.xs",
 		"size.sm",
 		"size.md",
@@ -115,7 +114,7 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		System.out.println("User: "+userid);
 		SearchResponse response = this.view.getESClient()
 				.prepareSearch("system").setTypes("userHasPortlets").addFields(fieldList)
-				.setQuery(QueryBuilders.matchQuery("userID", userid))
+				.setQuery(QueryBuilders.termQuery("userID", userid))
 				.execute()
 				.actionGet();
 		for (SearchHit hit:response.getHits().getHits()) {
