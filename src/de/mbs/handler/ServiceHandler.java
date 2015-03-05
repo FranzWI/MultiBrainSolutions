@@ -2,6 +2,7 @@ package de.mbs.handler;
 
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.mail.MailView;
+import de.mbs.db.java.JavaView;
 
 public class ServiceHandler {
 
@@ -13,6 +14,9 @@ public class ServiceHandler {
 	}
 	
 	public static DatabaseView getDatabaseView(){
+		if(dbview == null){
+			dbview = new JavaView();
+		}
 		return dbview;
 	}
 
