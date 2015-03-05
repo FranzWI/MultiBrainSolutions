@@ -47,7 +47,8 @@ public class SettingsviewTest {
 	public final void testEditSettings() {
 		try {
 			SettingsView settingsView = TestExecuter.getView().getSettingsView();
-			Settings s = new Settings(null);
+			Settings s = settingsView.getAll().get(0);
+			assertNotNull("keine Default Settings angelegt", s);
 			
 			Properties mailProp = s.getMailProperties();
 			mailProp.put("SendGrid_Nutzername", SGProp.USER);
@@ -98,6 +99,8 @@ public class SettingsviewTest {
 			SettingsView settingsView = TestExecuter.getView()
 					.getSettingsView();
 			List<Settings> vec = settingsView.getAll();
+			assertNotNull("Vector ist null", vec);
+			assertFalse("Vector größe ist 0", vec.size()<1 );
 			settingsId = vec.get(0).getId();
 			for (Settings s : vec) {
 				System.out.println("Settings: " + s.getId());
