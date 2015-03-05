@@ -13,8 +13,29 @@
                 "type":"string"
             },
             "order":{
+<<<<<<< HEAD
+            	"type":"short"
+            },
+            "size":{
+                "type":"object",
+                "properties":{
+                    "xs":{
+                        "type":"byte"
+                    },
+                    "sm":{
+                        "type":"byte"
+                    },
+                    "md":{
+                        "type":"byte"
+                    },
+                    "lg":{
+                        "type":"byte"
+                    }
+                }
+=======
                 "type":"short",
                 "index":"not_analyzed"
+>>>>>>> branch 'master' of https://github.com/FranzWI/MultiBrainSolutions.git
             }
         }
     }

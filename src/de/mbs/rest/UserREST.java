@@ -1,12 +1,11 @@
 package de.mbs.rest;
 
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -129,6 +128,10 @@ public class UserREST {
 			UserPortlet up = new UserPortlet(null);
 			up.setOwnerId(u.getId());
 			up.setPortletId(p.getId());
+			up.setXs(p.getSizeXS());
+			up.setSm(p.getSizeSM());
+			up.setMd(p.getSizeMD());
+			up.setLg(p.getSizeLG());
 			up.setOrder(ServiceHandler.getDatabaseView().getUserPortletView()
 					.byOwner(u.getId()).size());
 			if (ServiceHandler.getDatabaseView().getUserPortletView().add(up) != null)
@@ -192,12 +195,16 @@ public class UserREST {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity("Fehler beim speichern des Users").build();
 	}
-
+	
 	@POST
 	@Path("/setPortlets/settings/{id}/")
 	@User
 	public Response setPortletSettings(@PathParam("id") String id,
-			@QueryParam("setting") String settings) {
+			@QueryParam("setting") String settings,
+			@QueryParam("xs") int xs,
+			@QueryParam("sm") int sm,
+			@QueryParam("md") int md,
+			@QueryParam("lg") int lg) {
 		de.mbs.abstracts.db.objects.User u = (de.mbs.abstracts.db.objects.User) webRequest
 				.getAttribute("user");
 		if (u == null)
@@ -214,6 +221,10 @@ public class UserREST {
 						.entity("Sie sind nicht besizter des Portlets").build();
 			}
 			p.setSettings(settings);
+			p.setXs(RESTHelper.getSize(xs));
+			p.setSm(RESTHelper.getSize(sm));
+			p.setMd(RESTHelper.getSize(md));
+			p.setLg(RESTHelper.getSize(lg));
 			if (ServiceHandler.getDatabaseView().getUserPortletView().edit(p) != null) {
 				return Response.ok().build();
 			}

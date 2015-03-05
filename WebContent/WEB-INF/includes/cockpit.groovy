@@ -51,20 +51,20 @@ html.div {
 				Portlet p = portletView.get(map.getPortletId());
 				if(p){
 					String size = "";
-					if(p.getSizeXS()>0)
-						size+=" col-xs-"+p.getSizeXS();
-					if(p.getSizeSM()>0)
-						size+=" col-sm-"+p.getSizeSM();
-					if(p.getSizeMD()>0)
-						size+=" col-md-"+p.getSizeMD();
-					if(p.getSizeLG()>0)
-						size+=" col-lg-"+p.getSizeLG();
+					size+=" col-xs-"+map.getXs();
+					size+=" col-sm-"+map.getSm();
+					size+=" col-md-"+map.getMd();
+					size+=" col-lg-"+map.getLg();
 					div('class':size+" mbs-portlet",'data-portlet-id':map.getId()){
 						i('style':"display:none")
 						request.setAttribute("id", map.getId());
 						request.setAttribute("owner", map.getOwnerId());
 						request.setAttribute("portlet", map.getPortletId());
 						request.setAttribute("settings", map.getSettings());
+						request.setAttribute("xs", map.getXs());
+						request.setAttribute("md", map.getMd());
+						request.setAttribute("sm", map.getSm());
+						request.setAttribute("lg", map.getLg());
 						include('/WEB-INF/includes/portlets/'+p.getPath())
 					}
 				}else{

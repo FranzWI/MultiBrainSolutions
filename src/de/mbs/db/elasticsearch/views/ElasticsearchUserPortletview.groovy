@@ -23,7 +23,12 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		"userID",
 		"portletID",
 		"settings",
-		"order"
+		"order",
+		"size",
+		"size.xs",
+		"size.sm",
+		"size.md",
+		"size.lg"
 	];
 
 	public ElasticsearchUserPortletview(ElasticsearchView view){
@@ -38,6 +43,12 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		group.put("portletID", data.getPortletId());
 		group.put("settings", data.getSettings());
 		group.put("order", data.getOrder());
+		JSONObject size = new JSONObject();
+		size.put("xs", data.getXs());
+		size.put("sm", data.getSm());
+		size.put("md", data.getMd());
+		size.put("lg", data.getLg());
+		group.put("size", size);
 
 		return ElasticsearchHelper.add(view, "system", "userHasPortlets", group.toJSONString());
 	}
@@ -50,6 +61,12 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		group.put("portletID", data.getPortletId());
 		group.put("settings", data.getSettings());
 		group.put("order", data.getOrder());
+		JSONObject size = new JSONObject();
+		size.put("xs", data.getXs());
+		size.put("sm", data.getSm());
+		size.put("md", data.getMd());
+		size.put("lg", data.getLg());
+		group.put("size", size);
 
 		return ElasticsearchHelper.edit(view, "system", "userHasPortlets", group.toJSONString(), data);
 	}
@@ -128,6 +145,18 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 					break;
 				case "order":
 					group.setOrder(field.getValue() == null ? 0 : field.getValue());
+					break;
+				case "size.xs":
+					group.setXs(field.getValue() == null ? 0 : field.getValue());
+					break;
+				case "size.sm":
+					group.setSm(field.getValue() == null ? 0 : field.getValue());
+					break;
+				case "size.md":
+					group.setMd(field.getValue() == null ? 0 : field.getValue());
+					break;
+				case "size.lg":
+					group.setLg(field.getValue() == null ? 0 : field.getValue());
 					break;
 			}
 		}

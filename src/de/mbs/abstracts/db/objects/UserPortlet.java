@@ -20,6 +20,8 @@ public class UserPortlet extends DatabaseObject implements Cloneable {
 	private String portletId;
 
 	private int order;
+	
+	private int xs, sm, md, lg; 
 
 	public UserPortlet(String id) {
 		super(id);
@@ -59,6 +61,38 @@ public class UserPortlet extends DatabaseObject implements Cloneable {
 
 	public void setOrder(int i) {
 		this.order = i;
+	}
+
+	public int getXs() {
+		return xs;
+	}
+
+	public int getSm() {
+		return sm;
+	}
+
+	public int getMd() {
+		return md;
+	}
+
+	public int getLg() {
+		return lg;
+	}
+
+	public void setXs(int xs) {
+		this.xs = xs;
+	}
+
+	public void setSm(int sm) {
+		this.sm = sm;
+	}
+
+	public void setMd(int md) {
+		this.md = md;
+	}
+
+	public void setLg(int lg) {
+		this.lg = lg;
 	}
 
 }

@@ -123,5 +123,18 @@ public class RESTHelper {
 		}
 		return buffer.toString();
 	}
+	
+	/**
+	 * 
+	 * @param size
+	 * @return
+	 */
+	public static int getSize(int size){
+		if(size < 1)
+			return 1;
+		if(size > 12)
+			return 12;
+		return size;
+	}
 
 }

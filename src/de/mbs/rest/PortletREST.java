@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import de.mbs.abstracts.db.objects.Group;
 import de.mbs.abstracts.db.objects.Notification;
 import de.mbs.abstracts.db.objects.Portlet;
+import de.mbs.abstracts.db.objects.UserPortlet;
 import de.mbs.abstracts.mail.MailView;
 import de.mbs.abstracts.mail.definition.Mail;
 import de.mbs.filter.Admin;
@@ -108,7 +109,7 @@ public class PortletREST {
 		try {
 			JSONObject obj = RESTHelper.stringToJSONObject(json);
 			final Portlet p = new Portlet(null);
-			return this.editPortlet(obj, p,false);
+			return this.editPortlet(obj, p, false);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return Response.status(Response.Status.BAD_REQUEST)
@@ -182,21 +183,23 @@ public class PortletREST {
 				p.setUsedByGroups(newgroups);
 				break;
 			case "xs":
-				p.setSizeXS(Integer.parseInt((value.isEmpty()?"0":value)));
+				p.setSizeXS(RESTHelper.getSize(Integer.parseInt((value
+						.isEmpty() ? "0" : value))));
 				break;
 			case "sm":
-				p.setSizeSM(Integer.parseInt((value.isEmpty()?"0":value)));
+				p.setSizeSM(RESTHelper.getSize(Integer.parseInt((value
+						.isEmpty() ? "0" : value))));
 				break;
 			case "md":
-				p.setSizeMD(Integer.parseInt((value.isEmpty()?"0":value)));
+				p.setSizeMD(RESTHelper.getSize(Integer.parseInt((value
+						.isEmpty() ? "0" : value))));
 				break;
 			case "lg":
-				p.setSizeLG(Integer.parseInt((value.isEmpty()?"0":value)));
+				p.setSizeLG(RESTHelper.getSize(Integer.parseInt((value
+						.isEmpty() ? "0" : value))));
 				break;
 			case "multiple":
-				System.out.println("DEBUG: "+value);
 				p.setMultiple(Boolean.valueOf(value));
-				System.out.println("DEBUG: "+p.isMultiple());
 				break;
 			default:
 				return Response
@@ -206,21 +209,40 @@ public class PortletREST {
 			}
 		}
 		if (p.getUsedByGroups().size() > 0) {
-			if(isEdit){
+			if (isEdit) {
 				if (ServiceHandler.getDatabaseView().getPortletView().edit(p) != null) {
+					// in den vom Nutzer genutzen Portlets die größe anpassen
+					// falls gleich
+					for (UserPortlet up : ServiceHandler.getDatabaseView()
+							.getUserPortletView().getAll()) {
+						if (up.getPortletId().equals(p.getId())
+								&& up.getXs() == p.getSizeXS()
+								&& up.getSm() == p.getSizeSM()
+								&& up.getMd() == p.getSizeMD()
+								&& up.getLg() == p.getSizeLG()) {
+							up.setXs(p.getSizeXS());
+							up.setSm(p.getSizeSM());
+							up.setMd(p.getSizeMD());
+							up.setLg(p.getSizeLG());
+							ServiceHandler.getDatabaseView()
+									.getUserPortletView().edit(up);
+						}
+					}
 					return Response.ok().build();
 				} else {
 					return Response.status(Response.Status.BAD_REQUEST)
 							.entity("Fehler beim Ändern des Portlets").build();
 				}
-			}else{
-			
-			if (ServiceHandler.getDatabaseView().getPortletView().add(p) != null) {
-				return Response.ok().build();
 			} else {
-				return Response.status(Response.Status.BAD_REQUEST)
-						.entity("Fehler beim Anlegen des Portlets").build();
-			}}
+
+				if (ServiceHandler.getDatabaseView().getPortletView().add(p) != null) {
+
+					return Response.ok().build();
+				} else {
+					return Response.status(Response.Status.BAD_REQUEST)
+							.entity("Fehler beim Anlegen des Portlets").build();
+				}
+			}
 		} else {
 			return Response
 					.status(Response.Status.BAD_REQUEST)
