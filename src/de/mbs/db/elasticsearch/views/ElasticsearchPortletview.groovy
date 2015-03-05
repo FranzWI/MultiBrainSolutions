@@ -14,7 +14,7 @@ import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.objects.UserPortlet;
 import de.mbs.abstracts.db.views.PortletView;
 import de.mbs.db.elasticsearch.ElasticsearchView
-import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
+import de.mbs.db.elasticsearch.utils.ElasticsearchHelper
 
 public class ElasticsearchPortletview extends PortletView {
 
@@ -55,7 +55,7 @@ public class ElasticsearchPortletview extends PortletView {
 
 	@Override
 	public Portlet edit(Portlet data) {
-
+		
 		JSONObject portlet = new JSONObject();
 
 		portlet.put("name", data.getName());
@@ -67,8 +67,8 @@ public class ElasticsearchPortletview extends PortletView {
 		portlet.put("sizeMD", data.getSizeMD());
 		portlet.put("sizeLG", data.getSizeLG());
 		portlet.put("isMultiple", data.isMultiple());
-
-		return ElasticSearchHelper.edit(view, "system", "portlet", portlet.toJSONString(), data);
+		
+		return ElasticsearchHelper.edit(view, "system", "portlet", portlet.toJSONString(), data);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class ElasticsearchPortletview extends PortletView {
 	@Override
 	public boolean remove(String id) {
 		// TODO aktualisierung erforderlich?
-		return ElasticseachHelper.remove(view, "system", "portlet", id);
+		return ElasticsearchHelper.remove(view, "system", "portlet", id);
 	}
 
 	@Override

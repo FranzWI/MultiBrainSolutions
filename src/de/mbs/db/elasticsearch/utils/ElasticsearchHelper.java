@@ -93,6 +93,7 @@ public class ElasticsearchHelper {
 	
 	public static <A extends DatabaseObject> A edit(ElasticsearchView view, String index, String type, String json, A data)
 	{
+		System.out.println("DEBUG: Huhhu Tobi "+data.getId());
 		BulkResponse response = view
 				.getESClient()
 				.prepareBulk()

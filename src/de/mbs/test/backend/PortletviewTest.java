@@ -89,11 +89,13 @@ public class PortletviewTest {
 		try {
 			PortletView portletView = TestExecuter.getView().getPortletView();
 			portlet = portletView.get(portletID);
+			assertNotNull("Abholen zum bearbeiten fehlgeschlagen", portlet);
+			
 			portlet.setName("Edited Name");
 			portlet = portletView.edit(portlet);
 
 			System.out.println("----- testEdit -----");
-			test4GetPortlet();
+			//test4GetPortlet();
 			assertNotNull("Editierung fehlgeschlagen", portlet);
 		} catch (Exception e) {
 			class Local {};
