@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.util.function.Consumer;
 
@@ -30,6 +32,8 @@ public class ElasticsearchHelper {
 
 	public final static Settings CONNECTIONSETTINGS = ImmutableSettings.settingsBuilder()
 			.put("cluster.name", "MBS Management Cockpit Cluster").build();
+	
+	public final static DateFormat DATETIME_NO_MILLIS_FORMATER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	
 	public final static InetSocketTransportAddress CONNECTIONADRESS = new InetSocketTransportAddress("127.0.0.1", 9300);
 	

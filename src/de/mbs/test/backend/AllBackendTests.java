@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ NotificationviewTest.class}) //hier alle zu testenden views einfügen
+@SuiteClasses({ MessageviewTest.class}) //hier alle zu testenden views einfügen
 //@SuiteClasses({ UserviewTest.class, PortletviewTest.class, GroupviewTest.class })
 public class AllBackendTests {
 }

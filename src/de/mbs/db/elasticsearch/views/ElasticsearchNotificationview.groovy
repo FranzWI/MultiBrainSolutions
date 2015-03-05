@@ -19,8 +19,6 @@ public class ElasticsearchNotificationview extends NotificationView {
 	
 	private ElasticsearchView view;
 	
-	private DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-	
 	public ElasticsearchNotificationview(ElasticsearchView view)
 	{
 		this.view = view;
@@ -57,8 +55,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
-		not.put("creation", df.format( data.getCreateTimestamp()));
-		not.put("release", df.format(data.getReleaseTimestamp()));
+		not.put("creation", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format( data.getCreateTimestamp()));
+		not.put("release", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format(data.getReleaseTimestamp()));
 		JSONObject to = new JSONObject();
 		to.put("User", data.getToUser());
 		to.put("Group", data.getToGroup());
@@ -76,8 +74,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
-		not.put("creation", df.format( data.getCreateTimestamp()));
-		not.put("release", df.format(data.getReleaseTimestamp()));
+		not.put("creation", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format( data.getCreateTimestamp()));
+		not.put("release", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format(data.getReleaseTimestamp()));
 		JSONObject to = new JSONObject();
 		to.put("User", data.getToUser());
 		to.put("Group", data.getToGroup());

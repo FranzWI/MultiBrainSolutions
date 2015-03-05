@@ -5,6 +5,7 @@ package de.mbs.test.backend;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -58,7 +59,7 @@ public class MessageviewTest {
 					.getUserByUserName("admin").getId());
 			testMessage.addToUser(TestExecuter.getView().getUserView()
 					.getUserByUserName("user").getId());
-
+			testMessage.setSendDate(new Date());
 			messageId = messageView.add(testMessage);
 
 			System.out.println("_____test1AddMessage");
