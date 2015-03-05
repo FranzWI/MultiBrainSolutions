@@ -1,5 +1,7 @@
 package de.mbs.db.elasticsearch.views;
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Vector;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -16,6 +18,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 	private String[] fieldList = ["subject", "icon","link", "creation", "release", "to.User","to.Group"];
 	
 	private ElasticsearchView view;
+	
+	private DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	
 	public ElasticsearchNotificationview(ElasticsearchView view)
 	{
@@ -53,8 +57,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
-		not.put("creation", data.getCreateTimestamp().getTime());
-		not.put("release", data.getReleaseTimestamp().getTime());
+		not.put("creation", df.format( data.getCreateTimestamp()));
+		not.put("release", df.format(data.getReleaseTimestamp()));
 		JSONObject to = new JSONObject();
 		to.put("User", data.getToUser());
 		to.put("Group", data.getToGroup());
@@ -72,8 +76,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
-		not.put("creation", data.getCreateTimestamp().getTime());
-		not.put("release", data.getReleaseTimestamp().getTime());
+		not.put("creation", df.format( data.getCreateTimestamp()));
+		not.put("release", df.format(data.getReleaseTimestamp()));
 		JSONObject to = new JSONObject();
 		to.put("User", data.getToUser());
 		to.put("Group", data.getToGroup());
@@ -87,7 +91,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 	{
 		GetResponse response = this.view.getESClient().prepareGet("system", "notification", id).setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToNotification(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -100,7 +104,7 @@ public class ElasticsearchNotificationview extends NotificationView {
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "notification", fieldList)) 
 		{
 			if(hit.getFields() != null){
-				Notification not = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				Notification not = this.responseToNotification(hit.getId(), hit.getVersion(), hit.getFields());
 				if(not != null)
 					notification.add(not);
 			}
@@ -136,10 +140,10 @@ public class ElasticsearchNotificationview extends NotificationView {
 						notification.setLink(field.getValue() == null ? "" : field.getValue().toString());
 						break;
 					case "creation":
-						notification.setCreateTimestamp(field.getValue() == null ? 0 : field.getValue());
+						notification.setCreateTimestamp(field.getValue() == null ? new Date() : df.parse(field.getValue()));
 						break;
 					case "release":
-						notification.setReleaseTimestamp((field.getValue() == null ? 0 : field.getValue()));
+						notification.setReleaseTimestamp(field.getValue() == null ? new Date() :df.parse(field.getValue()));
 						break;
 					case "to.User":
 						Vector<String> users = new Vector<String>();
