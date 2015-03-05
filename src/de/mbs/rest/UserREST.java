@@ -6,7 +6,10 @@ import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.MatrixParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -195,16 +198,14 @@ public class UserREST {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
 					.entity("Fehler beim speichern des Users").build();
 	}
-	
+
 	@POST
 	@Path("/setPortlets/settings/{id}/")
 	@User
 	public Response setPortletSettings(@PathParam("id") String id,
-			@QueryParam("setting") String settings,
-			@QueryParam("xs") int xs,
-			@QueryParam("sm") int sm,
-			@QueryParam("md") int md,
-			@QueryParam("lg") int lg) {
+			@FormParam("setting") String settings, @FormParam("xs") int xs,
+			@FormParam("sm") int sm, @FormParam("md") int md,
+			@FormParam("lg") int lg) {
 		de.mbs.abstracts.db.objects.User u = (de.mbs.abstracts.db.objects.User) webRequest
 				.getAttribute("user");
 		if (u == null)
