@@ -13,8 +13,8 @@
                 "type":"string"
             },
             "order":{
-<<<<<<< HEAD
-            	"type":"short"
+            	"type":"short",
+            	"index":"not_analyzed"
             },
             "size":{
                 "type":"object",
@@ -32,10 +32,6 @@
                         "type":"byte"
                     }
                 }
-=======
-                "type":"short",
-                "index":"not_analyzed"
->>>>>>> branch 'master' of https://github.com/FranzWI/MultiBrainSolutions.git
             }
         }
     }
