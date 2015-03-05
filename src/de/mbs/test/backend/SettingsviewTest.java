@@ -102,9 +102,10 @@ public class SettingsviewTest {
 			assertNotNull("Vector ist null", vec);
 			assertFalse("Vector größe ist 0", vec.size()<1 );
 			settingsId = vec.get(0).getId();
+			/*
 			for (Settings s : vec) {
 				System.out.println("Settings: " + s.getId());
-			}
+			}*/
 			assertNotNull("SettingsVektor ist null", vec);
 			assertTrue("Groesse des SettingsVektor ist 0", vec.size() > 0);
 		} catch (Exception e) {

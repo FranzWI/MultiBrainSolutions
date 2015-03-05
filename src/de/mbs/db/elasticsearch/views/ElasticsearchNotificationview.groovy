@@ -49,9 +49,6 @@ public class ElasticsearchNotificationview extends NotificationView {
 	public String add(Notification data) 
 	{
 		JSONObject not = new JSONObject();
-		System.out.println("huhhu");
-		
-		//FIXME: Hier heit es .getSubject() bei den Messages hei�t die gleiche funktion .getTopic() wollen wir das noch vereinheitlich?
 		not.put("subject", data.getSubject());
 		not.put("icon", data.getIcon());
 		not.put("link", data.getLink());
@@ -61,7 +58,6 @@ public class ElasticsearchNotificationview extends NotificationView {
 		to.put("User", data.getToUser());
 		to.put("Group", data.getToGroup());
 		not.put("to", to);
-		System.out.println("Huhu --> "+not.toJSONString());
 		
 		return ElasticsearchHelper.add(view, "system", "notification", not.toJSONString());
 	}
@@ -129,19 +125,19 @@ public class ElasticsearchNotificationview extends NotificationView {
 				switch (key) 
 				{
 					case "subject":
-						notification.setSubject(field.getValue() == null ? "" : field.getValue().toString());
+						notification.setSubject(field.getValue() == null ? "" : field.getValue());
 						break;
 					case "icon":
-						notification.setIcon(field.getValue() == null ? "" : field.getValue().toString());
+						notification.setIcon(field.getValue() == null ? "" : field.getValue());
 						break;
 					case "link":
-						notification.setLink(field.getValue() == null ? "" : field.getValue().toString());
+						notification.setLink(field.getValue() == null ? "" : field.getValue());
 						break;
 					case "creation":
-						notification.setCreateTimestamp(field.getValue() == null ? new Date() : df.parse(field.getValue()));
+						notification.setCreateTimestamp(field.getValue() == null ? new Date() :  ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.parse(field.getValue()));
 						break;
 					case "release":
-						notification.setReleaseTimestamp(field.getValue() == null ? new Date() :df.parse(field.getValue()));
+						notification.setReleaseTimestamp(field.getValue() == null ? new Date() : ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.parse(field.getValue()));
 						break;
 					case "to.User":
 						Vector<String> users = new Vector<String>();

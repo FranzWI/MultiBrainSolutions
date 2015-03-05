@@ -167,19 +167,24 @@ public class UserviewTest {
 		portlet.setOwnerId(testUser.getId());
 		portlet.setSettings(portletSetting);
 		
+		// Portlet hinterlegen
+		String id = TestExecuter.getView().getUserPortletView().add(portlet);
+		assertNotNull("hinterlegen der Portlets fehlgeschlagen", id);
 		// Nutzer ändern
-		assertNotNull("hinterlegen der Portlets fehlgeschlagen", TestExecuter.getView().getUserPortletView().add(portlet));
 		assertNotNull("ändern des Nutzers fehlgeschlafen", TestExecuter.getView().getUserView().edit(testUser));
+		
+		assertTrue("zuwenige UserPortlets", TestExecuter.getView().getUserPortletView().getAll().size()>0);
+		
 		// Nutzer frisch aus der DAtenbank abholen und prüfen
 		User editedUser = userView.get(testUserId);
 		assertNotNull("User konnte nicht geändert werden", editedUser);
 		assertEquals("Username nicht identisch", testUser.getUsername(),
 				editedUser.getUsername());
 		assertTrue("testUser nicht aktiv", testUser.isActive());
-		assertNotNull("abfrage der Portlets fehlerhaft", TestExecuter.getView().getUserPortletView().byOwner(testUserId));
-		assertTrue("kein Portlet für den TestUser hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUserId).size()>0);
-		assertTrue("falsche Portlet ID hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUserId).get(0).getPortletId().equals(portletId));
-		assertTrue("falsche Portlet Settings hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUserId).get(0).getSettings().equals(portletSetting));
+		assertNotNull("abfrage der Portlets fehlerhaft", TestExecuter.getView().getUserPortletView().byOwner(testUser.getId()));
+		assertTrue("kein Portlet für den TestUser hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUser.getId()).size()>0);
+		assertTrue("falsche Portlet ID hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUser.getId()).get(0).getPortletId().equals(portletId));
+		assertTrue("falsche Portlet Settings hinterlegt", TestExecuter.getView().getUserPortletView().byOwner(testUser.getId()).get(0).getSettings().equals(portletSetting));
 		// Ausgabe aller Benutzernamen
 		// for(User u:userView.getAll()){System.out.println(u.getUsername());}
 		}catch(Exception ex){

@@ -62,8 +62,8 @@ public class MessageviewTest {
 			testMessage.setSendDate(new Date());
 			messageId = messageView.add(testMessage);
 
-			System.out.println("_____test1AddMessage");
-			System.out.println("testMessage ID = " + messageId);
+			//System.out.println("_____test1AddMessage");
+			//System.out.println("testMessage ID = " + messageId);
 
 			assertNotNull("testMessage wurde nicht hinzugefuegt", messageId);
 
@@ -196,10 +196,10 @@ public class MessageviewTest {
 		try {
 			MessageView messageView = TestExecuter.getView().getMessageView();
 			List<Message> vec = messageView.getAll();
-			System.out.println("_______________testGetAllMessages");
-			for (Message m : vec) {
-				System.out.println("Message " + m.getTopic());
-			}
+			//System.out.println("_______________testGetAllMessages");
+			//for (Message m : vec) {
+			//	System.out.println("Message " + m.getTopic());
+			//}
 			assertNotNull("Message Vektor ist Null", vec);
 			assertTrue("Message Vektor hat eie Laenge von 0", vec.size() > 0);
 		} catch (Exception e) {

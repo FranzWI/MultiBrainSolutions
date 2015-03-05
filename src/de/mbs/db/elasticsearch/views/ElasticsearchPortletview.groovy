@@ -75,7 +75,6 @@ public class ElasticsearchPortletview extends PortletView {
 	public Portlet get(String id) {
 		if(id == null)
 			return null;
-		System.out.println("DEBUG "+id);
 		GetResponse response = this.view.getESClient().prepareGet("system", "portlet", id).setFields(fieldList).execute().actionGet();
 
 		if(response.isExists())

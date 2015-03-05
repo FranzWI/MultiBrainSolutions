@@ -74,8 +74,8 @@ public class NotificationviewTest {
 			noti.setLink("TestString für einen Link");
 			
 			notID = notificationView.add(noti);
-			System.out.println("------ testAdd ------");
-			System.out.println("ID der neuen Notification: "+notID);
+			//System.out.println("------ testAdd ------");
+			//System.out.println("ID der neuen Notification: "+notID);
 			assertNotNull("Notification ID ist null", notID);
 		}catch (Exception e) {
 			class Local {};
@@ -96,7 +96,7 @@ public class NotificationviewTest {
 					.getNotificationView();
 			noti = notificationView.get(notID);
 			
-			System.out.println("------ testGet ------");
+			/*System.out.println("------ testGet ------");
 			System.out.println("ID: "+noti.getId());
 			System.out.println("Subject: "+noti.getSubject());
 			System.out.println("Creation: "+noti.getCreateTimestamp());
@@ -105,6 +105,7 @@ public class NotificationviewTest {
 			System.out.println("toGroup: "+noti.getToGroup());
 			System.out.println("Icon: "+noti.getIcon());
 			System.out.println("Link: "+noti.getLink());
+			*/
 			
 			assertNotNull("Notificatin failed to get", noti);			
 		}catch (Exception e) {
@@ -128,11 +129,12 @@ public class NotificationviewTest {
 			Vector<Notification> vec = notificationView
 					.getNotificationsForUser(TestExecuter.getView()
 							.getUserView().getUserByUserName("admin").getId());
-			System.out
+			/*System.out
 					.println("----- Possible notifications for user \"admin\" ------");
 			for (Notification n : vec) {
 				System.out.println("Notification: " + n.getSubject());
 			}
+			*/
 			assertNotNull("NotificationVector ist null", vec);
 		}catch (Exception e) {
 			class Local {};
@@ -168,7 +170,7 @@ public class NotificationviewTest {
 			noti.setToGroup(groupVec);
 			noti = notificationView.edit(noti);
 			
-			System.out.println("------ testEdit ------");
+			//System.out.println("------ testEdit ------");
 			test2GetNotification();
 			assertNotNull("Editierung fehlgeschlagen", noti);
 		}catch (Exception e) {
@@ -190,10 +192,10 @@ public class NotificationviewTest {
 					.getNotificationView();
 			Vector<Notification> vec = notificationView.getAll();
 			
-			System.out.println("------ testGetAllNotifications ------");
+			/*System.out.println("------ testGetAllNotifications ------");
 			for (Notification n : vec) {
 				System.out.println("Notifications: " + n.getSubject());
-			}
+			}*/
 			assertNotNull("NotificationVector ist null", vec);
 		}catch (Exception e) {
 			class Local {};
@@ -215,10 +217,10 @@ public class NotificationviewTest {
 					.getNotificationView();
 			boolean deleted = false;
 			deleted = notificationView.remove(notID);
-			System.out.println("------ testRemove ------");
+			/*System.out.println("------ testRemove ------");
 			System.out.println("Notification gelöscht: "+deleted);
 			System.out.println("NotificationID nach löschen: "+notificationView.get(notID));
-			assertTrue("Remove konnte nicht durchgeführt werden", deleted == true);
+			*/assertTrue("Remove konnte nicht durchgeführt werden", deleted == true);
 		}catch (Exception e) {
 			class Local {};
 			String methodName = Local.class.getEnclosingMethod().getName();

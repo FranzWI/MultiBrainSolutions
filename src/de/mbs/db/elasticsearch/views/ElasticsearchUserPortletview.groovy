@@ -10,6 +10,7 @@ import org.elasticsearch.search.SearchHit
 import org.json.simple.JSONObject
 
 import de.mbs.abstracts.db.objects.Group;
+import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.db.objects.UserPortlet;
 import de.mbs.abstracts.db.views.UserPortletView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
@@ -43,12 +44,12 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		group.put("portletID", data.getPortletId());
 		group.put("settings", data.getSettings());
 		group.put("order", data.getOrder());
-		JSONObject size = new JSONObject();
-		size.put("xs", data.getXs());
-		size.put("sm", data.getSm());
-		size.put("md", data.getMd());
-		size.put("lg", data.getLg());
-		group.put("size", size);
+		JSONObject blub = new JSONObject();
+		blub.put("xs", data.getXs());
+		blub.put("sm", data.getSm());
+		blub.put("md", data.getMd());
+		blub.put("lg", data.getLg());
+		group.put("size", blub);
 
 		return ElasticsearchHelper.add(view, "system", "userHasPortlets", group.toJSONString());
 	}
@@ -61,12 +62,12 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		group.put("portletID", data.getPortletId());
 		group.put("settings", data.getSettings());
 		group.put("order", data.getOrder());
-		JSONObject size = new JSONObject();
-		size.put("xs", data.getXs());
-		size.put("sm", data.getSm());
-		size.put("md", data.getMd());
-		size.put("lg", data.getLg());
-		group.put("size", size);
+		JSONObject blub = new JSONObject();
+		blub.put("xs", data.getXs());
+		blub.put("sm", data.getSm());
+		blub.put("md", data.getMd());
+		blub.put("lg", data.getLg());
+		group.put("size", blub);
 
 		return ElasticsearchHelper.edit(view, "system", "userHasPortlets", group.toJSONString(), data);
 	}
@@ -82,7 +83,7 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 				.prepareGet("system", "userHasPortlets", id).setFields(fieldList)
 				.execute().actionGet();
 		if (response.isExists()) {
-			return responseToGroup(response.getId(), response.getVersion(), response.getFields());
+			return responseToUserPortlet(response.getId(), response.getVersion(), response.getFields());
 		} else
 			return null;
 	}
@@ -93,7 +94,7 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 
 		for (SearchHit hit : ElasticsearchHelper.getAll(view, "system", "userHasPortlets", fieldList)) {
 			if(hit.getFields() != null) {
-				UserPortlet u = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				UserPortlet u = this.responseToUserPortlet(hit.getId(), hit.getVersion(), hit.getFields());
 				if(u != null)
 					users.add(u);
 			}
@@ -111,14 +112,15 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 	@Override
 	public Vector<UserPortlet> byOwner(String userid) {
 		Vector<UserPortlet> portlets = new Vector<UserPortlet>();
+		System.out.println("User: "+userid);
 		SearchResponse response = this.view.getESClient()
 				.prepareSearch("system").setTypes("userHasPortlets").addFields(fieldList)
-				.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("userID", userid)) )
+				.setQuery(QueryBuilders.matchQuery("userID", userid))
 				.execute()
 				.actionGet();
 		for (SearchHit hit:response.getHits().getHits()) {
 			if(hit.getFields() != null){
-				UserPortlet u = this.responseToGroup(hit.getId(), hit.getVersion(), hit.getFields());
+				UserPortlet u = this.responseToUserPortlet(hit.getId(), hit.getVersion(), hit.getFields());
 				if(u != null)
 					portlets.add(u);
 			}
@@ -126,7 +128,7 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		return portlets;
 	}
 
-	private UserPortlet responseToGroup(id,version, fields) {
+	private UserPortlet responseToUserPortlet(id,version, fields) {
 
 		UserPortlet group = new UserPortlet(id, version);
 
@@ -135,13 +137,13 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 
 			switch (key) {
 				case "userID":
-					group.setOwnerId(field.getValue() == null ? "" : field.getValue().toString());
+					group.setOwnerId(field.getValue() == null ? "" : field.getValue());
 					break;
 				case "portletID":
-					group.setPortletId(field.getValue() == null ? "" : field.getValue().toString());
+					group.setPortletId(field.getValue() == null ? "" : field.getValue());
 					break;
 				case "settings":
-					group.setSettings(field.getValue() == null ? "" : field.getValue().toString());
+					group.setSettings(field.getValue() == null ? "" : field.getValue());
 					break;
 				case "order":
 					group.setOrder(field.getValue() == null ? 0 : field.getValue());

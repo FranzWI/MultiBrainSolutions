@@ -143,8 +143,7 @@ public class ElasticsearchView extends DatabaseView {
 				admin.setActive(true);
 				admin.setPw("admin");
 				admin.addMembership(this.groupview.getAdminGroupId());
-				System.out.println("ES: DEBUG ID User Admini Strator "
-						+ this.getUserView().add(admin));
+				this.getUserView().add(admin);
 
 				// Nutzer anlegen
 				User user = new User(null);
@@ -155,8 +154,7 @@ public class ElasticsearchView extends DatabaseView {
 				user.setActive(true);
 				user.addMembership(this.groupview.getUserGroupId());
 				user.setPw("user");
-				System.out.println("ES: DEBUG ID User Max Mustermann "
-						+ this.getUserView().add(user));
+				this.getUserView().add(user);
 			} else {
 				System.out.println("ES: installation fehlgeschlagen");
 			}
