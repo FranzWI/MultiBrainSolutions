@@ -6,6 +6,7 @@ package de.mbs.test.backend;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
 import org.junit.FixMethodOrder;
@@ -16,6 +17,7 @@ import de.mbs.abstracts.db.objects.Portlet;
 import de.mbs.abstracts.db.objects.Settings;
 import de.mbs.abstracts.db.views.MessageView;
 import de.mbs.abstracts.db.views.SettingsView;
+import de.mbs.mail.sendgrid.SGProp;
 import de.mbs.test.TestExecuter;
 
 /**
@@ -46,7 +48,19 @@ public class SettingsviewTest {
 		try {
 			SettingsView settingsView = TestExecuter.getView().getSettingsView();
 			Settings s = new Settings(null);
-			//TODO
+			
+			Properties mailProp = s.getMailProperties();
+			mailProp.put("SendGrid_Nutzername", SGProp.USER);
+			mailProp.put("PW_SendGrid_Passwort", SGProp.PASSWORD);
+			s.setMailProperties(mailProp);
+			
+			Properties proxyProp = s.getProxyProperties();
+			proxyProp.put("HTTP_Proxy_Server", "");
+			proxyProp.put("NUMBER_HTTP_Proxy_Port", "");
+			s.setProxyProperties(proxyProp);
+			
+			assertNotNull("edit settings returned NULL",settingsView.edit(s));
+			assertNotNull("mailProperties sind nicht richtig",settingsView.get(settingsId).getMailProperties());
 		} catch (Exception e) {
 			class Local {
 			}
