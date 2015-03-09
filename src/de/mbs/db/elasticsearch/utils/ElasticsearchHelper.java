@@ -77,7 +77,7 @@ public class ElasticsearchHelper {
 		return vector;
 	}
 	
-	public static String add(ElasticsearchView view, String index, String type, String json){
+	public static String add(ElasticsearchClientHandler view, String index, String type, String json){
 		IndexResponse response = view.getESClient()
 				.prepareIndex(index, type)
 				.setSource(json)
@@ -95,7 +95,7 @@ public class ElasticsearchHelper {
 		}
 	}
 	
-	public static <A extends DatabaseObject> A edit(ElasticsearchView view, String index, String type, String json, A data)
+	public static <A extends DatabaseObject> A edit(ElasticsearchClientHandler view, String index, String type, String json, A data)
 	{
 		BulkResponse response = view
 				.getESClient()
@@ -117,7 +117,7 @@ public class ElasticsearchHelper {
 		}
 	}
 	
-	public static boolean remove(ElasticsearchView view, String index, String type, String id){
+	public static boolean remove(ElasticsearchClientHandler view, String index, String type, String id){
 		DeleteResponse response = view.getESClient()
 				.prepareDelete(index, type, id).execute().actionGet();
 		view.getESClient().admin().indices()
@@ -125,7 +125,7 @@ public class ElasticsearchHelper {
 		return response.isFound();
 	}
 	
-	public static SearchHit[] getAll(ElasticsearchView view, String index, String type, String[] fieldList){
+	public static SearchHit[] getAll(ElasticsearchClientHandler view, String index, String type, String[] fieldList){
 		return view.getESClient()
 				.prepareSearch(index).setTypes(type).addFields(fieldList)
 				.setQuery(new MatchAllQueryBuilder()).execute().actionGet().getHits().getHits();

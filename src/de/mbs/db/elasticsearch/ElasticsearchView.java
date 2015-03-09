@@ -43,6 +43,7 @@ import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.abstracts.db.views.UserPortletView;
 import de.mbs.abstracts.db.views.UserView;
 import de.mbs.abstracts.db.views.definition.SearchableView;
+import de.mbs.db.elasticsearch.utils.ElasticsearchClientHandler;
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper;
 import de.mbs.db.elasticsearch.views.ElasticsearchGroupview;
 import de.mbs.db.elasticsearch.views.ElasticsearchMessageview;
@@ -52,7 +53,7 @@ import de.mbs.db.elasticsearch.views.ElasticsearchSettingsview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserPortletview;
 import de.mbs.db.elasticsearch.views.ElasticsearchUserview;
 
-public class ElasticsearchView extends DatabaseView {
+public class ElasticsearchView extends DatabaseView implements ElasticsearchClientHandler {
 
 	private Client client;
 
