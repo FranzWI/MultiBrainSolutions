@@ -1,26 +1,40 @@
 package de.mbs.db.elasticsearch.utils;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.function.Consumer;
 
 import org.apache.commons.codec.binary.Base64;
+import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
+import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.bootstrap.Elasticsearch;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.indices.IndexAlreadyExistsException;
 import org.elasticsearch.search.SearchHit;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -129,6 +143,80 @@ public class ElasticsearchHelper {
 		return view.getESClient()
 				.prepareSearch(index).setTypes(type).addFields(fieldList)
 				.setQuery(new MatchAllQueryBuilder()).execute().actionGet().getHits().getHits();
+	}
+	
+	public static Vector<String> getDatabases(ElasticsearchClientHandler view) {
+		Vector<String> indices = new Vector<String>();
+		ClusterStateResponse clusterStateResponse = view.getESClient().admin().cluster()
+				.prepareState().execute().actionGet();
+		ImmutableOpenMap<String, IndexMetaData> indexMappings = clusterStateResponse
+				.getState().getMetaData().indices();
+		for (ObjectCursor<String> key : indexMappings.keys()) {
+
+			indices.add(key.value);
+		}
+		return indices;
+	}
+	
+	public static boolean install(ElasticsearchClientHandler view, String indexName, Class path) {
+		CreateIndexRequest request = new CreateIndexRequest(indexName);
+		Map<String, JSONObject> map = ElasticsearchHelper.getMapping(indexName, path);
+		
+		for (String key : map.keySet()) {
+			try{
+			request.mapping(key, map.get(key).toJSONString());
+
+			}catch(Exception MapperParsingException){
+				System.err.println("Fehler beim Parsen des Mappings für ES von "+key);
+			}
+		}
+		try {
+			view.getESClient().admin().indices().create(request).actionGet();
+			view.getESClient().admin().cluster()
+					.health(new ClusterHealthRequest().waitForYellowStatus())
+					.actionGet();
+			return true;
+		} catch (IndexAlreadyExistsException ex) {
+			System.err
+					.println("ES: Index " + indexName + " existiert bereits.");
+		} catch (Exception ex) {
+			System.err
+					.println("ES: unbekannte Ausnahme bei der Installation Exception:");
+			ex.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param dir
+	 *            - Ordner indem die *.json Datein gesucht werden sollen
+	 * @return
+	 */
+	private static Map<String, JSONObject> getMapping(String dir, Class path) {
+		Map<String, JSONObject> maps = new TreeMap<String, JSONObject>();
+		URL url = path.getResource("initscripts/" + dir);
+		File folder = new File(url.getFile());
+		JSONParser parser = new JSONParser();
+		// ordner existiert und ist Ordner
+		if (folder.exists() && folder.isDirectory()) {
+			// alle Dateien daraus holen
+			for (File file : folder.listFiles()) {
+				// Datie endet mit .json
+				if (file.getName().matches(".*json")) {
+					try {
+						JSONObject obj = (JSONObject) parser
+								.parse(new FileReader(file));
+						maps.put(file.getName().replace(".json", ""), obj);
+						parser.reset();
+					} catch (IOException | ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return maps;
 	}
 	
 }

@@ -198,16 +198,7 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 	 * @return
 	 */
 	public Vector<String> getDatabases() {
-		Vector<String> indices = new Vector<String>();
-		ClusterStateResponse clusterStateResponse = client.admin().cluster()
-				.prepareState().execute().actionGet();
-		ImmutableOpenMap<String, IndexMetaData> indexMappings = clusterStateResponse
-				.getState().getMetaData().indices();
-		for (ObjectCursor<String> key : indexMappings.keys()) {
-
-			indices.add(key.value);
-		}
-		return indices;
+		return ElasticsearchHelper.getDatabases(this);
 	}
 
 	/**
@@ -279,67 +270,10 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 		return grr;
 	}
 
-	/**
-	 * 
-	 * @param dir
-	 *            - Ordner indem die *.json Datein gesucht werden sollen
-	 * @return
-	 */
-	private Map<String, JSONObject> getMapping(String dir) {
-		Map<String, JSONObject> maps = new TreeMap<String, JSONObject>();
-		URL url = this.getClass().getResource("initscripts/" + dir);
-		File folder = new File(url.getFile());
-		JSONParser parser = new JSONParser();
-		// ordner existiert und ist Ordner
-		if (folder.exists() && folder.isDirectory()) {
-			// alle Dateien daraus holen
-			for (File file : folder.listFiles()) {
-				// Datie endet mit .json
-				if (file.getName().matches(".*json")) {
-					try {
-						JSONObject obj = (JSONObject) parser
-								.parse(new FileReader(file));
-						maps.put(file.getName().replace(".json", ""), obj);
-						parser.reset();
-					} catch (IOException | ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		return maps;
-	}
+	
 
 	public boolean install() {
-		// Index System erstellen
-		String indexName = "system";
-		CreateIndexRequest request = new CreateIndexRequest(indexName);
-		Map<String, JSONObject> map = this.getMapping("system");
-		
-		for (String key : map.keySet()) {
-			try{
-			request.mapping(key, map.get(key).toJSONString());
-
-			}catch(Exception MapperParsingException){
-				System.err.println("Fehler beim Parsen des Mappings für ES von "+key);
-			}
-		}
-		try {
-			client.admin().indices().create(request).actionGet();
-			client.admin().cluster()
-					.health(new ClusterHealthRequest().waitForYellowStatus())
-					.actionGet();
-			return true;
-		} catch (IndexAlreadyExistsException ex) {
-			System.err
-					.println("ES: Index " + indexName + " existiert bereits.");
-		} catch (Exception ex) {
-			System.err
-					.println("ES: unbekannte Ausnahme bei der Installation Exception:");
-			ex.printStackTrace();
-		}
-		return false;
+		return ElasticsearchHelper.install(this, "system", this.getClass());
 	}
 
 	@Override
