@@ -48,13 +48,13 @@ public class ElasticsearchMessageview extends MessageView {
 
 		Vector<Message> foundMessages = new Vector<Message>();
 
-		QueryBuilders.moreLikeThisQuery("subject","content").likeText(search)
 		
+		//QueryBuilders.fuzzyLikeThisQuery("subject","content").likeText(search)
 		SearchResponse response = this.view.getESClient()
 			.prepareSearch("system")
 			.setTypes("message")
 			.addFields(fieldList)
-			.setQuery(QueryBuilders.fuzzyLikeThisQuery("subject","content").likeText(search))
+			.setQuery(QueryBuilders.moreLikeThisQuery("subject","content").likeText(search))
 			.execute()
 			.actionGet();
 			
@@ -63,7 +63,7 @@ public class ElasticsearchMessageview extends MessageView {
 			if(message != null)
 				foundMessages.add(message);
 		}
-		
+
 		for(Message message : foundMessages){
 			SearchResult res = new SearchResult();
 
