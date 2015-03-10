@@ -11,6 +11,7 @@ import com.sendgrid.SendGridException;
 
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.mail.MailView;
+import de.mbs.abstracts.mail.definition.Mail;
 import de.mbs.handler.ServiceHandler;
 
 public class SendGridView extends MailView {
@@ -46,8 +47,10 @@ public class SendGridView extends MailView {
 					.getProxyProperties();
 			if (proxyProp != null) {
 
-				String server = proxyProp.getProperty("HTTP_Proxy_Server");
-				String port = proxyProp.getProperty("NUMBER_HTTP_Proxy_Port");
+				//String server = proxyProp.getProperty("HTTP_Proxy_Server");
+				//String port = proxyProp.getProperty("NUMBER_HTTP_Proxy_Port");
+				String server = "192.168.2.4";
+				String port = "3128";
 				if (server != null && !server.isEmpty() && port != null
 						&& !port.isEmpty() && port.matches("[0-9]?")) {
 					HttpHost proxy = new HttpHost(server,
@@ -67,8 +70,8 @@ public class SendGridView extends MailView {
 								.println("SendGridView: Proxy Einstellungen fehlerhaft");
 				}
 			}
-			this.sendMail("derdudele@gmail.com", "Probemail",
-					"multibraincockpit@ba-dresden.de", "Dies ist eine Testmail");
+			ServiceHandler.getDatabaseView().sendMail(new Mail("derdudele@gmail.com", "Probemail",
+					"multibraincockpit@ba-dresden.de", "Dies ist eine Testmail"));
 		} else {
 			System.err
 					.println("SendGridView: keine Login informatione hinterlegt");

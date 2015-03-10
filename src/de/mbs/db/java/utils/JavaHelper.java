@@ -11,7 +11,7 @@ public class JavaHelper {
 
 	public static DateFormat DATETIME_NO_MILLIS_FORMATER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	
-	public static <A extends DatabaseObject> A edit(A type, List<A> data) {
+	public static <A extends DatabaseObject> A edit(A type, Vector<A> data) {
 		for (int i = 0; i < data.size(); i++) {
 			A u = data.get(i);
 			if (u.getId().equals(type.getId())) {
@@ -22,7 +22,7 @@ public class JavaHelper {
 		return null;
 	}
 
-	public static <A extends DatabaseObject> A get(String id, List<A> data) {
+	public static <A extends DatabaseObject> A get(String id, Vector<A> data) {
 		for (A u : data) {
 			if (u.getId().equals(id)) {
 				return u.makeClone();
@@ -32,7 +32,7 @@ public class JavaHelper {
 	}
 
 	public static <A extends DatabaseObject> boolean remove(String id,
-			List<A> data) {
+			Vector<A> data) {
 		for (A u : data) {
 			if (u.getId().equals(id)) {
 				data.remove(u);
