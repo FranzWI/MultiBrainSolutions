@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -60,6 +61,11 @@ public class UserREST {
 					break;
 				case "username":
 					u.setUsername(obj.get(key).toString());
+					for(de.mbs.abstracts.db.objects.User user : ServiceHandler.getDatabaseView().getUserView().getAll()){
+						if(u.getUsername().trim().equals(user.getUsername())){
+							return Response.status(Status.BAD_REQUEST).entity("Nutzername bereits vergeben").build();
+						}
+					}
 					break;
 				case "mail":
 					u.setEmail(obj.get(key).toString());

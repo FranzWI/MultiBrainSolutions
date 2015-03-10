@@ -141,13 +141,13 @@ html.div{
 									div('class':"form-group"){
 										label('for':"md",'class':"col-sm-1 control-label", "MD")
 										div('class':"col-sm-6"){
-											input(type:"number",id:'portlet-edit-md',name:"MD",'class':"form-control portlet-edit", 'placeholder':"MD")
+											input(type:"number",id:'portlet-edit-md',name:"md",'class':"form-control portlet-edit", 'placeholder':"MD")
 										}
 									}
 									div('class':"form-group"){
 										label('for':"lg",'class':"col-sm-1 control-label", "LG")
 										div('class':"col-sm-6"){
-											input(type:"number",id:'portlet-edit-lg',name:"LG",'class':"form-control portlet-edit", 'placeholder':"LG")
+											input(type:"number",id:'portlet-edit-lg',name:"lg",'class':"form-control portlet-edit", 'placeholder':"LG")
 										}
 									}
 									div('class':"form-group"){
