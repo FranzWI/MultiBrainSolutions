@@ -48,22 +48,22 @@ public class ElasticsearchMessageview extends MessageView {
 
 		Vector<Message> foundMessages = new Vector<Message>();
 
+		QueryBuilders.moreLikeThisQuery("subject","content").likeText(search)
+		
 		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system")
-				.setTypes("message")
-				.addFields(fieldList)
-				.setQuery(QueryBuilders.boolQuery()
-				//.must(QueryBuilders.matchQuery("toUser", u.getId()))
-				.should(QueryBuilders.termQuery("subject", search))
-				.should(QueryBuilders.termQuery("content", search))
-				.minimumNumberShouldMatch(1))
-				.execute()
-				.actionGet();
+			.prepareSearch("system")
+			.setTypes("message")
+			.addFields(fieldList)
+			.setQuery(QueryBuilders.fuzzyLikeThisQuery("subject","content").likeText(search))
+			.execute()
+			.actionGet();
+			
 		for(SearchHit hit: response.getHits().getHits()){
 			Message message = this.responseToMessage(hit.getId(), hit.getVersion(), hit.getFields());
 			if(message != null)
 				foundMessages.add(message);
 		}
+		
 		for(Message message : foundMessages){
 			SearchResult res = new SearchResult();
 
