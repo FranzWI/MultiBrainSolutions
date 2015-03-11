@@ -56,7 +56,7 @@ public class ElasticsearchMessageview extends MessageView {
 				.prepareSearch("system")
 				.setTypes("message")
 				.addFields(fieldList)
-				.setQuery(QueryBuilders.termQuery("content",search))
+				.setQuery(QueryBuilders.fuzzyLikeThisQuery("subject","content").likeText(search))
 				.execute()
 				.actionGet();
 		for(SearchHit hit: response.getHits().getHits()){

@@ -53,8 +53,8 @@ public class MessageviewTest {
 			MessageView messageView = TestExecuter.getView().getMessageView();
 			Message testMessage = new Message(null);
 
-			testMessage.setTopic("TestMessage");
-			testMessage.setContent("MessageContent");
+			testMessage.setTopic("Test Message");
+			testMessage.setContent("Message Content");
 			testMessage.setFromUser(TestExecuter.getView().getUserView()
 					.getUserByUserName("admin").getId());
 			testMessage.addToUser(TestExecuter.getView().getUserView()
@@ -68,9 +68,9 @@ public class MessageviewTest {
 			assertNotNull("testMessage wurde nicht hinzugefuegt", messageId);
 
 			assertEquals("Betreff nicht richtig hinzugefuegt",
-					testMessage.getTopic(), "TestMessage");
+					testMessage.getTopic(), "Test Message");
 			assertEquals("Inhalt nicht richtig hinzugefuegt",
-					testMessage.getContent(), "MessageContent");
+					testMessage.getContent(), "Message Content");
 			assertEquals("Absender nicht richtig hinzugefuegt",
 					testMessage.getFromUser(), TestExecuter.getView()
 							.getUserView().getUserByUserName("admin").getId());
@@ -96,7 +96,7 @@ public class MessageviewTest {
 			Message testMessage = messageView.get(messageId);
 			assertNotNull("testMessage kann nicht gefunden werden", testMessage);
 			assertEquals("Betreff der gefundenen Nachricht ist nicht richtig",
-					testMessage.getTopic(), "TestMessage");
+					testMessage.getTopic(), "Test Message");
 		} catch (Exception e) {
 			class Local {
 			}
@@ -217,7 +217,7 @@ public class MessageviewTest {
 	 * Test method for
 	 * {@link de.mbs.db.java.views.JavaMessageview#remove(java.lang.String)}.
 	 */
-	/*
+	
 	@Test
 	public final void test5RemoveMessage() {
 		try {
@@ -236,6 +236,6 @@ public class MessageviewTest {
 			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 }

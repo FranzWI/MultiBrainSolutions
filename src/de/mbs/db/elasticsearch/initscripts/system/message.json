@@ -2,8 +2,7 @@
     "message":{
         "properties":{
             "subject":{
-                "type":"string",
-                "index":"not_analyzed"
+                "type":"string"
             },
             "timestamp":{
                 "type":"date",
@@ -27,8 +26,7 @@
                 }
             },
             "content":{
-                "type":"string",
-                "index":"not_analyzed"
+                "type":"string"
             },
             "file":{
                 "type":"string",
