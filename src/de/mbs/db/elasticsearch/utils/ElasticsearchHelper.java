@@ -22,6 +22,8 @@ import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.bootstrap.Elasticsearch;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
@@ -30,7 +32,9 @@ import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.indices.IndexAlreadyExistsException;
 import org.elasticsearch.search.SearchHit;
 import org.json.simple.JSONArray;
@@ -100,7 +104,7 @@ public class ElasticsearchHelper {
 		
 		if (response.isCreated()) 
 		{
-			view.getESClient().admin().indices().flush(new FlushRequest(index)).actionGet();
+			view.getESClient().admin().indices().flush(new FlushRequest(index).force(true).full(true)).actionGet();
 			return response.getId();
 		} 
 		else 
@@ -120,7 +124,7 @@ public class ElasticsearchHelper {
 				
 		if (!response.hasFailures()) 
 		{
-			view.getESClient().admin().indices().flush(new FlushRequest(index)).actionGet();
+			view.getESClient().admin().indices().flush(new FlushRequest(index).force(true).full(true)).actionGet();
 			return data;
 		} 
 		else 
@@ -135,14 +139,28 @@ public class ElasticsearchHelper {
 		DeleteResponse response = view.getESClient()
 				.prepareDelete(index, type, id).execute().actionGet();
 		view.getESClient().admin().indices()
-				.flush(new FlushRequest(index)).actionGet();
+				.flush(new FlushRequest(index).force(true).full(true)).actionGet();
 		return response.isFound();
 	}
 	
 	public static SearchHit[] getAll(ElasticsearchClientHandler view, String index, String type, String[] fieldList){
-		return view.getESClient()
-				.prepareSearch(index).setTypes(type).addFields(fieldList)
-				.setQuery(new MatchAllQueryBuilder()).execute().actionGet().getHits().getHits();
+		SearchResponse scrollResp = view.getESClient().prepareSearch(index).setTypes(type).setScroll(new TimeValue(60000))
+		        .setQuery(QueryBuilders.matchAllQuery()).addFields(fieldList)
+		        .setSize(100).execute().actionGet();
+		Vector<SearchHit> hits = new Vector<SearchHit>();
+		while (true) {
+
+		    for (SearchHit hit : scrollResp.getHits().getHits()) {
+		        hits.add(hit);
+		    }
+		    scrollResp = view.getESClient().prepareSearchScroll(scrollResp.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
+		    //Break condition: No hits are returned
+		    if (scrollResp.getHits().getHits().length == 0) {
+		        break;
+		    }
+		}
+		
+		return hits.toArray(new SearchHit[hits.size()]);
 	}
 	
 	public static Vector<String> getDatabases(ElasticsearchClientHandler view) {

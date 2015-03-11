@@ -2,6 +2,7 @@ package de.mbs.handler;
 
 import de.mbs.abstracts.db.DatabaseView;
 import de.mbs.abstracts.mail.MailView;
+import de.mbs.db.elasticsearch.ElasticsearchView;
 import de.mbs.db.java.JavaView;
 import de.mbs.mail.sendgrid.SendGridView;
 
@@ -16,7 +17,7 @@ public class ServiceHandler {
 	
 	public static DatabaseView getDatabaseView(){
 		if(dbview == null){
-			dbview = new JavaView();
+			dbview = new ElasticsearchView();
 		}
 		return dbview;
 	}

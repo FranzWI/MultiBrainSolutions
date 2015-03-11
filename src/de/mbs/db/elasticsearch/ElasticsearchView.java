@@ -81,6 +81,10 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 			System.out.println("ES: nicht installiert");
 			if (this.install()) {
 				this.groupview = new ElasticsearchGroupview(this);
+				
+				System.out.println("DEBUG ID admin Group : "+this.groupview.getAdminGroupId());
+				System.out.println("DEBUG ID User Group : "+this.groupview.getUserGroupId());
+				
 				this.portletview = new ElasticsearchPortletview(this);
 				
 				Portlet p = new Portlet(null);
@@ -132,7 +136,8 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 				admin.setActive(true);
 				admin.setPw("admin");
 				admin.addMembership(this.groupview.getAdminGroupId());
-				this.getUserView().add(admin);
+				if(this.userview.add(admin) == null)
+					System.err.println("Admin anlegen fehlgeschlagen");
 
 				// Nutzer anlegen
 				User user = new User(null);
@@ -143,7 +148,7 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 				user.setActive(true);
 				user.addMembership(this.groupview.getUserGroupId());
 				user.setPw("user");
-				this.getUserView().add(user);
+				this.userview.add(user);
 			} else {
 				System.out.println("ES: installation fehlgeschlagen");
 			}

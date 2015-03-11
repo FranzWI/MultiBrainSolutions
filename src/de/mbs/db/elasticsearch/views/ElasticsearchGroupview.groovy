@@ -60,7 +60,7 @@ public class ElasticsearchGroupview extends GroupView {
 				.prepareSearch("system")
 				.setTypes("group")
 				.addFields(fieldList)
-				.setQuery(QueryBuilders.matchQuery("name", group) )
+				.setQuery(QueryBuilders.termQuery("name", group) )
 				.execute()
 				.actionGet();
 
@@ -139,10 +139,10 @@ public class ElasticsearchGroupview extends GroupView {
 			switch (key) 
 			{
 				case "name":
-					group.setName(field.getValue() == null ? "" : field.getValue().toString());
+					group.setName(field.getValue() == null ? "" : field.getValue());
 					break;
 				case "description":
-					group.setDescription(field.getValue() == null ? "" : field.getValue().toString());
+					group.setDescription(field.getValue() == null ? "" : field.getValue());
 					break;
 			}
 		}

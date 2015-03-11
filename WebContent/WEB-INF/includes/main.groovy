@@ -66,6 +66,9 @@ html.div('class':"page-container sidebar-collapsed"){
 					}
 				}
 			}
+			if(user == null){
+				println "kein User"
+			}else{
 			// Ist der Nutzer Admin?
 			if(user.getMembership().contains(groupView.getAdminGroupId())){
 				li('class':(page && page.equals("system")?"active":"")){
@@ -74,6 +77,7 @@ html.div('class':"page-container sidebar-collapsed"){
 						span "System"
 					}
 				}
+			}
 			}
 		}
 	}

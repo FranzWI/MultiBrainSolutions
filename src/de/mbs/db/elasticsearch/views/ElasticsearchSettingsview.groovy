@@ -1,5 +1,7 @@
 package de.mbs.db.elasticsearch.views;
 
+import java.util.Properties;
+import java.util.UUID;
 import java.util.Vector;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -10,6 +12,7 @@ import de.mbs.abstracts.db.objects.Settings;
 import de.mbs.abstracts.db.views.SettingsView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper
+import de.mbs.mail.sendgrid.SGProp;
 
 public class ElasticsearchSettingsview extends SettingsView {
 
@@ -24,21 +27,21 @@ public class ElasticsearchSettingsview extends SettingsView {
 	public ElasticsearchSettingsview(ElasticsearchView view) {
 		this.view = view;
 		if(this.getAll().size() == 0){
-			JSONObject prob = new JSONObject();
+			Settings setting = new Settings(UUID.randomUUID().toString());
+			Properties mailProp = setting.getMailProperties();
+			mailProp.put("SendGrid_Nutzername", SGProp.USER);
+			mailProp.put("PW_SendGrid_Passwort", SGProp.PASSWORD);
+			setting.setMailProperties(mailProp);
 
-			//wenn ich die Properties richtig verstehe und dazu tobis tabelle nehme gehe ich davon aus das ich direkt die get funktion nehmen muss damit ich auf die Objecte komme
-			//nach meinem Verst�ndnis w�rde das getProperties die direkten Strings holen
-			prob.put("mailProperties","");
-			prob.put("dbProperties", "");
-			prob.put("proxyProperties", "");
-			
-			ElasticsearchHelper.add(view, "system", "settings", prob.toJSONString());
-			
+			Properties proxyProp = setting.getProxyProperties();
+			proxyProp.put("HTTP_Proxy_Server", "");
+			proxyProp.put("NUMBER_HTTP_Proxy_Port", "");
+			setting.setProxyProperties(proxyProp);
+			ElasticsearchHelper.add(this.view, "system","settings",this.settingsToJSON(setting).toJSONString());
 		}
 	}
 
-	@Override
-	public Settings edit(Settings data) {
+	private JSONObject settingsToJSON(Settings data){
 		JSONObject prob = new JSONObject();
 
 		//wenn ich die Properties richtig verstehe und dazu tobis tabelle nehme gehe ich davon aus das ich direkt die get funktion nehmen muss damit ich auf die Objecte komme
@@ -46,10 +49,13 @@ public class ElasticsearchSettingsview extends SettingsView {
 		prob.put("mailProperties",this.propertiesToString( data.getMailProperties()));
 		prob.put("dbProperties", this.propertiesToString(data.getDbProperties()));
 		prob.put("proxyProperties", this.propertiesToString(data.getProxyProperties()));
+		return prob;
+	}
 
-		//FIXME: Gibt Settings dann wirklich ein "Settings" object zur�ck?
-		// public static <A extends DatabaseObject> A edit(...)
-		return ElasticsearchHelper.edit(view,"system","settings",prob.toJSONString(), data);
+	@Override
+	public Settings edit(Settings data) {
+
+		return ElasticsearchHelper.edit(view,"system","settings",this.settingsToJSON(data).toJSONString(), data);
 	}
 
 	//###################DONE#######################################

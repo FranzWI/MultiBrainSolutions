@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServlet;
 
 import de.mbs.abstracts.mail.MailView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
-import de.mbs.db.java.JavaView;
 import de.mbs.handler.ServiceHandler;
 import de.mbs.mail.sendgrid.SendGridView;
 
@@ -16,11 +15,11 @@ public class ServiceServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		System.out.println("Starte Datenbankverbindung");
+		ServiceHandler.setDatabaseView(new ElasticsearchView());
 		//ServiceHandler.setDatabaseView(new ElasticsearchView());
-		ServiceHandler.setDatabaseView(new JavaView());
-		//MailView mailView = new SendGridView();
-		//ServiceHandler.getDatabaseView().setMailView(mailView);
-		//ServiceHandler.setMailView(mailView);
+		MailView mailView = new SendGridView();
+		ServiceHandler.getDatabaseView().setMailView(mailView);
+		ServiceHandler.setMailView(mailView);
 		System.out.println("Verbindung zur Datenbank hergestellt");
 	}
 	

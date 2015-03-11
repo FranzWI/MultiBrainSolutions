@@ -136,32 +136,27 @@ public class ElasticsearchUserview extends UserView {
 
 		if (response.isExists())
 		{
+			System.out.println("DEBUG nutzer existiert");
 			return responseToUser(response.getId(), response.getVersion(), response.getFields());
-		} else
+		} else{
+			System.err.println("Nutzer ID "+id+" ungültig");
 			return null;
+		}
 	}
 
 	@Override
 	public String login(String username, String password) {
-		// Passwort in klartext
-		// FIXME: @Franz: pruefen ob user active ist beim einloggen
-		SearchResponse response = this.view.getESClient()
-				.prepareSearch("system").setTypes("user").addFields(fieldList)
-				.setQuery(
-				QueryBuilders.boolQuery()
-				.must(QueryBuilders.termQuery("userName", username))
-				.must(QueryBuilders.termQuery("pw", Crypt.getCryptedPassword(password)))
-				.must(QueryBuilders.termQuery("isActive", true)))
-				.execute()
-				.actionGet();
-		//The boolean type also supports passing the value as a number or
-		//a string (in this case 0, an empty string, false, off and no are false, all other values are true).
-
-		SearchHit[] hits = response.getHits().getHits();
-		if(hits.length == 1 ){
-			User u = this.responseToUser(hits[0].getId(), hits[0].getVersion(), hits[0].getFields());
-			if(u != null)
-				return u;
+		System.out.println(username+" "+Crypt.getCryptedPassword(password));
+		for(User user: this.getAll()){
+			System.out.println("Username: "+user.getUsername());
+			System.out.println("PW: "+user.getPw());
+			System.out.println("ACtiv: "+user.isActive());
+			if(username.equals(user.getUsername()) 
+				&& Crypt.getCryptedPassword(password).equals(user.getPw()) 
+				&& user.isActive()){
+				System.out.println("treffer: "+user.getId());
+				return user.getId();
+			}
 		}
 		return null;
 	}
@@ -276,33 +271,33 @@ public class ElasticsearchUserview extends UserView {
 							user.setUsername(field);
 						}else{
 							user.setUsername(field.getValue() == null ? "" : field
-									.getValue().toString());
+									.getValue());
 						}
 						break;
 					case "firstName":
 
 						user.setFirstname(field.getValue() == null ? "" : field
-						.getValue().toString());
+						.getValue());
 						break;
 					case "lastName":
 						user.setLastname(field.getValue() == null ? "" : field
-						.getValue().toString());
+						.getValue());
 						break;
 					case "email":
 						user.setEmail(field.getValue() == null ? "" : field
-						.getValue().toString());
+						.getValue());
 						break;
 					case "pw":
 						user.setPw(field.getValue() == null ? "" : field
-						.getValue().toString());
+						.getValue());
 						break;
 					case "apiKey":
 						user.setApikey(field.getValue() == null ? "" : field
-						.getValue().toString());
+						.getValue());
 						break;
 					case "sessionID":
 						user.setSessionId(field.getValue() == null ? "" : field
-						.getValue().toString());
+						.getValue());
 						break;
 					case "isActive":
 						user.setActive(field.getValue() == null ? false : ((Boolean)field.getValue()));
