@@ -48,20 +48,21 @@ public class ElasticsearchMessageview extends MessageView {
 
 		Vector<Message> foundMessages = new Vector<Message>();
 
-		
+
 		//QueryBuilders.fuzzyLikeThisQuery("subject","content").likeText(search)
+		// QueryBuilders.moreLikeThisQuery("subject","content").likeText(search)
+		System.out.println("DEBUG suchwort "+ search);
 		SearchResponse response = this.view.getESClient()
-			.prepareSearch("system")
-			.setTypes("message")
-			.addFields(fieldList)
-			.setQuery(QueryBuilders.moreLikeThisQuery("subject","content").likeText(search))
-			.execute()
-			.actionGet();
-			
+				.prepareSearch("system")
+				.setTypes("message")
+				.addFields(fieldList)
+				.setQuery(QueryBuilders.termQuery("content",search))
+				.execute()
+				.actionGet();
 		for(SearchHit hit: response.getHits().getHits()){
-			Message message = this.responseToMessage(hit.getId(), hit.getVersion(), hit.getFields());
-			if(message != null)
-				foundMessages.add(message);
+			Message user = this.responseToMessage(hit.getId(), hit.getVersion(), hit.getFields());
+			if(user != null)
+				foundMessages.add(user);
 		}
 
 		for(Message message : foundMessages){
@@ -69,7 +70,7 @@ public class ElasticsearchMessageview extends MessageView {
 
 			res.setClassName("Message");
 			res.setHeading("Nachricht :"+message.getTopic());
-			res.setContent("Inhalt: "+message.getContent()); 
+			res.setContent("Inhalt: "+message.getContent());
 			res.setLink("");
 
 			Pair<SearchResult, String> sResult = new Pair<SearchResult, String>(res, null);

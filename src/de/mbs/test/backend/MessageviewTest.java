@@ -178,6 +178,7 @@ public class MessageviewTest {
 			Vector<Pair<SearchResult, String>> vec = messageView.search(
 					suchString, TestExecuter.getView().getUserView()
 							.getUserByUserName("user"));
+			assertTrue("keine Nachrichten vorhanden", messageView.getAll().size()>0);
 			assertNotNull("Suchvektor ist NULL", vec);
 			assertTrue("Groesse des Suchvektors ist 0", vec.size() > 0);
 		} catch (Exception e) {
@@ -216,6 +217,7 @@ public class MessageviewTest {
 	 * Test method for
 	 * {@link de.mbs.db.java.views.JavaMessageview#remove(java.lang.String)}.
 	 */
+	/*
 	@Test
 	public final void test5RemoveMessage() {
 		try {
@@ -234,6 +236,6 @@ public class MessageviewTest {
 			System.out.println("---stacktrace " + methodName + "---");
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }

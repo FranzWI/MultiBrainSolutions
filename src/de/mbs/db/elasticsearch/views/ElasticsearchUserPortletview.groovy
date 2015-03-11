@@ -111,7 +111,6 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 	@Override
 	public Vector<UserPortlet> byOwner(String userid) {
 		Vector<UserPortlet> portlets = new Vector<UserPortlet>();
-		System.out.println("User: "+userid);
 		SearchResponse response = this.view.getESClient()
 				.prepareSearch("system").setTypes("userHasPortlets").addFields(fieldList)
 				.setQuery(QueryBuilders.termQuery("userID", userid))
