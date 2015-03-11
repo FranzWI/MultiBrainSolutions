@@ -115,7 +115,7 @@ $(document).ready(
 								{
 									type : "POST",
 									url : "rest/portlet/add/"
-											+ escape(JSON.stringify(json)
+											+ escape(JSON.stringify(json).replace(/\//g, "SLasH")
 													.replace(/{/g, "(")
 													.replace(/}/g, ")"))
 								}).done(function() {							

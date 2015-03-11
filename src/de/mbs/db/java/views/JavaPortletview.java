@@ -88,7 +88,7 @@ public class JavaPortletview extends PortletView {
 						boolean addable = true;
 						if(!portlet.isMultiple()){
 							for(UserPortlet map: view.getUserPortletView().byOwner(user.getId())){
-								if(map.getId().equals((portlet.getId()))){
+								if(map.getPortletId().equals((portlet.getId()))){
 									addable = false;
 								}
 							}
