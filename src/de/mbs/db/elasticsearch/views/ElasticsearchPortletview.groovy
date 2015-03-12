@@ -43,7 +43,7 @@ public class ElasticsearchPortletview extends PortletView {
 		portlet.put("name", data.getName());
 		portlet.put("path", data.getPath());
 		portlet.put("description", data.getDescription());
-		portlet.put("usedByGroups", ElasticsearchHelper.vectorToJSONArray(data.getUsedByGroups()).toJSONString());
+		portlet.put("usedByGroups", ElasticsearchHelper.vectorToJSONArray(data.getUsedByGroups()));
 		portlet.put("sizeXS", data.getSizeXS());
 		portlet.put("sizeSM", data.getSizeSM());
 		portlet.put("sizeMD", data.getSizeMD());
@@ -61,7 +61,7 @@ public class ElasticsearchPortletview extends PortletView {
 		portlet.put("name", data.getName());
 		portlet.put("path", data.getPath());
 		portlet.put("description", data.getDescription());
-		portlet.put("usedByGroups", ElasticsearchHelper.vectorToJSONArray(data.getUsedByGroups()).toJSONString());
+		portlet.put("usedByGroups", ElasticsearchHelper.vectorToJSONArray(data.getUsedByGroups()));
 		portlet.put("sizeXS", data.getSizeXS());
 		portlet.put("sizeSM", data.getSizeSM());
 		portlet.put("sizeMD", data.getSizeMD());

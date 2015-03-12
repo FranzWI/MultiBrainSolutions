@@ -136,6 +136,7 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 				admin.setActive(true);
 				admin.setPw("admin");
 				admin.addMembership(this.groupview.getAdminGroupId());
+				admin.addMembership(this.groupview.getUserGroupId());
 				if(this.userview.add(admin) == null)
 					System.err.println("Admin anlegen fehlgeschlagen");
 

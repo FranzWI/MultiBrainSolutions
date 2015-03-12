@@ -82,7 +82,7 @@ public class ElasticsearchUserview extends UserView {
 		// FIXME pr�fen ob IDs g�ltig sind -> erst m�glich wenn Portlet und
 		// Group Views laufen
 		jsonUser.put("inGroups",
-				ElasticsearchHelper.vectorToJSONArray(data.getMembership()).toJSONString());
+				ElasticsearchHelper.vectorToJSONArray(data.getMembership()));
 		// FIXME pr�fen ob IDs g�ltig sind -> erst m�glich wenn Portlet und
 		// Group Views laufen
 		jsonUser.put("isActive", data.isActive());
@@ -136,7 +136,6 @@ public class ElasticsearchUserview extends UserView {
 
 		if (response.isExists())
 		{
-			System.out.println("DEBUG nutzer existiert");
 			return responseToUser(response.getId(), response.getVersion(), response.getFields());
 		} else{
 			System.err.println("Nutzer ID "+id+" ungültig");
@@ -146,15 +145,10 @@ public class ElasticsearchUserview extends UserView {
 
 	@Override
 	public String login(String username, String password) {
-		System.out.println(username+" "+Crypt.getCryptedPassword(password));
 		for(User user: this.getAll()){
-			System.out.println("Username: "+user.getUsername());
-			System.out.println("PW: "+user.getPw());
-			System.out.println("ACtiv: "+user.isActive());
 			if(username.equals(user.getUsername()) 
 				&& Crypt.getCryptedPassword(password).equals(user.getPw()) 
 				&& user.isActive()){
-				System.out.println("treffer: "+user.getId());
 				return user.getId();
 			}
 		}
@@ -307,7 +301,7 @@ public class ElasticsearchUserview extends UserView {
 						if (field.getValues() != null) {
 							List<Object> values = field.getValues();
 							for (Object o : values) {
-								groups.add(o.toString());
+								groups.add((String)o);
 							}
 						}
 						user.setMembership(groups);
