@@ -291,6 +291,7 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 		return this.groupview;
 	}
 
+	/*
 	@Override
 	public Map<String, Vector<Pair<SearchResult, String>>> search(
 			String search, User u) {
@@ -300,6 +301,7 @@ public class ElasticsearchView extends DatabaseView implements ElasticsearchClie
 		}
 		return result;
 	}
+	*/
 
 	@Override
 	public MessageView getMessageView() {

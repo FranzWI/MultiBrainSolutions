@@ -37,7 +37,7 @@ public class ElasticsearchSettingsview extends SettingsView {
 			proxyProp.put("HTTP_Proxy_Server", "");
 			proxyProp.put("NUMBER_HTTP_Proxy_Port", "");
 			setting.setProxyProperties(proxyProp);
-			ElasticsearchHelper.add(this.view, "system","settings",this.settingsToJSON(setting).toJSONString());
+			ElasticsearchHelper.add(this.view, "system","settings","1",this.settingsToJSON(setting).toJSONString());
 		}
 	}
 
@@ -62,7 +62,7 @@ public class ElasticsearchSettingsview extends SettingsView {
 	@Override
 	public Settings get(String id)
 	{
-		GetResponse response = this.view.getESClient().prepareGet("system", "settings", id).setFields(fieldList).execute().actionGet();
+		GetResponse response = this.view.getESClient().prepareGet("system", "settings", "1").setFields(fieldList).execute().actionGet();
 		if (response.isExists()) {
 			return responseToSettings(response.getId(), response.getVersion(), response.getFields());
 		} else
