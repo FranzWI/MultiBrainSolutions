@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSessionListener;
 @WebListener
 public class SessionListener implements HttpSessionListener {
 
-	private static int activeSessions; 
+	private static int activeSessions;  
 	
 	/**
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)

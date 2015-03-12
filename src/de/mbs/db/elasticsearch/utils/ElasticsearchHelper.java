@@ -1,8 +1,11 @@
 package de.mbs.db.elasticsearch.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +17,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.function.Consumer;
 
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -23,17 +26,14 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.bootstrap.Elasticsearch;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.common.Base64;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.indices.IndexAlreadyExistsException;
 import org.elasticsearch.search.SearchHit;
@@ -43,7 +43,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.mbs.abstracts.db.objects.definition.DatabaseObject;
-import de.mbs.db.elasticsearch.ElasticsearchView;
 
 public class ElasticsearchHelper {
 
@@ -64,16 +63,22 @@ public class ElasticsearchHelper {
 	 * @return null --> falls datei ungültig / nicht lesbar
 	 */
 	public static String encodeFileBase64(File f) {
-		if (f.exists() && !f.isDirectory()) {
-			Path path = Paths.get(f.toURI());
-			try {
-				return Base64.encodeBase64String(Files.readAllBytes(path));
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
+		try {
+			Process p = Runtime.getRuntime().exec(
+					"/usr/bin/openssl base64 -in " + f.getAbsolutePath());
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			StringBuilder builder = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+				builder.append(System.getProperty("line.separator"));
 			}
+			return builder.toString();
+		} catch (Exception ex) {
+			return null;
 		}
-		return null;
+
 	}
 
 	public static JSONArray vectorToJSONArray(Vector<String> data) {
@@ -246,6 +251,8 @@ public class ElasticsearchHelper {
 				// Datie endet mit .json
 				if (file.getName().matches(".*json")) {
 					try {
+						System.out.println("Installiere Mapping "
+								+ file.getPath());
 						JSONObject obj = (JSONObject) parser
 								.parse(new FileReader(file));
 						maps.put(file.getName().replace(".json", ""), obj);
@@ -256,6 +263,8 @@ public class ElasticsearchHelper {
 					}
 				}
 			}
+		} else {
+			System.err.println("Ordner existiert nicht: " + folder.getPath());
 		}
 		return maps;
 	}
