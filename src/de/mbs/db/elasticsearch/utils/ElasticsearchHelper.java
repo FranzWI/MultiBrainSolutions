@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -22,6 +23,7 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.common.Base64;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.hppc.cursors.ObjectCursor;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -58,24 +60,17 @@ public class ElasticsearchHelper {
 	 */
 	public static String encodeFileBase64(File f) {
 		try {
-			Process p = Runtime.getRuntime().exec(
-					"/usr/bin/openssl base64 -in " + f.getAbsolutePath());
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					p.getInputStream()));
-			StringBuilder builder = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
-				builder.append(System.getProperty("line.separator"));
-			}
-			return builder.toString();
-		} catch (Exception ex) {
+			return Base64.encodeFromFile(f.getAbsolutePath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return null;
 		}
-
 	}
 
 	public static JSONArray vectorToJSONArray(Vector<String> data) {
+		if(data == null || data.size() == 0)
+			return null;
 		JSONArray array = new JSONArray();
 		for (String string : data)
 			array.add(string);
