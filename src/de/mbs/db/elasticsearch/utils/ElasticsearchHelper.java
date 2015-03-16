@@ -1,11 +1,8 @@
 package de.mbs.db.elasticsearch.utils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -155,7 +152,7 @@ public class ElasticsearchHelper {
 	public static SearchHit[] getAll(ElasticsearchClientHandler view,
 			String index, String type, String[] fieldList) {
 		SearchResponse scrollResp = view.getESClient().prepareSearch(index)
-				.setTypes(type).setScroll(new TimeValue(60000))
+				.setTypes(type).setScroll(new TimeValue(60000)).setVersion(true)
 				.setQuery(QueryBuilders.matchAllQuery()).addFields(fieldList)
 				.setSize(100).execute().actionGet();
 		Vector<SearchHit> hits = new Vector<SearchHit>();

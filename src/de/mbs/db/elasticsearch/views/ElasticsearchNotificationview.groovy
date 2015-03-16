@@ -2,6 +2,7 @@ package de.mbs.db.elasticsearch.views;
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Date;
 import java.util.Vector;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -9,6 +10,7 @@ import org.elasticsearch.search.SearchHit;
 import org.json.simple.JSONObject
 
 import de.mbs.abstracts.db.objects.Notification;
+import de.mbs.abstracts.db.objects.User;
 import de.mbs.abstracts.db.views.NotificationView;
 import de.mbs.db.elasticsearch.ElasticsearchView;
 import de.mbs.db.elasticsearch.utils.ElasticsearchHelper
@@ -30,17 +32,30 @@ public class ElasticsearchNotificationview extends NotificationView {
 	@Override
 	public Vector<Notification> getNotificationsForUser(String userId) 
 	{
-		Vector<Notification> AllMyNotifications = new Vector<Notification>();
-
-		for(Notification myNotifications : this.getAll())
-		{
-			if(myNotifications.getId() == userId)
-				AllMyNotifications.add(myNotifications);
+		Date currentTime = new Date();
+		Vector<Notification> notification = new Vector<Notification>();
+		User u = this.view.getUserView().get(userId);
+		if (u != null) {
+			for (Notification n : this.getAll()) {
+				if (n.getToUser().contains(u.getId())) {
+					if (n.getReleaseTimestamp().getTime() <= currentTime
+							.getTime())
+						notification.add(n);
+				} else {
+					for (String groupId : u.getMembership()) {
+						if (n.getToGroup().contains(groupId)) {
+							if (n.getReleaseTimestamp().getTime() <= currentTime
+									.getTime()) {
+								notification.add(n);
+								break;
+							}
+						}
+					}
+				}
+			}
+			return notification;
 		}
-		if(AllMyNotifications != null)
-			return AllMyNotifications;
-		else
-			return null;
+		return null;
 	}
 	
 	//################################DONE############################################
@@ -55,8 +70,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("creation", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format( data.getCreateTimestamp()));
 		not.put("release", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format(data.getReleaseTimestamp()));
 		JSONObject to = new JSONObject();
-		to.put("User", data.getToUser());
-		to.put("Group", data.getToGroup());
+		to.put("User", ElasticsearchHelper.vectorToJSONArray( data.getToUser()));
+		to.put("Group", ElasticsearchHelper.vectorToJSONArray( data.getToGroup()));
 		not.put("to", to);
 		
 		return ElasticsearchHelper.add(view, "system", "notification", not.toJSONString());
@@ -73,8 +88,8 @@ public class ElasticsearchNotificationview extends NotificationView {
 		not.put("creation", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format( data.getCreateTimestamp()));
 		not.put("release", ElasticsearchHelper.DATETIME_NO_MILLIS_FORMATER.format(data.getReleaseTimestamp()));
 		JSONObject to = new JSONObject();
-		to.put("User", data.getToUser());
-		to.put("Group", data.getToGroup());
+		to.put("User", ElasticsearchHelper.vectorToJSONArray( data.getToUser()));
+		to.put("Group", ElasticsearchHelper.vectorToJSONArray( data.getToGroup()));
 		not.put("to", to);
 		
 		return ElasticsearchHelper.edit(view,"system","notification",not.toJSONString(), data);
@@ -164,8 +179,6 @@ public class ElasticsearchNotificationview extends NotificationView {
 						break;
 				}
 			}
-			if(notification==null)
-				return null;
 			return notification;
 	} 
 
