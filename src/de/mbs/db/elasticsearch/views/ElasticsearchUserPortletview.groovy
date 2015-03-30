@@ -49,7 +49,6 @@ public class ElasticsearchUserPortletview extends UserPortletView {
 		blub.put("md", data.getMd());
 		blub.put("lg", data.getLg());
 		group.put("size", blub);
-
 		return ElasticsearchHelper.add(view, "system", "userHasPortlets", group.toJSONString());
 	}
 

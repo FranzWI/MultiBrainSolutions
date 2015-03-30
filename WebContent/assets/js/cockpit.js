@@ -3,8 +3,6 @@ var $container;
 // init
 $(document).ready(function() {
 	
-	$container = $('#draggable-portlets');
-	
 	context.init({
 	    fadeSpeed: 100,
 	    filter: function ($obj){},
@@ -31,35 +29,26 @@ $(document).ready(function() {
 		}
 	}]);
 	
-	$container.packery({
-		 itemSelector: '.mbs-portlet',
-		  layout: 'meticulous'
-	});
-	
-	$container.find('.mbs-portlet').each( function( i, itemElem ) {
-		  var draggie = new Draggabilly( itemElem );
-		  $container.packery( 'bindDraggabillyEvents', draggie );
-	});
-	
-	// show item order after layout
-	function orderItems() {
-	  var itemElems = $container.packery('getItemElements');
-	  var portletIds = "";
-	  $( itemElems ).each( function( i, itemElem ) {
-		  portletIds = portletIds+$(this).data('portlet-id')+",";
-	  });
-	  //portletIds = portletIds.substring(0, (portletIds.length()-1));
-	  $.ajax({
-		  type: "POST",
-		  url: "rest/user/setPortlets/"+portletIds
-	  }).fail(function(jqXHR, textStatus ) {
-			toastr.error( "error: "+textStatus );
-	  });
-	}
+	$("#draggable-portlets").sortable({
+			connectWith : ".sorted",
+			handle : '.tile-stats, .panel-heading ',
+			delay : 200,
+			stop: function(ev, ui){
+				var portletIds = "";
+				$(".mbs-portlet").each(function(index,obj) {
+					portletIds = portletIds+$(this).data('portlet-id')+",";
+				});
+				 $.ajax({
+					  type: "POST",
+					  url: "rest/user/setPortlets/"+portletIds
+				  }).done(function() {
+					  location.reload();
+				  }).fail(function(jqXHR, textStatus ) {
+						toastr.error( "error: "+textStatus );
+				  });
+			}
+		}).disableSelection();
 
-	//$container.packery( 'on', 'layoutComplete', orderItems );
-	$container.packery( 'on', 'dragItemPositioned', orderItems );
-	
 	$(function() {		
 		$('.portlet > .panel-heading > .panel-options > a[data-rel="close"]').click(function() {
 			var $par = $(this).closest('div[data-portlet-id]');

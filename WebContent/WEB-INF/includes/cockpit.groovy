@@ -38,7 +38,7 @@ html.div {
 			}
 		}
 	}
-	div('id':"draggable-portlets", 'class':"row"){
+	div('id':"draggable-portlets", 'class':"row sorted"){
 		Vector<UserPortlet> userPortlets = userportletView.byOwner(session.user);
 		//Vector<Map<String,String>> userPortlets = user.getPortlets();
 		if(!userPortlets || userPortlets.size() == 0){
@@ -55,7 +55,7 @@ html.div {
 					size+=" col-sm-"+map.getSm();
 					size+=" col-md-"+map.getMd();
 					size+=" col-lg-"+map.getLg();
-					div('class':size+" mbs-portlet",'data-portlet-id':map.getId()){
+					div('class':size+" mbs-portlet",'data-portlet-id':map.getId(), "style":"float:left;"){
 						i('style':"display:none")
 						request.setAttribute("id", map.getId());
 						request.setAttribute("owner", map.getOwnerId());
